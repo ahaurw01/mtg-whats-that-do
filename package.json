@@ -28,6 +28,14 @@
     "prettier": "^1.10.2"
   },
   "lint-staged": {
-    "*.js": ["prettier --single-quote --trailing-comma es5 --write", "git add"]
+    "*.js": [
+      "prettier --single-quote --trailing-comma es5 --write",
+      "git add"
+    ]
+  },
+  "dependencies": {
+    "next": "^4.2.3",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0"
   }
 }

@@ -4,6 +4,7 @@
   "description": "Look up many cards in one view.",
   "main": "index.js",
   "scripts": {
+    "dev": "next",
     "test": "echo \"Error: no test specified\" && exit 1",
     "precommit": "lint-staged"
   },

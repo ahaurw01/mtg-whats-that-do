@@ -1,0 +1,22 @@
+{
+  "name": "mtg-whats-that-do",
+  "version": "1.0.0",
+  "description": "Look up many cards in one view.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ahaurw01/mtg-whats-that-do.git"
+  },
+  "keywords": [
+    "mtg"
+  ],
+  "author": "Aaron Haurwitz <aaron.haurwitz@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ahaurw01/mtg-whats-that-do/issues"
+  },
+  "homepage": "https://github.com/ahaurw01/mtg-whats-that-do#readme"
+}

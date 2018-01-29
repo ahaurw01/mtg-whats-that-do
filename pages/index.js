@@ -1,7 +1,7 @@
-const Index = () => (
-  <div>
-    <h1>What's that do?</h1>
-  </div>
-);
+import Page from '../components/Page';
 
-export default Index;
+export default () => (
+  <Page>
+    <h1>What's that do?</h1>
+  </Page>
+);

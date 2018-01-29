@@ -18,5 +18,12 @@
   "bugs": {
     "url": "https://github.com/ahaurw01/mtg-whats-that-do/issues"
   },
-  "homepage": "https://github.com/ahaurw01/mtg-whats-that-do#readme"
+  "homepage": "https://github.com/ahaurw01/mtg-whats-that-do#readme",
+  "devDependencies": {
+    "eslint": "^4.16.0",
+    "eslint-config-prettier": "^2.9.0",
+    "husky": "^0.14.3",
+    "lint-staged": "^6.1.0",
+    "prettier": "^1.10.2"
+  }
 }

@@ -14,6 +14,9 @@ const Page = ({ children }) => (
       h1 {
         text-align: center;
       }
+      * {
+        box-sizing: border-box;
+      }
     `}</style>
   </div>
 );

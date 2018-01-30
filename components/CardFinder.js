@@ -70,7 +70,7 @@ export default class CardFinder extends Component {
             position: relative;
           }
           .react-autosuggest__input {
-            width: 300px;
+            width: 100%;
             padding: 12px;
             border: 1px solid #333;
             border-radius: 4px;
@@ -87,7 +87,7 @@ export default class CardFinder extends Component {
           .react-autosuggest__suggestions-container--open {
             position: absolute;
             top: 43px;
-            width: 300px;
+            width: 100%;
             border: 1px solid #333;
             border-bottom-left-radius: 4px;
             border-bottom-right-radius: 4px;

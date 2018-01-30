@@ -8,14 +8,16 @@ const Tile = ({ children }) => (
         border: 1px solid black;
         border-radius: 4px;
         padding: 10px;
-        display: inline-block;
-        width: 100%;
-        height: 160%;
+        display: block;
+        width: 300px;
+        min-height: 480px;
+        margin: auto;
       }
-      @media (min-width: 350px) {
+      @media (min-width: 768px) {
         .tile {
           width: 350px;
           height: 560px;
+          margin: 0;
         }
       }
     `}</style>

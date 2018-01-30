@@ -12,11 +12,12 @@ const Tile = ({ children }) => (
         width: 300px;
         min-height: 480px;
         margin: auto;
+        position: relative;
       }
       @media (min-width: 768px) {
         .tile {
           width: 350px;
-          height: 560px;
+          min-height: 549px;
           margin: 0;
         }
       }

@@ -18,11 +18,16 @@ export default class CardFinder extends Component {
   };
 
   onSuggestionSelected = (e, { suggestion }) => {
+    this.setState({ value: '', suggestions: [] });
     this.props.onCardSelected(suggestion);
   };
 
-  onSuggestionsFetchRequested = ({ value }) => {
-    if (value.length < 3) {
+  shouldRenderSuggestions = value => {
+    return value.trim().length > 2;
+  };
+
+  onSuggestionsFetchRequested = ({ value, reason }) => {
+    if (value.length < 3 || reason === 'suggestion-selected') {
       this.setState({
         suggestions: [],
       });
@@ -59,6 +64,7 @@ export default class CardFinder extends Component {
         <Autosuggest
           suggestions={suggestions}
           onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
+          shouldRenderSuggestions={this.shouldRenderSuggestions}
           onSuggestionSelected={this.onSuggestionSelected}
           getSuggestionValue={getSuggestionValue}
           renderSuggestion={renderSuggestion}

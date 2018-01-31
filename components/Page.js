@@ -6,23 +6,13 @@ const Page = ({ children }) => (
     <Head>
       <meta name="viewport" content="width=device-width, initial-scale=1" />
       <meta charSet="utf-8" />
+      <link
+        rel="stylesheet"
+        href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.12/semantic.min.css"
+      />
     </Head>
     {children}
-    <style jsx global>{`
-      html {
-        background: lightgrey;
-        /*System fonts:*/
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
-          Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-          'Segoe UI Symbol';
-      }
-      h1 {
-        text-align: center;
-      }
-      * {
-        box-sizing: border-box;
-      }
-    `}</style>
+    <style jsx global>{``}</style>
   </div>
 );
 

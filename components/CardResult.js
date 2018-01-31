@@ -1,6 +1,7 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import Tile from './Tile';
+import { Button } from 'semantic-ui-react';
 
 export default class CardResult extends Component {
   static propTypes = {
@@ -31,12 +32,10 @@ export default class CardResult extends Component {
       <Tile>
         <img src={imageUrl} />
         <div className="actions">
-          <a className="action lookup" href={cardUrl} target="_blank">
+          <Button as="a" href={cardUrl} target="_blank" primary>
             View page
-          </a>
-          <button className="action remove" onClick={onRequestRemove}>
-            Remove
-          </button>
+          </Button>
+          <Button onClick={onRequestRemove}>Remove</Button>
         </div>
         <style jsx>{`
           img {
@@ -47,23 +46,6 @@ export default class CardResult extends Component {
             display: flex;
             justify-content: space-around;
             margin: 10px 0 5px;
-          }
-          .action {
-            width: 40%;
-            padding: 12px;
-            border: 1px solid black;
-            border-radius: 4px;
-            font-size: 16px;
-            text-align: center;
-            color: black;
-            text-decoration: none;
-            cursor: pointer;
-          }
-          .lookup {
-            background: #93cadc;
-          }
-          .remove {
-            background: transparent;
           }
         `}</style>
       </Tile>

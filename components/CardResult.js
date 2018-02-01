@@ -1,7 +1,6 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import Tile from './Tile';
-import { Button } from 'semantic-ui-react';
+import { Button, Segment } from 'semantic-ui-react';
 
 export default class CardResult extends Component {
   static propTypes = {
@@ -31,7 +30,7 @@ export default class CardResult extends Component {
     const imageUrl = card ? card.image_uris.border_crop : '';
     const cardUrl = card ? card.scryfall_uri : '#';
     return (
-      <Tile>
+      <Segment raised>
         <img src={imageUrl} />
         <div className="actions">
           <Button as="a" href={cardUrl} target="_blank" primary>
@@ -50,7 +49,7 @@ export default class CardResult extends Component {
             margin-top: 10px;
           }
         `}</style>
-      </Tile>
+      </Segment>
     );
   }
 }

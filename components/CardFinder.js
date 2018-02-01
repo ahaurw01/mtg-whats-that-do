@@ -1,7 +1,6 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Search, Input } from 'semantic-ui-react';
-import Tile from './Tile';
+import { Search, Input, Segment } from 'semantic-ui-react';
 
 export default class CardFinder extends Component {
   static propTypes = {
@@ -43,7 +42,7 @@ export default class CardFinder extends Component {
   render() {
     const { results, loading, value } = this.state;
     return (
-      <Tile>
+      <Segment raised>
         <Search
           results={results}
           fluid
@@ -66,7 +65,7 @@ export default class CardFinder extends Component {
           onResultSelect={this.onResultSelect}
           value={value}
         />
-      </Tile>
+      </Segment>
     );
   }
 }

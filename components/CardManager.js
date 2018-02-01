@@ -1,6 +1,8 @@
 import { Component } from 'react';
 import CardResult from './CardResult';
 import CardFinder from './CardFinder';
+import { Grid } from 'semantic-ui-react';
+import Column from './Column';
 
 export default class CardManager extends Component {
   constructor(props) {
@@ -28,16 +30,19 @@ export default class CardManager extends Component {
   render() {
     const { cardNames } = this.state;
     return (
-      <div>
+      <Grid stackable container>
         {cardNames.map((cardName, index) => (
-          <CardResult
-            name={cardName}
-            key={index}
-            onRequestRemove={() => this.removeCard(index)}
-          />
+          <Column key={index}>
+            <CardResult
+              name={cardName}
+              onRequestRemove={() => this.removeCard(index)}
+            />
+          </Column>
         ))}
-        <CardFinder onCardSelected={this.addCard} />
-      </div>
+        <Column>
+          <CardFinder onCardSelected={this.addCard} />
+        </Column>
+      </Grid>
     );
   }
 }

@@ -70,7 +70,6 @@ export default class CardFinder extends Component {
           onResultSelect={this.onResultSelect}
           value={value}
         />
-        <style jsx global>{``}</style>
       </Tile>
     );
   }

@@ -3,10 +3,6 @@ import PropTypes from 'prop-types';
 import { Search, Input } from 'semantic-ui-react';
 import Tile from './Tile';
 
-const renderInputComponent = inputProps => <Input {...inputProps} fluid />;
-const getSuggestionValue = suggestion => suggestion;
-const renderSuggestion = suggestion => suggestion;
-
 export default class CardFinder extends Component {
   static propTypes = {
     onCardSelected: PropTypes.func.isRequired,

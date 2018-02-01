@@ -12,7 +12,6 @@ const Page = ({ children }) => (
       />
     </Head>
     {children}
-    <style jsx global>{``}</style>
   </div>
 );
 

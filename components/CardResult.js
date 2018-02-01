@@ -18,7 +18,9 @@ export default class CardResult extends Component {
 
   componentDidMount() {
     const { name } = this.props;
-    fetch(`https://api.scryfall.com/cards/named?exact=${name}`)
+    fetch(
+      `https://api.scryfall.com/cards/named?exact=${encodeURIComponent(name)}`
+    )
       .then(result => result.json())
       .then(card => this.setState({ card }));
   }
@@ -26,7 +28,7 @@ export default class CardResult extends Component {
   render() {
     const { card } = this.state;
     const { onRequestRemove } = this.props;
-    const imageUrl = card ? card.image_uris.border_crop : 'about:blank';
+    const imageUrl = card ? card.image_uris.border_crop : '';
     const cardUrl = card ? card.scryfall_uri : '#';
     return (
       <Tile>
@@ -45,7 +47,7 @@ export default class CardResult extends Component {
           .actions {
             display: flex;
             justify-content: space-around;
-            margin: 10px 0 5px;
+            margin-top: 10px;
           }
         `}</style>
       </Tile>

@@ -1,13 +1,11 @@
 import PropTypes from 'prop-types';
+import { Segment } from 'semantic-ui-react';
 
 const Tile = ({ children }) => (
   <div className="tile">
-    {children}
+    <Segment raised>{children}</Segment>
     <style jsx>{`
       .tile {
-        border: 1px solid black;
-        border-radius: 4px;
-        padding: 10px;
         display: block;
         width: 300px;
         min-height: 480px;
@@ -18,7 +16,8 @@ const Tile = ({ children }) => (
         .tile {
           width: 350px;
           min-height: 549px;
-          margin: 0;
+          margin: 10px;
+          float: left;
         }
       }
     `}</style>

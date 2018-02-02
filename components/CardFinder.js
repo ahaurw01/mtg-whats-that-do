@@ -24,7 +24,11 @@ export default class CardFinder extends Component {
     }
 
     this.setState({ loading: true });
-    fetch(`https://api.scryfall.com/cards/autocomplete?q=${value}`)
+    fetch(
+      `https://api.scryfall.com/cards/autocomplete?q=${encodeURIComponent(
+        value
+      )}`
+    )
       .then(result => result.json())
       .then(result =>
         this.setState({

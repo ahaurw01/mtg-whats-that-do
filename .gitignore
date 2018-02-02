@@ -59,3 +59,4 @@ typings/
 
 # Next.js build directory
 .next
+out

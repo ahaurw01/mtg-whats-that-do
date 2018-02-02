@@ -4,6 +4,7 @@
   "description": "Look up many cards in one view.",
   "main": "index.js",
   "scripts": {
+    "build": "next build && next export",
     "dev": "next",
     "lint": "eslint **/*.js",
     "unit": "jest",
@@ -52,19 +53,10 @@
     "semantic-ui-react": "^0.77.2"
   },
   "babel": {
-    "env": {
-      "test": {
-        "presets": [
-          [
-            "env",
-            {
-              "modules": "commonjs"
-            }
-          ],
-          "next/babel"
-        ]
-      }
-    }
+    "presets": [
+      "env",
+      "next/babel"
+    ]
   },
   "jest": {
     "setupFiles": [

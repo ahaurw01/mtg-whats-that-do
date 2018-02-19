@@ -10,6 +10,7 @@ const Page = ({ children }) => (
         rel="stylesheet"
         href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.12/semantic.min.css"
       />
+      <title>{"What's that do?"}</title>
     </Head>
     {children}
   </div>

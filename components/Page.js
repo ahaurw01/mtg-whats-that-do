@@ -11,6 +11,7 @@ const Page = ({ children }) => (
         href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.12/semantic.min.css"
       />
       <title>{"What's that do?"}</title>
+      <link rel="shortcut icon" href="/static/favicon.png" />
     </Head>
     {children}
   </div>

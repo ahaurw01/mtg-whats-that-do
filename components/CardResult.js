@@ -21,7 +21,16 @@ export default class CardResult extends Component {
       `https://api.scryfall.com/cards/named?exact=${encodeURIComponent(name)}`
     )
       .then(result => result.json())
-      .then(card => this.setState({ card }));
+      .then(card => {
+        this.setState({ card });
+        return fetch(card.rulings_uri);
+      })
+      .then(result => result.json())
+      .then(result =>
+        this.setState({
+          rulings: result.data,
+        })
+      );
   }
 
   render() {

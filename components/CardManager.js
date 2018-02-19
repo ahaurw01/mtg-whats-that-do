@@ -23,7 +23,7 @@ export default class CardManager extends Component {
 
   addCard = name => {
     this.setState(prevState => ({
-      cardNames: prevState.cardNames.concat(name),
+      cardNames: prevState.cardNames.slice().concat(name),
     }));
   };
 
@@ -32,7 +32,7 @@ export default class CardManager extends Component {
     return (
       <Grid stackable container>
         {cardNames.map((cardName, index) => (
-          <Column key={index}>
+          <Column key={cardName + index}>
             <CardResult
               name={cardName}
               onRequestRemove={() => this.removeCard(index)}

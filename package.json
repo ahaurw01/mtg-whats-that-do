@@ -10,7 +10,8 @@
     "unit": "jest",
     "unit:watch": "npm run unit -- --watchAll",
     "test": "npm run lint && npm run unit",
-    "precommit": "lint-staged"
+    "precommit": "lint-staged",
+    "deploy": "npm run build && firebase deploy --token \"$FIREBASE_TOKEN\""
   },
   "repository": {
     "type": "git",
@@ -33,6 +34,7 @@
     "eslint-config-prettier": "^2.9.0",
     "eslint-plugin-react": "^7.6.1",
     "fetch-mock": "^6.0.0",
+    "firebase-tools": "^3.17.4",
     "husky": "^0.14.3",
     "jest": "^22.1.4",
     "lint-staged": "^6.1.0",

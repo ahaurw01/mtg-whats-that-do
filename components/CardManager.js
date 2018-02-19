@@ -30,7 +30,7 @@ export default class CardManager extends Component {
   render() {
     const { cardNames } = this.state;
     return (
-      <Grid stackable padded="horizontal">
+      <Grid stackable padded>
         {cardNames.map((cardName, index) => (
           <Column key={cardName + index}>
             <CardResult

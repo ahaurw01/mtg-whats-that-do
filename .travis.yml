@@ -5,4 +5,4 @@ deploy:
   provider: script
   on:
     branch: master
-  script: npm run deploy
+  script: ./deploy.sh

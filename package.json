@@ -4,14 +4,12 @@
   "description": "Look up many cards in one view.",
   "main": "index.js",
   "scripts": {
-    "build": "next build && next export",
     "dev": "next",
     "lint": "eslint **/*.js",
     "unit": "jest",
     "unit:watch": "npm run unit -- --watchAll",
     "test": "npm run lint && npm run unit",
-    "precommit": "lint-staged",
-    "deploy": "npm run build && firebase deploy --token \"$FIREBASE_TOKEN\""
+    "precommit": "lint-staged"
   },
   "repository": {
     "type": "git",

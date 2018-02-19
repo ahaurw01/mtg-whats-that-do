@@ -6,3 +6,4 @@ deploy:
   on:
     branch: master
   script: ./deploy.sh
+  skip_cleanup: true

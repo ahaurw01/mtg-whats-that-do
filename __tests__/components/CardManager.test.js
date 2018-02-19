@@ -7,9 +7,26 @@ import { Button } from 'semantic-ui-react';
 import { shallow, mount } from 'enzyme';
 
 describe('CardManager', () => {
-  afterEach(() => {
-    fetchMock.restore();
+  const mockCardData = {
+    image_uris: {
+      border_crop: 'image uri',
+    },
+    scryfall_uri: 'card uri',
+    rulings_uri: 'rulings uri',
+  };
+  const mockRulingsData = {
+    data: [],
+  };
+
+  beforeEach(() => {
+    fetchMock.get(
+      'begin:https://api.scryfall.com/cards/named?exact=',
+      mockCardData
+    );
+    fetchMock.get('rulings uri', mockRulingsData);
   });
+
+  afterEach(fetchMock.restore);
 
   test('renders just the CardFinder to start', () => {
     const wrapper = shallow(<CardManager />);
@@ -18,14 +35,7 @@ describe('CardManager', () => {
     expect(wrapper.find(CardResult)).toHaveLength(0);
   });
 
-  test('adds new cards', () => {
-    fetchMock.mock('*', {
-      image_uris: {
-        border_crop: 'image uri',
-      },
-      scryfall_uri: 'card uri',
-    });
-
+  test('adds new cards', done => {
     const wrapper = mount(<CardManager />);
     wrapper
       .find(CardFinder)
@@ -54,16 +64,14 @@ describe('CardManager', () => {
         .at(1)
         .prop('name')
     ).toEqual('Goblin King');
+
+    // When mounting, the CardResults fetch data. They haven't finished at this
+    // point, but they will after the next tick. If we don't do this, we'll
+    // unmock fetch before they call it and we get a warning.
+    setImmediate(done);
   });
 
   test('removes cards', () => {
-    fetchMock.mock('*', {
-      image_uris: {
-        border_crop: 'image uri',
-      },
-      scryfall_uri: 'card uri',
-    });
-
     const wrapper = shallow(<CardManager />);
     wrapper
       .find(CardFinder)

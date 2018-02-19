@@ -1,6 +1,7 @@
 import React from 'react';
 import fetchMock from 'fetch-mock';
 import CardResult from '../../components/CardResult';
+import { Button } from 'semantic-ui-react';
 import { mount } from 'enzyme';
 
 describe('CardResult', () => {
@@ -39,9 +40,7 @@ describe('CardResult', () => {
     fetchMock.getOnce('rulings uri', mockRulingsData);
   });
 
-  afterEach(() => {
-    fetchMock.restore();
-  });
+  afterEach(fetchMock.restore);
 
   test('searches for card and rulings data on mount', done => {
     const wrapper = mount(
@@ -70,6 +69,55 @@ describe('CardResult', () => {
       wrapper.update();
       expect(wrapper.find('img')).toHaveLength(1);
       expect(wrapper.find('img').prop('src')).toEqual('image uri');
+      done();
+    });
+  });
+
+  test('renders rulings button if rulings exist', done => {
+    const wrapper = mount(
+      <CardResult name="Goblin Balloon Brigade" onRequestRemove={() => null} />
+    );
+
+    setImmediate(() => {
+      wrapper.update();
+      expect(wrapper.find('.actions').find(Button)).toHaveLength(2);
+      expect(
+        wrapper
+          .find('.actions')
+          .find(Button)
+          .at(0)
+          .text()
+      ).toEqual('View rulings');
+      expect(
+        wrapper
+          .find('.actions')
+          .find(Button)
+          .at(1)
+          .text()
+      ).toEqual('Remove');
+      done();
+    });
+  });
+
+  test('does not render rulings button if no rulings', done => {
+    fetchMock.restore();
+    fetchMock.getOnce('*', mockCardData);
+    fetchMock.getOnce('rulings uri', { data: [] });
+
+    const wrapper = mount(
+      <CardResult name="Goblin Balloon Brigade" onRequestRemove={() => null} />
+    );
+
+    setImmediate(() => {
+      wrapper.update();
+      expect(wrapper.find('.actions').find(Button)).toHaveLength(1);
+      expect(
+        wrapper
+          .find('.actions')
+          .find(Button)
+          .at(0)
+          .text()
+      ).toEqual('Remove');
       done();
     });
   });

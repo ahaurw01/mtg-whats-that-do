@@ -12,6 +12,7 @@ export default class CardResult extends Component {
     super(props);
     this.state = {
       card: null,
+      rulings: [],
     };
   }
 
@@ -34,7 +35,7 @@ export default class CardResult extends Component {
   }
 
   render() {
-    const { card } = this.state;
+    const { card, rulings } = this.state;
     const { onRequestRemove } = this.props;
     const imageUrl = card ? card.image_uris.border_crop : '';
     const cardUrl = card ? card.scryfall_uri : '#';
@@ -42,9 +43,8 @@ export default class CardResult extends Component {
       <Segment raised>
         <img src={imageUrl} />
         <div className="actions">
-          <Button as="a" href={cardUrl} target="_blank" primary>
-            View page
-          </Button>
+          {rulings.length ? <Button primary>View rulings</Button> : null}
+
           <Button onClick={onRequestRemove}>Remove</Button>
         </div>
         <style jsx>{`

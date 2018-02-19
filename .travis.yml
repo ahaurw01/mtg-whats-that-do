@@ -5,5 +5,5 @@ deploy:
   provider: script
   on:
     branch: master
-  script: ./deploy.sh
+  script: npm run deploy
   skip_cleanup: true

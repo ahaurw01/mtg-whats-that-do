@@ -1,6 +1,7 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Segment } from 'semantic-ui-react';
+import RulingsModal from './RulingsModal';
 
 export default class CardResult extends Component {
   static propTypes = {
@@ -12,6 +13,7 @@ export default class CardResult extends Component {
     super(props);
     this.state = {
       card: null,
+      rulings: [],
     };
   }
 
@@ -21,21 +23,29 @@ export default class CardResult extends Component {
       `https://api.scryfall.com/cards/named?exact=${encodeURIComponent(name)}`
     )
       .then(result => result.json())
-      .then(card => this.setState({ card }));
+      .then(card => {
+        this.setState({ card });
+        return fetch(card.rulings_uri);
+      })
+      .then(result => result.json())
+      .then(result =>
+        this.setState({
+          rulings: result.data,
+        })
+      );
   }
 
   render() {
-    const { card } = this.state;
+    const { card, rulings } = this.state;
     const { onRequestRemove } = this.props;
     const imageUrl = card ? card.image_uris.border_crop : '';
-    const cardUrl = card ? card.scryfall_uri : '#';
     return (
       <Segment raised>
         <img src={imageUrl} />
         <div className="actions">
-          <Button as="a" href={cardUrl} target="_blank" primary>
-            View page
-          </Button>
+          {rulings.length ? (
+            <RulingsModal card={card} rulings={rulings} />
+          ) : null}
           <Button onClick={onRequestRemove}>Remove</Button>
         </div>
         <style jsx>{`

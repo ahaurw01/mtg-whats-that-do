@@ -87,7 +87,7 @@ describe('CardResult', () => {
           .find(Button)
           .at(0)
           .text()
-      ).toEqual('View rulings');
+      ).toEqual('Rulings');
       expect(
         wrapper
           .find('.actions')

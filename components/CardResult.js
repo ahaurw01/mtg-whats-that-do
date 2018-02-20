@@ -1,6 +1,7 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Segment } from 'semantic-ui-react';
+import RulingsModal from './RulingsModal';
 
 export default class CardResult extends Component {
   static propTypes = {
@@ -38,13 +39,13 @@ export default class CardResult extends Component {
     const { card, rulings } = this.state;
     const { onRequestRemove } = this.props;
     const imageUrl = card ? card.image_uris.border_crop : '';
-    const cardUrl = card ? card.scryfall_uri : '#';
     return (
       <Segment raised>
         <img src={imageUrl} />
         <div className="actions">
-          {rulings.length ? <Button primary>View rulings</Button> : null}
-
+          {rulings.length ? (
+            <RulingsModal card={card} rulings={rulings} />
+          ) : null}
           <Button onClick={onRequestRemove}>Remove</Button>
         </div>
         <style jsx>{`

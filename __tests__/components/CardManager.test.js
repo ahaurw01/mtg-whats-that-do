@@ -132,4 +132,32 @@ describe('CardManager', () => {
 
     expect(wrapper.find(CardResult)).toHaveLength(3);
   });
+
+  test('does not clear pinned cards', () => {
+    const wrapper = shallow(<CardManager />);
+    wrapper
+      .find(CardFinder)
+      .at(0)
+      .prop('onCardSelected')('Serra Angel');
+    wrapper
+      .find(CardFinder)
+      .at(0)
+      .prop('onCardSelected')('Lightning Bolt');
+    wrapper
+      .find(CardFinder)
+      .at(0)
+      .prop('onCardSelected')('Goblin King');
+
+    wrapper.update();
+    wrapper
+      .find(CardResult)
+      .at(1)
+      .prop('onRequestPin')();
+    wrapper.update();
+    expect(wrapper.find(CardResult)).toHaveLength(3);
+    wrapper.instance().clearCards();
+    wrapper.update();
+    expect(wrapper.find(CardResult)).toHaveLength(1);
+    expect(wrapper.find(CardResult).prop('name')).toEqual('Lightning Bolt');
+  });
 });

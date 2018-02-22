@@ -5,41 +5,59 @@ import { Grid } from 'semantic-ui-react';
 import Column from './Column';
 
 export default class CardManager extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      cardNames: [],
-    };
-  }
+  state = {
+    cards: [],
+  };
 
-  removeCard = index => {
+  cardIdSequence = (function*() {
+    let id = 0;
+    while (true) yield id++;
+  })();
+
+  removeCard = id => {
     this.setState(prevState => ({
-      cardNames: [
-        ...prevState.cardNames.slice(0, index),
-        ...prevState.cardNames.slice(index + 1, prevState.cardNames.length),
-      ],
+      cards: prevState.cards.filter(card => card.id !== id),
     }));
   };
 
   addCard = name => {
     this.setState(prevState => ({
-      cardNames: prevState.cardNames.slice().concat(name),
+      cards: prevState.cards
+        .slice()
+        .concat({
+          cardName: name,
+          isPinned: false,
+          id: this.cardIdSequence.next().value,
+        }),
+    }));
+  };
+
+  pinCard = id => {
+    this.setState(prevState => ({
+      cards: prevState.cards.map(card => {
+        if (card.id !== id) return card;
+        return Object.assign({}, card, { isPinned: !card.isPinned });
+      }),
     }));
   };
 
   clearCards() {
-    this.setState({ cardNames: [] });
+    this.setState(prevState => ({
+      cards: prevState.cards.filter(card => card.isPinned),
+    }));
   }
 
   render() {
-    const { cardNames } = this.state;
+    const { cards } = this.state;
     return (
       <Grid stackable padded>
-        {cardNames.map((cardName, index) => (
-          <Column key={cardName + index}>
+        {cards.map(({ cardName, isPinned, id }) => (
+          <Column key={id}>
             <CardResult
               name={cardName}
-              onRequestRemove={() => this.removeCard(index)}
+              isPinned={isPinned}
+              onRequestRemove={() => this.removeCard(id)}
+              onRequestPin={() => this.pinCard(id)}
             />
           </Column>
         ))}

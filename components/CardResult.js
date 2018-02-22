@@ -1,21 +1,20 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Button, Segment } from 'semantic-ui-react';
+import { Button, Segment, Icon } from 'semantic-ui-react';
 import RulingsModal from './RulingsModal';
 
 export default class CardResult extends Component {
   static propTypes = {
     name: PropTypes.string.isRequired,
     onRequestRemove: PropTypes.func.isRequired,
+    onRequestPin: PropTypes.func.isRequired,
+    isPinned: PropTypes.bool.isRequired,
   };
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      card: null,
-      rulings: [],
-    };
-  }
+  state = {
+    card: null,
+    rulings: [],
+  };
 
   componentDidMount() {
     const { name } = this.props;
@@ -37,17 +36,23 @@ export default class CardResult extends Component {
 
   render() {
     const { card, rulings } = this.state;
-    const { onRequestRemove } = this.props;
+    const { onRequestRemove, onRequestPin, isPinned } = this.props;
     const imageUrl = card ? card.image_uris.border_crop : '';
     return (
       <Segment raised>
         <img src={imageUrl} />
         <div className="actions">
-          {rulings.length ? (
-            <RulingsModal card={card} rulings={rulings} />
-          ) : null}
-          <Button onClick={onRequestRemove}>Remove</Button>
+          <Button.Group>
+            {card && <RulingsModal card={card} rulings={rulings} />}
+            <Button icon onClick={onRequestRemove}>
+              <Icon name="trash outline" />
+            </Button>
+            <Button icon toggle active={isPinned} onClick={onRequestPin}>
+              <Icon name="pin" />
+            </Button>
+          </Button.Group>
         </div>
+
         <style jsx>{`
           img {
             width: 100%;

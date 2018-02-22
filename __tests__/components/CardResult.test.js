@@ -44,7 +44,12 @@ describe('CardResult', () => {
 
   test('searches for card and rulings data on mount', done => {
     const wrapper = mount(
-      <CardResult name="Goblin Balloon Brigade" onRequestRemove={() => null} />
+      <CardResult
+        name="Goblin Balloon Brigade"
+        onRequestRemove={() => null}
+        onRequestPin={() => null}
+        isPinned={false}
+      />
     );
 
     setImmediate(() => {
@@ -62,7 +67,12 @@ describe('CardResult', () => {
 
   test('renders image', done => {
     const wrapper = mount(
-      <CardResult name="Goblin Balloon Brigade" onRequestRemove={() => null} />
+      <CardResult
+        name="Goblin Balloon Brigade"
+        onRequestRemove={() => null}
+        onRequestPin={() => null}
+        isPinned={false}
+      />
     );
 
     setImmediate(() => {
@@ -73,51 +83,52 @@ describe('CardResult', () => {
     });
   });
 
-  test('renders rulings button if rulings exist', done => {
+  test('renders active rulings button if rulings exist', done => {
     const wrapper = mount(
-      <CardResult name="Goblin Balloon Brigade" onRequestRemove={() => null} />
+      <CardResult
+        name="Goblin Balloon Brigade"
+        onRequestRemove={() => null}
+        onRequestPin={() => null}
+        isPinned={false}
+      />
     );
 
     setImmediate(() => {
       wrapper.update();
-      expect(wrapper.find('.actions').find(Button)).toHaveLength(2);
-      expect(
-        wrapper
-          .find('.actions')
-          .find(Button)
-          .at(0)
-          .text()
-      ).toEqual('Rulings');
-      expect(
-        wrapper
-          .find('.actions')
-          .find(Button)
-          .at(1)
-          .text()
-      ).toEqual('Remove');
+      expect(wrapper.find('.actions').find(Button)).toHaveLength(3);
+      const button = wrapper
+        .find('.actions')
+        .find(Button)
+        .at(0);
+      expect(button.text()).toEqual('Rulings');
+      expect(button.prop('disabled')).toEqual(false);
       done();
     });
   });
 
-  test('does not render rulings button if no rulings', done => {
+  test('renders disabled rulings button if no rulings', done => {
     fetchMock.restore();
     fetchMock.getOnce('*', mockCardData);
     fetchMock.getOnce('rulings uri', { data: [] });
 
     const wrapper = mount(
-      <CardResult name="Goblin Balloon Brigade" onRequestRemove={() => null} />
+      <CardResult
+        name="Goblin Balloon Brigade"
+        onRequestRemove={() => null}
+        onRequestPin={() => null}
+        isPinned={false}
+      />
     );
 
     setImmediate(() => {
       wrapper.update();
-      expect(wrapper.find('.actions').find(Button)).toHaveLength(1);
-      expect(
-        wrapper
-          .find('.actions')
-          .find(Button)
-          .at(0)
-          .text()
-      ).toEqual('Remove');
+      expect(wrapper.find('.actions').find(Button)).toHaveLength(3);
+      const button = wrapper
+        .find('.actions')
+        .find(Button)
+        .at(0);
+      expect(button.text()).toEqual('Rulings');
+      expect(button.prop('disabled')).toEqual(true);
       done();
     });
   });

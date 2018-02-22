@@ -110,7 +110,7 @@ describe('CardManager', () => {
     ).toEqual('Goblin King');
   });
 
-  test('clears cards', () => {
+  test('does not clear pinned cards', () => {
     const wrapper = shallow(<CardManager />);
     wrapper
       .find(CardFinder)
@@ -124,12 +124,17 @@ describe('CardManager', () => {
       .find(CardFinder)
       .at(0)
       .prop('onCardSelected')('Goblin King');
+
     wrapper.update();
-
+    wrapper
+      .find(CardResult)
+      .at(1)
+      .prop('onRequestPin')();
+    wrapper.update();
     expect(wrapper.find(CardResult)).toHaveLength(3);
-
     wrapper.instance().clearCards();
-
-    expect(wrapper.find(CardResult)).toHaveLength(3);
+    wrapper.update();
+    expect(wrapper.find(CardResult)).toHaveLength(1);
+    expect(wrapper.find(CardResult).prop('name')).toEqual('Lightning Bolt');
   });
 });

@@ -109,4 +109,27 @@ describe('CardManager', () => {
         .prop('name')
     ).toEqual('Goblin King');
   });
+
+  test('clears cards', () => {
+    const wrapper = shallow(<CardManager />);
+    wrapper
+      .find(CardFinder)
+      .at(0)
+      .prop('onCardSelected')('Serra Angel');
+    wrapper
+      .find(CardFinder)
+      .at(0)
+      .prop('onCardSelected')('Lightning Bolt');
+    wrapper
+      .find(CardFinder)
+      .at(0)
+      .prop('onCardSelected')('Goblin King');
+    wrapper.update();
+
+    expect(wrapper.find(CardResult)).toHaveLength(3);
+
+    wrapper.instance().clearCards();
+
+    expect(wrapper.find(CardResult)).toHaveLength(3);
+  });
 });

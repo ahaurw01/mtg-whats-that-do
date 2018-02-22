@@ -27,6 +27,10 @@ export default class CardManager extends Component {
     }));
   };
 
+  clearCards() {
+    this.setState({ cardNames: [] });
+  }
+
   render() {
     const { cardNames } = this.state;
     return (

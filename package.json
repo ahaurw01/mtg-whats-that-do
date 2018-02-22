@@ -4,7 +4,7 @@
   "description": "Look up many cards in one view.",
   "main": "index.js",
   "scripts": {
-    "dev": "next",
+    "dev": "next -p 1337",
     "lint": "eslint **/*.js",
     "unit": "jest",
     "unit:watch": "npm run unit -- --watchAll",

@@ -2,7 +2,7 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Segment, Icon } from 'semantic-ui-react';
 import RulingsModal from './RulingsModal';
-import { getImageUrl } from '../utils/card-data';
+import { getImageUrl, isDoubleFaced } from '../utils/card-data';
 
 export default class CardResult extends Component {
   static propTypes = {
@@ -15,6 +15,7 @@ export default class CardResult extends Component {
   state = {
     card: null,
     rulings: [],
+    faceIndex: 0,
   };
 
   componentDidMount() {
@@ -24,7 +25,7 @@ export default class CardResult extends Component {
     )
       .then(result => result.json())
       .then(card => {
-        this.setState({ card });
+        this.setState({ card }, this.prefetchOppositeFaceImage);
         return fetch(card.rulings_uri);
       })
       .then(result => result.json())
@@ -35,10 +36,23 @@ export default class CardResult extends Component {
       );
   }
 
+  prefetchOppositeFaceImage = () => {
+    const { card } = this.state;
+    if (!isDoubleFaced(card)) return;
+
+    document.createElement('img').src = getImageUrl(card, 1);
+  };
+
+  flip = () => {
+    this.setState(({ faceIndex }) => ({
+      faceIndex: (faceIndex + 1) % 2,
+    }));
+  };
+
   render() {
-    const { card, rulings } = this.state;
+    const { card, rulings, faceIndex } = this.state;
     const { onRequestRemove, onRequestPin, isPinned } = this.props;
-    const imageUrl = getImageUrl(card);
+    const imageUrl = getImageUrl(card, faceIndex);
     return (
       <Segment raised>
         <img src={imageUrl} />
@@ -51,6 +65,11 @@ export default class CardResult extends Component {
             <Button icon toggle active={isPinned} onClick={onRequestPin}>
               <Icon name="pin" />
             </Button>
+            {isDoubleFaced(card) && (
+              <Button icon onClick={this.flip}>
+                <Icon name="refresh" />
+              </Button>
+            )}
           </Button.Group>
         </div>
 

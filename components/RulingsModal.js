@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import { Button, Modal, Comment, Grid, Icon } from 'semantic-ui-react';
 import WizardsIcon from './WizardsIcon';
 import ScryfallIcon from './ScryfallIcon';
+import { getImageUrl } from '../utils/card-data';
 
 const makeCommentData = ruling => {
   let source;
@@ -61,7 +62,7 @@ const RulingsModal = ({ card, rulings }) => (
           </Comment.Group>
         </Grid.Column>
         <Grid.Column only="computer" width="4">
-          <img src={card.image_uris.border_crop} />
+          <img src={getImageUrl(card)} />
         </Grid.Column>
       </Grid>
     </Modal.Content>
@@ -75,12 +76,7 @@ const RulingsModal = ({ card, rulings }) => (
 );
 
 RulingsModal.propTypes = {
-  card: PropTypes.shape({
-    image_uris: PropTypes.shape({
-      border_crop: PropTypes.string,
-    }),
-    name: PropTypes.string,
-  }).isRequired,
+  card: PropTypes.object.isRequired,
   rulings: PropTypes.arrayOf(
     PropTypes.shape({
       published_at: PropTypes.string,

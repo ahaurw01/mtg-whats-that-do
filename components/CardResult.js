@@ -2,6 +2,7 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Segment, Icon } from 'semantic-ui-react';
 import RulingsModal from './RulingsModal';
+import { getImageUrl } from '../utils/card-data';
 
 export default class CardResult extends Component {
   static propTypes = {
@@ -37,7 +38,7 @@ export default class CardResult extends Component {
   render() {
     const { card, rulings } = this.state;
     const { onRequestRemove, onRequestPin, isPinned } = this.props;
-    const imageUrl = card ? card.image_uris.border_crop : '';
+    const imageUrl = getImageUrl(card);
     return (
       <Segment raised>
         <img src={imageUrl} />

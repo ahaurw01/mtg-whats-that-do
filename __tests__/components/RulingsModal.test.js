@@ -6,11 +6,31 @@ import { mount } from 'enzyme';
 import WizardsIcon from '../../components/WizardsIcon';
 import ScryfallIcon from '../../components/ScryfallIcon';
 
-describe('CardFinder', () => {
+describe('RulingsModal', () => {
+  afterEach(() => {
+    const modal = document.querySelector('.modal');
+    if (modal) modal.remove();
+  });
+
   const mockCard = {
     image_uris: {
       border_crop: 'image uri',
     },
+    name: 'Derevi, Empyrial Tactician',
+  };
+  const mockCardWithFaces = {
+    card_faces: [
+      {
+        image_uris: {
+          border_crop: 'image uri face 1',
+        },
+      },
+      {
+        image_uris: {
+          border_crop: 'image uri face 2',
+        },
+      },
+    ],
     name: 'Derevi, Empyrial Tactician',
   };
 
@@ -110,5 +130,18 @@ describe('CardFinder', () => {
     const images = modal.querySelectorAll('img');
     expect(images).toHaveLength(1);
     expect(images[0].src).toEqual('image uri');
+  });
+
+  test('renders the card image with faces', () => {
+    const wrapper = mount(
+      <RulingsModal card={mockCardWithFaces} rulings={mockRulings} />
+    );
+    wrapper.find(Button).simulate('click');
+
+    const modal = document.querySelector('.modal');
+    expect(modal).toBeDefined();
+    const images = modal.querySelectorAll('img');
+    expect(images).toHaveLength(1);
+    expect(images[0].src).toEqual('image uri face 1');
   });
 });

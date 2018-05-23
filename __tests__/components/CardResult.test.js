@@ -34,6 +34,22 @@ describe('CardResult', () => {
       },
     ],
   };
+  const mockCardDataWithFaces = {
+    card_faces: [
+      {
+        image_uris: {
+          border_crop: 'image uri face 1',
+        },
+      },
+      {
+        image_uris: {
+          border_crop: 'image uri face 2',
+        },
+      },
+    ],
+    scryfall_uri: 'card uri',
+    rulings_uri: 'rulings uri',
+  };
 
   beforeEach(() => {
     fetchMock.getOnce('*', mockCardData);
@@ -79,6 +95,28 @@ describe('CardResult', () => {
       wrapper.update();
       expect(wrapper.find('img')).toHaveLength(1);
       expect(wrapper.find('img').prop('src')).toEqual('image uri');
+      done();
+    });
+  });
+
+  test('renders face image', done => {
+    fetchMock.restore();
+    fetchMock.getOnce('*', mockCardDataWithFaces);
+    fetchMock.getOnce('rulings uri', mockRulingsData);
+
+    const wrapper = mount(
+      <CardResult
+        name="Goblin Balloon Brigade"
+        onRequestRemove={() => null}
+        onRequestPin={() => null}
+        isPinned={false}
+      />
+    );
+
+    setImmediate(() => {
+      wrapper.update();
+      expect(wrapper.find('img')).toHaveLength(1);
+      expect(wrapper.find('img').prop('src')).toEqual('image uri face 1');
       done();
     });
   });

@@ -7,3 +7,5 @@ export const getImageUrl = (card, faceIndex = 0) => {
 
   return card.image_uris.border_crop;
 };
+
+export const isDoubleFaced = card => !!card && !!card.card_faces;

@@ -1,4 +1,4 @@
-import { getImageUrl } from '../../utils/card-data';
+import { getImageUrl, isDoubleFaced } from '../../utils/card-data';
 
 describe('getImageUrl', () => {
   test('is empty string if card data is falsy', () => {
@@ -44,5 +44,25 @@ describe('getImageUrl', () => {
     };
 
     expect(getImageUrl(card, 3)).toBe('hi');
+  });
+});
+
+describe('isDoubleFaced', () => {
+  test('is false if card is null', () => {
+    expect(isDoubleFaced(null)).toBe(false);
+  });
+
+  test('is false if no card_faces', () => {
+    const card = {};
+
+    expect(isDoubleFaced(card)).toBe(false);
+  });
+
+  test('is true if has card_faces', () => {
+    const card = {
+      card_faces: [],
+    };
+
+    expect(isDoubleFaced(card)).toBe(true);
   });
 });

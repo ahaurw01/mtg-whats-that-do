@@ -132,7 +132,7 @@ describe('RulingsModal', () => {
     expect(images[0].src).toEqual('image uri');
   });
 
-  test('renders the card image with faces', () => {
+  test('renders both card faces', () => {
     const wrapper = mount(
       <RulingsModal card={mockCardWithFaces} rulings={mockRulings} />
     );
@@ -141,7 +141,8 @@ describe('RulingsModal', () => {
     const modal = document.querySelector('.modal');
     expect(modal).toBeDefined();
     const images = modal.querySelectorAll('img');
-    expect(images).toHaveLength(1);
+    expect(images).toHaveLength(2);
     expect(images[0].src).toEqual('image uri face 1');
+    expect(images[1].src).toEqual('image uri face 2');
   });
 });

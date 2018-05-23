@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import { Button, Modal, Comment, Grid, Icon } from 'semantic-ui-react';
 import WizardsIcon from './WizardsIcon';
 import ScryfallIcon from './ScryfallIcon';
-import { getImageUrl } from '../utils/card-data';
+import { getImageUrl, isDoubleFaced } from '../utils/card-data';
 
 const makeCommentData = ruling => {
   let source;
@@ -63,6 +63,7 @@ const RulingsModal = ({ card, rulings }) => (
         </Grid.Column>
         <Grid.Column only="computer" width="4">
           <img src={getImageUrl(card)} />
+          {isDoubleFaced(card) && <img src={getImageUrl(card, 1)} />}
         </Grid.Column>
       </Grid>
     </Modal.Content>

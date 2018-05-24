@@ -1,7 +1,7 @@
 import React from 'react';
 import fetchMock from 'fetch-mock';
 import CardResult from '../../components/CardResult';
-import { Button } from 'semantic-ui-react';
+import { Button, Icon } from 'semantic-ui-react';
 import { mount } from 'enzyme';
 
 describe('CardResult', () => {
@@ -33,6 +33,22 @@ describe('CardResult', () => {
           'When you activate Derevi’s last ability, you’re not casting Derevi as a spell. The ability can’t be countered by something that counters only spells. The ability isn’t subject to the additional cost of casting commanders from the command zone.',
       },
     ],
+  };
+  const mockCardDataWithFaces = {
+    card_faces: [
+      {
+        image_uris: {
+          border_crop: 'image uri face 1',
+        },
+      },
+      {
+        image_uris: {
+          border_crop: 'image uri face 2',
+        },
+      },
+    ],
+    scryfall_uri: 'card uri',
+    rulings_uri: 'rulings uri',
   };
 
   beforeEach(() => {
@@ -83,6 +99,28 @@ describe('CardResult', () => {
     });
   });
 
+  test('renders face image', done => {
+    fetchMock.restore();
+    fetchMock.getOnce('*', mockCardDataWithFaces);
+    fetchMock.getOnce('rulings uri', mockRulingsData);
+
+    const wrapper = mount(
+      <CardResult
+        name="Goblin Balloon Brigade"
+        onRequestRemove={() => null}
+        onRequestPin={() => null}
+        isPinned={false}
+      />
+    );
+
+    setImmediate(() => {
+      wrapper.update();
+      expect(wrapper.find('img')).toHaveLength(1);
+      expect(wrapper.find('img').prop('src')).toEqual('image uri face 1');
+      done();
+    });
+  });
+
   test('renders active rulings button if rulings exist', done => {
     const wrapper = mount(
       <CardResult
@@ -129,6 +167,81 @@ describe('CardResult', () => {
         .at(0);
       expect(button.text()).toEqual('Rulings');
       expect(button.prop('disabled')).toEqual(true);
+      done();
+    });
+  });
+
+  test('does not show flip button if only one face', done => {
+    const wrapper = mount(
+      <CardResult
+        name="Goblin Balloon Brigade"
+        onRequestRemove={() => null}
+        onRequestPin={() => null}
+        isPinned={false}
+      />
+    );
+
+    setImmediate(() => {
+      wrapper.update();
+      const icon = wrapper
+        .find('.actions')
+        .find(Icon)
+        .filter({ name: 'refresh' });
+      expect(icon).toHaveLength(0);
+      done();
+    });
+  });
+
+  test('shows flip button if double faced', done => {
+    fetchMock.restore();
+    fetchMock.getOnce('*', mockCardDataWithFaces);
+    fetchMock.getOnce('rulings uri', mockRulingsData);
+
+    const wrapper = mount(
+      <CardResult
+        name="Goblin Balloon Brigade"
+        onRequestRemove={() => null}
+        onRequestPin={() => null}
+        isPinned={false}
+      />
+    );
+
+    setImmediate(() => {
+      wrapper.update();
+      const icon = wrapper
+        .find('.actions')
+        .find(Icon)
+        .filter({ name: 'refresh' });
+      expect(icon).toHaveLength(1);
+      expect(icon.parent().is('button')).toBe(true);
+      done();
+    });
+  });
+
+  test('shows other face when flip button is clicked', done => {
+    fetchMock.restore();
+    fetchMock.getOnce('*', mockCardDataWithFaces);
+    fetchMock.getOnce('rulings uri', mockRulingsData);
+
+    const wrapper = mount(
+      <CardResult
+        name="Goblin Balloon Brigade"
+        onRequestRemove={() => null}
+        onRequestPin={() => null}
+        isPinned={false}
+      />
+    );
+
+    setImmediate(() => {
+      wrapper.update();
+      const button = wrapper
+        .find('.actions')
+        .find(Icon)
+        .filter({ name: 'refresh' })
+        .closest(Button);
+      expect(wrapper.find('img').prop('src')).toEqual('image uri face 1');
+      button.simulate('click');
+      expect(wrapper.find('img').prop('src')).toEqual('image uri face 2');
       done();
     });
   });

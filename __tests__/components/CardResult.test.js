@@ -121,6 +121,28 @@ describe('CardResult', () => {
     });
   });
 
+  test('renders oracle button', done => {
+    const wrapper = mount(
+      <CardResult
+        name="Goblin Balloon Brigade"
+        onRequestRemove={() => null}
+        onRequestPin={() => null}
+        isPinned={false}
+      />
+    );
+
+    setImmediate(() => {
+      wrapper.update();
+      expect(wrapper.find('.actions').find(Button)).toHaveLength(4);
+      const button = wrapper
+        .find('.actions')
+        .find(Button)
+        .at(0);
+      expect(button.prop('title')).toEqual('Oracle');
+      done();
+    });
+  });
+
   test('renders active rulings button if rulings exist', done => {
     const wrapper = mount(
       <CardResult
@@ -133,12 +155,12 @@ describe('CardResult', () => {
 
     setImmediate(() => {
       wrapper.update();
-      expect(wrapper.find('.actions').find(Button)).toHaveLength(3);
+      expect(wrapper.find('.actions').find(Button)).toHaveLength(4);
       const button = wrapper
         .find('.actions')
         .find(Button)
-        .at(0);
-      expect(button.text()).toEqual('Rulings');
+        .at(1);
+      expect(button.prop('title')).toEqual('Rulings');
       expect(button.prop('disabled')).toEqual(false);
       done();
     });
@@ -160,12 +182,12 @@ describe('CardResult', () => {
 
     setImmediate(() => {
       wrapper.update();
-      expect(wrapper.find('.actions').find(Button)).toHaveLength(3);
+      expect(wrapper.find('.actions').find(Button)).toHaveLength(4);
       const button = wrapper
         .find('.actions')
         .find(Button)
-        .at(0);
-      expect(button.text()).toEqual('Rulings');
+        .at(1);
+      expect(button.prop('title')).toEqual('Rulings');
       expect(button.prop('disabled')).toEqual(true);
       done();
     });

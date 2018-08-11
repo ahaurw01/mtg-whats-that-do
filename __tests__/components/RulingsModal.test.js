@@ -61,14 +61,14 @@ describe('RulingsModal', () => {
     );
 
     expect(wrapper.find(Button)).toHaveLength(1);
-    expect(wrapper.find(Button).text()).toEqual('Rulings');
+    expect(wrapper.find(Button).prop('title')).toEqual('Rulings');
   });
 
   test('renders a disabled trigger button if no rulings', () => {
     const wrapper = mount(<RulingsModal card={mockCard} rulings={[]} />);
 
     expect(wrapper.find(Button)).toHaveLength(1);
-    expect(wrapper.find(Button).text()).toEqual('Rulings');
+    expect(wrapper.find(Button).prop('title')).toEqual('Rulings');
     expect(wrapper.find(Button).prop('disabled')).toEqual(true);
   });
 

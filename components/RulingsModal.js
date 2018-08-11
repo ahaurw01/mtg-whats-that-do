@@ -35,8 +35,8 @@ const makeCommentData = ruling => {
 const RulingsModal = ({ card, rulings }) => (
   <Modal
     trigger={
-      <Button primary disabled={!rulings.length}>
-        Rulings
+      <Button icon secondary disabled={!rulings.length} title="Rulings">
+        <Icon name="legal" />
       </Button>
     }
   >

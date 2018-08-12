@@ -5,8 +5,9 @@ import Iconify from './Iconify';
 import PowerToughness from './PowerToughness';
 import cx from 'classnames';
 
-const OracleModal = ({ card, rulings }) => (
+const OracleModal = ({ card }) => (
   <Modal
+    closeIcon
     trigger={
       <Button icon primary title="Oracle">
         <Icon name="info" />

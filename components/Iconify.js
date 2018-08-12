@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-import { Icon } from 'semantic-ui-react';
 
 const map = {
   '{W}': 'ms-w',

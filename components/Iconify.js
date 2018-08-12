@@ -59,6 +59,7 @@ const map = {
   '{E}': 'ms-e',
   '{T}': 'ms-tap',
   '{Q}': 'ms-untap',
+  '{CHAOS}': 'ms-chaos',
 };
 const classNamesFor = text => {
   let names = map[text];

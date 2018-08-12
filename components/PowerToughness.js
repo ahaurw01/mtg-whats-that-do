@@ -4,11 +4,14 @@ import { Icon } from 'semantic-ui-react';
 
 const parse = value => {
   if (value == +value) {
-    return <i key={value} className={cx('ms', `ms-${value}`)} />;
+    return [
+      value < 0 ? '-' : null,
+      <i key={Math.random()} className={cx('ms', `ms-${Math.abs(value)}`)} />,
+    ];
   }
 
   if (value === '*') {
-    return <Icon key={value} name="star" />;
+    return <Icon key={Math.random()} name="star" />;
   }
 
   if (value.indexOf('+') > -1) {

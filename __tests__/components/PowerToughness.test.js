@@ -70,26 +70,22 @@ describe('PowerToughness', () => {
   test('renders number plus star', () => {
     const wrapper = shallow(<PowerToughness power="1+*" toughness="2+*" />);
 
-    expect(
-      wrapper.matchesElement(
-        <span>
-          <span>
-            <i className="ms ms-1" />+<Icon />
-          </span>
-          <i />
-          {' / '}
-          <span>
-            <i className="ms ms-2" />+<Icon />
-          </span>
-          <i />
-        </span>
-      )
-    ).toBe(true);
+    expect(wrapper.html()).toBe(
+      '<span title="Power 1+*, Toughness 2+*"><span><i class="ms ms-1"></i>+<i aria-hidden="true" class="star icon"></i></span><i class="ms ms-power"></i> / <span><i class="ms ms-2"></i>+<i aria-hidden="true" class="star icon"></i></span><i class="ms ms-toughness"></i></span>'
+    );
   });
 
   test('sets title', () => {
     const wrapper = shallow(<PowerToughness power="17" toughness="*" />);
 
     expect(wrapper.prop('title')).toBe('Power 17, Toughness *');
+  });
+
+  test('renders negative numbers', () => {
+    const wrapper = shallow(<PowerToughness power="-1" toughness="-2" />);
+
+    expect(wrapper.html()).toBe(
+      '<span title="Power -1, Toughness -2">-<i class="ms ms-1"></i><i class="ms ms-power"></i> / -<i class="ms ms-2"></i><i class="ms ms-toughness"></i></span>'
+    );
   });
 });

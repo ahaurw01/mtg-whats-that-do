@@ -3,6 +3,7 @@ import { Button, Modal, Segment, Grid, Icon, Header } from 'semantic-ui-react';
 import { getImageUrl, isDoubleFaced, getOracleData } from '../utils/card-data';
 import Iconify from './Iconify';
 import PowerToughness from './PowerToughness';
+import cx from 'classnames';
 
 const OracleModal = ({ card, rulings }) => (
   <Modal
@@ -39,10 +40,24 @@ const OracleModal = ({ card, rulings }) => (
                     />
                   </p>
                 )}
-              {oracle.loyalty != null && <p>Loyalty {oracle.loyalty}</p>}
-              <p>
-                <i>{oracle.flavor_text}</i>
-              </p>
+              {oracle.loyalty != null && (
+                <p>
+                  <i
+                    title={`Loyalty ${oracle.loyalty}`}
+                    className={cx(
+                      'ms',
+                      'ms-loyalty-start',
+                      `ms-loyalty-${oracle.loyalty}`,
+                      'loyalty'
+                    )}
+                  />
+                </p>
+              )}
+              {oracle.flavor_text && (
+                <p>
+                  <i>{oracle.flavor_text}</i>
+                </p>
+              )}
             </Segment>
           ))}
         </Grid.Column>
@@ -68,6 +83,12 @@ const OracleModal = ({ card, rulings }) => (
       }
       .oracle-card-header i:first-of-type {
         margin-left: 10px;
+      }
+      .ms-loyalty-start {
+        font-size: 32px !important;
+      }
+      i[class*='ms-loyalty']:not(.ms-loyalty-start) {
+        font-size: 28px !important;
       }
     `}</style>
   </Modal>

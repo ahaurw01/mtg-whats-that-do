@@ -59,7 +59,7 @@ const map = {
   '{Z}': 'ms-z',
   '{E}': 'ms-e',
   '{T}': 'ms-tap',
-  '{U}': 'ms-untap',
+  '{Q}': 'ms-untap',
 };
 const classNamesFor = text => {
   let names = map[text];
@@ -69,10 +69,42 @@ const classNamesFor = text => {
   return names;
 };
 
+const MINUS = '−'; // The minus sign character.
+const DASH = '-'; // The key between 0 and +.
+
+const convertSpecialCharacters = text => {
+  return text.replace(new RegExp(MINUS, 'g'), DASH);
+};
+
+const lineStart = text => {
+  if (/^[-+]?\d*:\s/.test(text)) {
+    const indexOfColon = text.indexOf(':');
+    const loyaltyDiff = text.substring(0, indexOfColon);
+    return [
+      <i
+        key="0"
+        title={`${loyaltyDiff} Loyalty`}
+        className={cx(
+          'ms',
+          {
+            'ms-loyalty-zero': text[0] === '0',
+            'ms-loyalty-up': text[0] === '+',
+            'ms-loyalty-down': text[0] === '-',
+          },
+          `ms-loyalty-${Math.abs(loyaltyDiff)}`
+        )}
+      />,
+      text.substring(indexOfColon),
+    ];
+  }
+
+  return [text];
+};
+
 const Iconify = ({ children, shadow }) => {
   if (!children) return null;
 
-  let results = [children];
+  let results = lineStart(convertSpecialCharacters(children));
 
   let matches;
   let currentText;

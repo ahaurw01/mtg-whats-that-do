@@ -83,4 +83,30 @@ describe('Iconify', () => {
         .prop('title')
     ).toBe('{100}');
   });
+
+  describe('beginning of line', () => {
+    test('converts 0:', () => {
+      const wrapper = render('0: give up');
+
+      expect(wrapper.html()).toBe(
+        '<span><i title="0 Loyalty" class="ms ms-loyalty-zero ms-loyalty-0"></i>: give up</span>'
+      );
+    });
+
+    test('converts −3:', () => {
+      const wrapper = render('−3: do a cool thing');
+
+      expect(wrapper.html()).toBe(
+        '<span><i title="-3 Loyalty" class="ms ms-loyalty-down ms-loyalty-3"></i>: do a cool thing</span>'
+      );
+    });
+
+    test('converts +1:', () => {
+      const wrapper = render('+1: do a mediocre thing');
+
+      expect(wrapper.html()).toBe(
+        '<span><i title="+1 Loyalty" class="ms ms-loyalty-up ms-loyalty-1"></i>: do a mediocre thing</span>'
+      );
+    });
+  });
 });

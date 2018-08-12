@@ -70,6 +70,8 @@ const classNamesFor = text => {
 };
 
 const Iconify = ({ children, shadow }) => {
+  if (!children) return null;
+
   let results = [children];
 
   let matches;
@@ -103,11 +105,12 @@ const Iconify = ({ children, shadow }) => {
 
 Iconify.propTypes = {
   shadow: PropTypes.bool,
-  children: PropTypes.string.isRequired,
+  children: PropTypes.string,
 };
 
 Iconify.defaultProps = {
   shadow: false,
+  children: null,
 };
 
 export default Iconify;

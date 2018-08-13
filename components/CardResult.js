@@ -2,6 +2,7 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Segment, Icon } from 'semantic-ui-react';
 import RulingsModal from './RulingsModal';
+import OracleModal from './OracleModal';
 import { getImageUrl, isDoubleFaced } from '../utils/card-data';
 
 export default class CardResult extends Component {
@@ -58,6 +59,7 @@ export default class CardResult extends Component {
         <img src={imageUrl} />
         <div className="actions">
           <Button.Group>
+            {card && <OracleModal card={card} />}
             {card && <RulingsModal card={card} rulings={rulings} />}
             <Button icon onClick={onRequestRemove}>
               <Icon name="trash outline" />

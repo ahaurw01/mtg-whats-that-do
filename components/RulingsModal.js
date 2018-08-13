@@ -3,6 +3,7 @@ import { Button, Modal, Comment, Grid, Icon } from 'semantic-ui-react';
 import WizardsIcon from './WizardsIcon';
 import ScryfallIcon from './ScryfallIcon';
 import { getImageUrl, isDoubleFaced } from '../utils/card-data';
+import Iconify from './Iconify';
 
 const makeCommentData = ruling => {
   let source;
@@ -34,9 +35,10 @@ const makeCommentData = ruling => {
 
 const RulingsModal = ({ card, rulings }) => (
   <Modal
+    closeIcon
     trigger={
-      <Button primary disabled={!rulings.length}>
-        Rulings
+      <Button icon secondary disabled={!rulings.length} title="Rulings">
+        <Icon name="legal" />
       </Button>
     }
   >
@@ -55,7 +57,9 @@ const RulingsModal = ({ card, rulings }) => (
                   <Comment.Content>
                     <Comment.Author as="span">{source}</Comment.Author>
                     <Comment.Metadata as="span">{publishedAt}</Comment.Metadata>
-                    <Comment.Text>{comment}</Comment.Text>
+                    <Comment.Text>
+                      <Iconify>{comment}</Iconify>
+                    </Comment.Text>
                   </Comment.Content>
                 </Comment>
               ))}

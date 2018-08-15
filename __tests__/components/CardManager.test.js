@@ -24,9 +24,12 @@ describe('CardManager', () => {
       mockCardData
     );
     fetchMock.get('rulings uri', mockRulingsData);
+    localStorage.clear();
   });
 
-  afterEach(fetchMock.restore);
+  afterEach(() => {
+    fetchMock.restore();
+  });
 
   test('renders just the CardFinder to start', () => {
     const wrapper = shallow(<CardManager />);
@@ -159,5 +162,65 @@ describe('CardManager', () => {
     wrapper.update();
     expect(wrapper.find(CardResult)).toHaveLength(1);
     expect(wrapper.find(CardResult).prop('name')).toEqual('Lightning Bolt');
+  });
+
+  describe('retrieveSavedState', () => {
+    test('is default state if no storage exists', () => {
+      localStorage.clear();
+
+      const manager = shallow(<CardManager />).instance();
+      expect(manager.retrieveSavedState()).toEqual({ cards: [] });
+    });
+
+    test('is default state if no storage is bogus', () => {
+      localStorage.setItem('CardManager#state', 'BOGUS');
+
+      const manager = shallow(<CardManager />).instance();
+      expect(manager.retrieveSavedState()).toEqual({ cards: [] });
+    });
+
+    test('is from storage', () => {
+      localStorage.setItem(
+        'CardManager#state',
+        JSON.stringify({
+          cards: [{ name: 'Fling', isPinned: true }],
+        })
+      );
+
+      const manager = shallow(<CardManager />).instance();
+      expect(manager.retrieveSavedState()).toEqual({
+        cards: [{ name: 'Fling', isPinned: true }],
+      });
+    });
+  });
+
+  describe('componentDidMount', () => {
+    test('updates state to saved state', () => {
+      localStorage.setItem(
+        'CardManager#state',
+        JSON.stringify({
+          cards: [{ name: 'Fling', isPinned: true }],
+        })
+      );
+
+      const wrapper = shallow(<CardManager />);
+      wrapper.update();
+
+      expect(wrapper.find(CardResult)).toHaveLength(1);
+      expect(wrapper.find(CardResult).prop('name')).toBe('Fling');
+      expect(wrapper.find(CardResult).prop('isPinned')).toBe(true);
+    });
+  });
+
+  describe('componentDidUpdate', () => {
+    test('saves state', () => {
+      const wrapper = shallow(<CardManager />);
+
+      wrapper.setState({ cards: [{ name: 'Fling', isPinned: true }] });
+
+      expect(localStorage.getItem('CardManager#state')).toEqual(
+        '{"cards":[{"name":"Fling","isPinned":true}]}'
+      );
+    });
   });
 });

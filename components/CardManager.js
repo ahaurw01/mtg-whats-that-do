@@ -4,9 +4,32 @@ import CardFinder from './CardFinder';
 import { Grid } from 'semantic-ui-react';
 import Column from './Column';
 
+const LOCAL_STORAGE_STATE_KEY = 'CardManager#state';
+
 export default class CardManager extends Component {
-  state = {
-    cards: [],
+  state = { cards: [] };
+
+  retrieveSavedState = () => {
+    try {
+      const savedState = JSON.parse(
+        localStorage.getItem(LOCAL_STORAGE_STATE_KEY)
+      );
+      if (!savedState || !savedState.cards) {
+        throw new Error();
+      }
+      return savedState;
+    } catch (e) {
+      return { cards: [] };
+    }
+  };
+
+  componentDidMount() {
+    this.setState(this.retrieveSavedState());
+  }
+
+  saveState = () => {
+    const stateJson = JSON.stringify(this.state);
+    localStorage.setItem(LOCAL_STORAGE_STATE_KEY, stateJson);
   };
 
   removeCard = name => {
@@ -37,6 +60,10 @@ export default class CardManager extends Component {
     this.setState(prevState => ({
       cards: prevState.cards.filter(card => card.isPinned),
     }));
+  }
+
+  componentDidUpdate() {
+    this.saveState();
   }
 
   render() {

@@ -23,7 +23,7 @@ describe('OracleModal', () => {
       '“The most enlightened mages create beauty from violence.” —Medomai the Ageless',
     loyalty: null,
     image_uris: {
-      border_crop: 'hi',
+      large: 'hi',
     },
   };
   const mockCardWithFaces = {
@@ -42,7 +42,7 @@ describe('OracleModal', () => {
           '“The most enlightened mages create beauty from violence.” —Medomai the Ageless',
         loyalty: null,
         image_uris: {
-          border_crop: 'hi 1',
+          large: 'hi 1',
         },
       },
       {
@@ -59,7 +59,7 @@ describe('OracleModal', () => {
           '“The most enlightened mages create beauty from violence.” —Medomai the Ageless',
         loyalty: null,
         image_uris: {
-          border_crop: 'hi 2',
+          large: 'hi 2',
         },
       },
     ],

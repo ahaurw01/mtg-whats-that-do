@@ -9,22 +9,22 @@ describe('getImageUrl', () => {
     expect(getImageUrl()).toBe('');
   });
 
-  test('is image_uris.border_crop if no card faces', () => {
+  test('is image_uris.large if no card faces', () => {
     const card = {
       image_uris: {
-        border_crop: 'hi',
+        large: 'hi',
       },
     };
 
     expect(getImageUrl(card)).toBe('hi');
   });
 
-  test('is first face image_uris.border_crop if faces exist', () => {
+  test('is first face image_uris.large if faces exist', () => {
     const card = {
       card_faces: [
         {
           image_uris: {
-            border_crop: 'hi',
+            large: 'hi',
           },
         },
       ],
@@ -33,7 +33,7 @@ describe('getImageUrl', () => {
     expect(getImageUrl(card)).toBe('hi');
   });
 
-  test('is given face image_uris.border_crop if faces exist', () => {
+  test('is given face image_uris.large if faces exist', () => {
     const card = {
       card_faces: [
         {},
@@ -41,7 +41,7 @@ describe('getImageUrl', () => {
         {},
         {
           image_uris: {
-            border_crop: 'hi',
+            large: 'hi',
           },
         },
       ],

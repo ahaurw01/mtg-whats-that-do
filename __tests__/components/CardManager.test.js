@@ -9,7 +9,7 @@ import { shallow, mount } from 'enzyme';
 describe('CardManager', () => {
   const mockCardData = {
     image_uris: {
-      border_crop: 'image uri',
+      large: 'image uri',
     },
     scryfall_uri: 'card uri',
     rulings_uri: 'rulings uri',

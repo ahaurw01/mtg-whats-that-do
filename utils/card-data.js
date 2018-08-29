@@ -1,15 +1,15 @@
 export const getImageUrl = (card, faceIndex = 0) => {
   if (!card) return '';
 
-  if (card.image_uris && card.image_uris.border_crop) {
-    return card.image_uris.border_crop;
+  if (card.image_uris && card.image_uris.large) {
+    return card.image_uris.large;
   }
 
   if (card.card_faces) {
-    return card.card_faces[faceIndex].image_uris.border_crop;
+    return card.card_faces[faceIndex].image_uris.large;
   }
 
-  return card.image_uris.border_crop;
+  return '';
 };
 
 export const isDoubleFaced = card =>

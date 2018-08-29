@@ -4,6 +4,7 @@ import { Button, Segment, Icon } from 'semantic-ui-react';
 import RulingsModal from './RulingsModal';
 import OracleModal from './OracleModal';
 import { getImageUrl, isDoubleFaced } from '../utils/card-data';
+import CardImage from './CardImage';
 
 export default class CardResult extends Component {
   static propTypes = {
@@ -55,8 +56,8 @@ export default class CardResult extends Component {
     const { onRequestRemove, onRequestPin, isPinned } = this.props;
     const imageUrl = getImageUrl(card, faceIndex);
     return (
-      <Segment raised>
-        <img src={imageUrl} />
+      <Segment raised className="result">
+        <CardImage src={imageUrl} />
         <div className="actions">
           <Button.Group>
             {card && <OracleModal card={card} />}

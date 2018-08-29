@@ -9,22 +9,22 @@ describe('getImageUrl', () => {
     expect(getImageUrl()).toBe('');
   });
 
-  test('is image_uris.border_crop if no card faces', () => {
+  test('is image_uris.large if no card faces', () => {
     const card = {
       image_uris: {
-        border_crop: 'hi',
+        large: 'hi',
       },
     };
 
     expect(getImageUrl(card)).toBe('hi');
   });
 
-  test('is first face image_uris.border_crop if faces exist', () => {
+  test('is first face image_uris.large if faces exist', () => {
     const card = {
       card_faces: [
         {
           image_uris: {
-            border_crop: 'hi',
+            large: 'hi',
           },
         },
       ],
@@ -33,7 +33,7 @@ describe('getImageUrl', () => {
     expect(getImageUrl(card)).toBe('hi');
   });
 
-  test('is given face image_uris.border_crop if faces exist', () => {
+  test('is given face image_uris.large if faces exist', () => {
     const card = {
       card_faces: [
         {},
@@ -41,7 +41,7 @@ describe('getImageUrl', () => {
         {},
         {
           image_uris: {
-            border_crop: 'hi',
+            large: 'hi',
           },
         },
       ],
@@ -62,12 +62,20 @@ describe('isDoubleFaced', () => {
     expect(isDoubleFaced(card)).toBe(false);
   });
 
-  test('is true if has card_faces', () => {
+  test('is true if has card_faces with images', () => {
+    const card = {
+      card_faces: [{ image_uris: [] }, { image_uris: [] }],
+    };
+
+    expect(isDoubleFaced(card)).toBe(true);
+  });
+
+  test('is false if has card_faces without images', () => {
     const card = {
       card_faces: [],
     };
 
-    expect(isDoubleFaced(card)).toBe(true);
+    expect(isDoubleFaced(card)).toBe(false);
   });
 });
 

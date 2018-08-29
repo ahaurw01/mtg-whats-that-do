@@ -14,7 +14,7 @@ describe('RulingsModal', () => {
 
   const mockCard = {
     image_uris: {
-      border_crop: 'image uri',
+      large: 'image uri',
     },
     name: 'Derevi, Empyrial Tactician',
   };
@@ -22,12 +22,12 @@ describe('RulingsModal', () => {
     card_faces: [
       {
         image_uris: {
-          border_crop: 'image uri face 1',
+          large: 'image uri face 1',
         },
       },
       {
         image_uris: {
-          border_crop: 'image uri face 2',
+          large: 'image uri face 2',
         },
       },
     ],

@@ -13,6 +13,7 @@ export default class CardFinder extends Component {
       results: [],
       loading: false,
       value: '',
+      lastFetchTime: 0,
     };
   }
 
@@ -23,7 +24,8 @@ export default class CardFinder extends Component {
       return;
     }
 
-    this.setState({ loading: true });
+    const lastFetchTime = +Date.now();
+    this.setState({ loading: true, lastFetchTime });
     fetch(
       `https://api.scryfall.com/cards/autocomplete?q=${encodeURIComponent(
         value
@@ -31,9 +33,15 @@ export default class CardFinder extends Component {
     )
       .then(result => result.json())
       .then(result =>
-        this.setState({
-          results: (result.data || []).map(name => ({ title: name })),
-          loading: false,
+        this.setState(prevState => {
+          if (prevState.lastFetchTime > lastFetchTime) {
+            // We've kicked off another fetch since this one. Ignore this one.
+            return;
+          }
+          return {
+            results: (result.data || []).map(name => ({ title: name })),
+            loading: false,
+          };
         })
       );
   };

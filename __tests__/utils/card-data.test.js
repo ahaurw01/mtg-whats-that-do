@@ -62,12 +62,20 @@ describe('isDoubleFaced', () => {
     expect(isDoubleFaced(card)).toBe(false);
   });
 
-  test('is true if has card_faces', () => {
+  test('is true if has card_faces with images', () => {
+    const card = {
+      card_faces: [{ image_uris: [] }, { image_uris: [] }],
+    };
+
+    expect(isDoubleFaced(card)).toBe(true);
+  });
+
+  test('is false if has card_faces without images', () => {
     const card = {
       card_faces: [],
     };
 
-    expect(isDoubleFaced(card)).toBe(true);
+    expect(isDoubleFaced(card)).toBe(false);
   });
 });
 

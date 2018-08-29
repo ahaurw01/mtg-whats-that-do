@@ -1,6 +1,10 @@
 export const getImageUrl = (card, faceIndex = 0) => {
   if (!card) return '';
 
+  if (card.image_uris && card.image_uris.border_crop) {
+    return card.image_uris.border_crop;
+  }
+
   if (card.card_faces) {
     return card.card_faces[faceIndex].image_uris.border_crop;
   }
@@ -8,7 +12,11 @@ export const getImageUrl = (card, faceIndex = 0) => {
   return card.image_uris.border_crop;
 };
 
-export const isDoubleFaced = card => !!card && !!card.card_faces;
+export const isDoubleFaced = card =>
+  !!card &&
+  !!card.card_faces &&
+  card.card_faces.length > 1 &&
+  !!card.card_faces[1].image_uris;
 
 /**
  * Extract oracle data from the card. There may be two items if the card is
@@ -33,5 +41,5 @@ export const getOracleData = card => {
     loyalty: face.loyalty,
   });
 
-  return isDoubleFaced(card) ? card.card_faces.map(mapper) : [mapper(card)];
+  return card.card_faces ? card.card_faces.map(mapper) : [mapper(card)];
 };

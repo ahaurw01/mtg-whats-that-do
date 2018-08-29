@@ -1,6 +1,7 @@
 import React from 'react';
 import fetchMock from 'fetch-mock';
 import CardResult from '../../components/CardResult';
+import CardImage from '../../components/CardImage';
 import { Button, Icon } from 'semantic-ui-react';
 import { mount } from 'enzyme';
 
@@ -93,8 +94,8 @@ describe('CardResult', () => {
 
     setImmediate(() => {
       wrapper.update();
-      expect(wrapper.find('img')).toHaveLength(1);
-      expect(wrapper.find('img').prop('src')).toEqual('image uri');
+      expect(wrapper.find(CardImage)).toHaveLength(1);
+      expect(wrapper.find(CardImage).prop('src')).toEqual('image uri');
       done();
     });
   });
@@ -115,8 +116,8 @@ describe('CardResult', () => {
 
     setImmediate(() => {
       wrapper.update();
-      expect(wrapper.find('img')).toHaveLength(1);
-      expect(wrapper.find('img').prop('src')).toEqual('image uri face 1');
+      expect(wrapper.find(CardImage)).toHaveLength(1);
+      expect(wrapper.find(CardImage).prop('src')).toEqual('image uri face 1');
       done();
     });
   });
@@ -261,9 +262,9 @@ describe('CardResult', () => {
         .find(Icon)
         .filter({ name: 'refresh' })
         .closest(Button);
-      expect(wrapper.find('img').prop('src')).toEqual('image uri face 1');
+      expect(wrapper.find(CardImage).prop('src')).toEqual('image uri face 1');
       button.simulate('click');
-      expect(wrapper.find('img').prop('src')).toEqual('image uri face 2');
+      expect(wrapper.find(CardImage).prop('src')).toEqual('image uri face 2');
       done();
     });
   });

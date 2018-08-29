@@ -9,22 +9,43 @@ export default class CardImage extends Component {
 
   state = {
     loading: true,
+    src: '',
   };
 
-  imageLoaded = () => this.setState({ loading: false });
+  fetchImage = () => {
+    if (this.img) return;
+    const img = document.createElement('img');
+    img.src = this.props.src;
+    img.onload = () => this.setState({ loading: false, src: this.props.src });
+    this.img = img; // stash for testing purposes
+  };
+
+  componentDidUpdate() {
+    if (this.props.src) {
+      this.fetchImage();
+    }
+  }
+
+  componentDidMount() {
+    if (this.props.src) {
+      this.fetchImage();
+    }
+  }
 
   render() {
     return (
       <div>
-        <img src={this.props.src} onLoad={this.imageLoaded} />
-        {this.state.loading && (
+        {this.state.loading ? (
           <div className="spin">
             <Icon name="spinner" loading size="massive" className="spin" />
           </div>
+        ) : (
+          <img src={this.state.src} />
         )}
         <style jsx>{`
           img {
             width: 100%;
+            border-radius: 4.75% / 3.5%;
           }
           .spin {
             padding: 20px;

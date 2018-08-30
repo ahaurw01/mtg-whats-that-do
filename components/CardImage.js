@@ -4,42 +4,58 @@ import { Icon } from 'semantic-ui-react';
 
 export default class CardImage extends Component {
   static propTypes = {
-    src: PropTypes.string.isRequired,
+    sources: PropTypes.arrayOf(PropTypes.string).isRequired,
+    indexShowing: PropTypes.oneOf([0, 1]).isRequired,
   };
 
   state = {
-    loading: true,
+    loading: [true, true],
   };
 
-  fetchImage = () => {
-    if (this.img) return;
-    const img = document.createElement('img');
-    img.src = this.props.src;
-    img.onload = () => this.setState({ loading: false });
-    this.img = img; // stash for testing purposes
+  fetchImages = () => {
+    if (this.images) return;
+    this.images = this.props.sources.map((src, index) => {
+      const img = document.createElement('img');
+      img.src = src;
+      img.onload = () => {
+        this.setState(({ loading: prevLoading }) => ({
+          // Replace the loading item at <index> with false.
+          loading: [
+            ...prevLoading.slice(0, index),
+            false,
+            ...prevLoading.slice(index + 1, 2),
+          ],
+        }));
+      };
+      return img;
+    });
   };
 
   componentDidUpdate() {
-    if (this.props.src) {
-      this.fetchImage();
+    if (this.props.sources.length) {
+      this.fetchImages();
     }
   }
 
   componentDidMount() {
-    if (this.props.src) {
-      this.fetchImage();
+    if (this.props.sources.length) {
+      this.fetchImages();
     }
   }
 
   render() {
+    const { sources, indexShowing } = this.props;
+    const isSourceLoading = this.state.loading[indexShowing];
+    const src = sources[indexShowing];
+
     return (
       <div>
-        {this.state.loading ? (
+        {isSourceLoading ? (
           <div className="spin">
             <Icon name="spinner" loading size="massive" className="spin" />
           </div>
         ) : (
-          <img src={this.props.src} />
+          <img src={src} />
         )}
         <style jsx>{`
           img {

@@ -8,6 +8,7 @@ import {
 import Iconify from './Iconify';
 import PowerToughness from './PowerToughness';
 import cx from 'classnames';
+import CardImage from './CardImage';
 
 const OracleModal = ({ card }) => (
   <Modal
@@ -67,17 +68,13 @@ const OracleModal = ({ card }) => (
           ))}
         </Grid.Column>
         <Grid.Column only="computer" width="4">
-          <img src={getImageSources(card)[0]} />
-          {isDoubleFaced(card) && <img src={getImageSources(card)[1]} />}
+          <CardImage sources={getImageSources(card)} indexShowing={0} />
+          {isDoubleFaced(card) && (
+            <CardImage sources={getImageSources(card)} indexShowing={1} />
+          )}
         </Grid.Column>
       </Grid>
     </Modal.Content>
-    <style jsx>{`
-      img {
-        width: 100%;
-        border-radius: 4px;
-      }
-    `}</style>
     <style global jsx>{`
       .oracle-card-header {
         display: flex;

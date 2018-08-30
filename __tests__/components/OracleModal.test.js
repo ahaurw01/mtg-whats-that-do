@@ -1,5 +1,6 @@
 import React from 'react';
 import OracleModal from '../../components/OracleModal';
+import CardImage from '../../components/CardImage';
 import { Modal, Button, Segment } from 'semantic-ui-react';
 import { mount } from 'enzyme';
 
@@ -106,15 +107,14 @@ describe('OracleModal', () => {
     );
   });
 
+  // These tests are difficult because semantic ui portal rendering is not supported here.
   test('renders the card image', () => {
     const wrapper = mount(<OracleModal card={mockCard} />);
     wrapper.find(Button).simulate('click');
 
     const modal = document.querySelector('.modal');
     expect(modal).toBeDefined();
-    const images = modal.querySelectorAll('img');
-    expect(images).toHaveLength(1);
-    expect(images[0].src).toEqual('hi');
+    expect(modal.querySelectorAll('.spin.front')).toHaveLength(1);
   });
 
   test('renders both card faces', () => {
@@ -123,9 +123,6 @@ describe('OracleModal', () => {
 
     const modal = document.querySelector('.modal');
     expect(modal).toBeDefined();
-    const images = modal.querySelectorAll('img');
-    expect(images).toHaveLength(2);
-    expect(images[0].src).toEqual('hi 1');
-    expect(images[1].src).toEqual('hi 2');
+    expect(modal.querySelectorAll('.spin.front')).toHaveLength(2);
   });
 });

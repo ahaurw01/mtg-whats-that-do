@@ -39,12 +39,15 @@ export default class CardManager extends Component {
   };
 
   addCard = name => {
-    this.setState(prevState => ({
-      cards: prevState.cards.slice().concat({
-        name,
-        isPinned: false,
-      }),
-    }));
+    // Prevents the same card being added twice
+    if (this.state.cards.findIndex(card => card.name === name) === -1) {
+      this.setState(prevState => ({
+        cards: prevState.cards.slice().concat({
+          name,
+          isPinned: false,
+        }),
+      }));
+    }
   };
 
   pinCard = name => {

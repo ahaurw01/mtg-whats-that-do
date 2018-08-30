@@ -1,5 +1,6 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
+import cx from 'classnames';
 import { Icon } from 'semantic-ui-react';
 
 export default class CardImage extends Component {
@@ -45,26 +46,74 @@ export default class CardImage extends Component {
 
   render() {
     const { sources, indexShowing } = this.props;
-    const isSourceLoading = this.state.loading[indexShowing];
-    const src = sources[indexShowing];
+    const { loading } = this.state;
+    const firstLoadedSrc = !loading[0]
+      ? sources[0]
+      : !loading[1] ? sources[1] : null;
 
     return (
-      <div>
-        {isSourceLoading ? (
-          <div className="spin">
-            <Icon name="spinner" loading size="massive" className="spin" />
-          </div>
-        ) : (
-          <img src={src} />
-        )}
+      <div className="outer">
+        <div className={cx('card', { flipped: indexShowing === 1 })}>
+          {sources.map(
+            (src, index) =>
+              loading[index] ? (
+                <div
+                  className={cx('spin', {
+                    front: index === 0,
+                    back: index === 1,
+                  })}
+                  key={`spinner-${index}`}
+                >
+                  <Icon name="spinner" loading size="massive" />
+                </div>
+              ) : (
+                <img
+                  src={src}
+                  key={src}
+                  className={cx('img', {
+                    front: index === 0,
+                    back: index === 1,
+                  })}
+                />
+              )
+          )}
+          {firstLoadedSrc && <img src={firstLoadedSrc} className="placer" />}
+        </div>
+
         <style jsx>{`
           img {
             width: 100%;
             border-radius: 4.75% / 3.5%;
+            backface-visibility: hidden;
           }
           .spin {
             padding: 20px;
             text-align: center;
+            position: absolute;
+            width: 100%;
+            backface-visibility: hidden;
+          }
+          .outer {
+            position: relative;
+            perspective: 900px;
+          }
+          .card {
+            min-height: 160px;
+            transition: transform 500ms;
+            transform-style: preserve-3d;
+          }
+          .card.flipped {
+            transform: rotateY(180deg);
+          }
+          .front,
+          .back {
+            position: absolute;
+          }
+          .back {
+            transform: rotateY(180deg);
+          }
+          .placer {
+            visibility: hidden;
           }
         `}</style>
       </div>

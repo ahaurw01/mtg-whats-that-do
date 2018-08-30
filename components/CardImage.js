@@ -9,14 +9,13 @@ export default class CardImage extends Component {
 
   state = {
     loading: true,
-    src: '',
   };
 
   fetchImage = () => {
     if (this.img) return;
     const img = document.createElement('img');
     img.src = this.props.src;
-    img.onload = () => this.setState({ loading: false, src: this.props.src });
+    img.onload = () => this.setState({ loading: false });
     this.img = img; // stash for testing purposes
   };
 
@@ -40,7 +39,7 @@ export default class CardImage extends Component {
             <Icon name="spinner" loading size="massive" className="spin" />
           </div>
         ) : (
-          <img src={this.state.src} />
+          <img src={this.props.src} />
         )}
         <style jsx>{`
           img {

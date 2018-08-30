@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Button, Segment, Icon } from 'semantic-ui-react';
 import RulingsModal from './RulingsModal';
 import OracleModal from './OracleModal';
-import { getImageUrl, isDoubleFaced } from '../utils/card-data';
+import { getImageSources, isDoubleFaced } from '../utils/card-data';
 import CardImage from './CardImage';
 
 export default class CardResult extends Component {
@@ -27,7 +27,7 @@ export default class CardResult extends Component {
     )
       .then(result => result.json())
       .then(card => {
-        this.setState({ card }, this.prefetchOppositeFaceImage);
+        this.setState({ card });
         return fetch(card.rulings_uri);
       })
       .then(result => result.json())
@@ -38,13 +38,6 @@ export default class CardResult extends Component {
       );
   }
 
-  prefetchOppositeFaceImage = () => {
-    const { card } = this.state;
-    if (!isDoubleFaced(card)) return;
-
-    document.createElement('img').src = getImageUrl(card, 1);
-  };
-
   flip = () => {
     this.setState(({ faceIndex }) => ({
       faceIndex: (faceIndex + 1) % 2,
@@ -54,10 +47,10 @@ export default class CardResult extends Component {
   render() {
     const { card, rulings, faceIndex } = this.state;
     const { onRequestRemove, onRequestPin, isPinned } = this.props;
-    const imageUrl = getImageUrl(card, faceIndex);
+    const imageSources = getImageSources(card);
     return (
       <Segment raised className="result">
-        <CardImage src={imageUrl} />
+        <CardImage sources={imageSources} indexShowing={faceIndex} />
         <div className="actions">
           <Button.Group>
             {card && <OracleModal card={card} />}

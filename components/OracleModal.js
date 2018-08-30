@@ -1,6 +1,10 @@
 import PropTypes from 'prop-types';
 import { Button, Modal, Segment, Grid, Icon, Header } from 'semantic-ui-react';
-import { getImageUrl, isDoubleFaced, getOracleData } from '../utils/card-data';
+import {
+  getImageSources,
+  isDoubleFaced,
+  getOracleData,
+} from '../utils/card-data';
 import Iconify from './Iconify';
 import PowerToughness from './PowerToughness';
 import cx from 'classnames';
@@ -63,8 +67,8 @@ const OracleModal = ({ card }) => (
           ))}
         </Grid.Column>
         <Grid.Column only="computer" width="4">
-          <img src={getImageUrl(card)} />
-          {isDoubleFaced(card) && <img src={getImageUrl(card, 1)} />}
+          <img src={getImageSources(card)[0]} />
+          {isDoubleFaced(card) && <img src={getImageSources(card)[1]} />}
         </Grid.Column>
       </Grid>
     </Modal.Content>

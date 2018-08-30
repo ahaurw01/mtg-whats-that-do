@@ -119,6 +119,7 @@ describe('RulingsModal', () => {
     );
   });
 
+  // These tests are difficult because semantic ui portal rendering is not supported here.
   test('renders the card image', () => {
     const wrapper = mount(
       <RulingsModal card={mockCard} rulings={mockRulings} />
@@ -127,9 +128,7 @@ describe('RulingsModal', () => {
 
     const modal = document.querySelector('.modal');
     expect(modal).toBeDefined();
-    const images = modal.querySelectorAll('img');
-    expect(images).toHaveLength(1);
-    expect(images[0].src).toEqual('image uri');
+    expect(modal.querySelectorAll('.spin.front')).toHaveLength(1);
   });
 
   test('renders both card faces', () => {
@@ -140,9 +139,6 @@ describe('RulingsModal', () => {
 
     const modal = document.querySelector('.modal');
     expect(modal).toBeDefined();
-    const images = modal.querySelectorAll('img');
-    expect(images).toHaveLength(2);
-    expect(images[0].src).toEqual('image uri face 1');
-    expect(images[1].src).toEqual('image uri face 2');
+    expect(modal.querySelectorAll('.spin.front')).toHaveLength(2);
   });
 });

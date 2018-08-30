@@ -95,7 +95,8 @@ describe('CardResult', () => {
     setImmediate(() => {
       wrapper.update();
       expect(wrapper.find(CardImage)).toHaveLength(1);
-      expect(wrapper.find(CardImage).prop('src')).toEqual('image uri');
+      expect(wrapper.find(CardImage).prop('sources')).toEqual(['image uri']);
+      expect(wrapper.find(CardImage).prop('indexShowing')).toEqual(0);
       done();
     });
   });
@@ -117,7 +118,11 @@ describe('CardResult', () => {
     setImmediate(() => {
       wrapper.update();
       expect(wrapper.find(CardImage)).toHaveLength(1);
-      expect(wrapper.find(CardImage).prop('src')).toEqual('image uri face 1');
+      expect(wrapper.find(CardImage).prop('sources')).toEqual([
+        'image uri face 1',
+        'image uri face 2',
+      ]);
+      expect(wrapper.find(CardImage).prop('indexShowing')).toEqual(0);
       done();
     });
   });
@@ -262,9 +267,17 @@ describe('CardResult', () => {
         .find(Icon)
         .filter({ name: 'refresh' })
         .closest(Button);
-      expect(wrapper.find(CardImage).prop('src')).toEqual('image uri face 1');
+      expect(wrapper.find(CardImage).prop('sources')).toEqual([
+        'image uri face 1',
+        'image uri face 2',
+      ]);
+      expect(wrapper.find(CardImage).prop('indexShowing')).toEqual(0);
       button.simulate('click');
-      expect(wrapper.find(CardImage).prop('src')).toEqual('image uri face 2');
+      expect(wrapper.find(CardImage).prop('sources')).toEqual([
+        'image uri face 1',
+        'image uri face 2',
+      ]);
+      expect(wrapper.find(CardImage).prop('indexShowing')).toEqual(1);
       done();
     });
   });

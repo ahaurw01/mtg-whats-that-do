@@ -1,25 +1,25 @@
 import {
-  getImageUrl,
+  getImageSources,
   isDoubleFaced,
   getOracleData,
 } from '../../utils/card-data';
 
-describe('getImageUrl', () => {
-  test('is empty string if card data is falsy', () => {
-    expect(getImageUrl()).toBe('');
+describe('getImageSources', () => {
+  test('is empty array if card data is falsy', () => {
+    expect(getImageSources()).toEqual([]);
   });
 
-  test('is image_uris.large if no card faces', () => {
+  test('is [image_uris.large] if no card faces', () => {
     const card = {
       image_uris: {
         large: 'hi',
       },
     };
 
-    expect(getImageUrl(card)).toBe('hi');
+    expect(getImageSources(card)).toEqual(['hi']);
   });
 
-  test('is first face image_uris.large if faces exist', () => {
+  test('is image_uris.large entries if faces exist', () => {
     const card = {
       card_faces: [
         {
@@ -27,27 +27,15 @@ describe('getImageUrl', () => {
             large: 'hi',
           },
         },
-      ],
-    };
-
-    expect(getImageUrl(card)).toBe('hi');
-  });
-
-  test('is given face image_uris.large if faces exist', () => {
-    const card = {
-      card_faces: [
-        {},
-        {},
-        {},
         {
           image_uris: {
-            large: 'hi',
+            large: 'bye',
           },
         },
       ],
     };
 
-    expect(getImageUrl(card, 3)).toBe('hi');
+    expect(getImageSources(card)).toEqual(['hi', 'bye']);
   });
 });
 

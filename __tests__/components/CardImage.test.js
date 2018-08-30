@@ -35,7 +35,7 @@ describe('CardImage', () => {
     expect(wrapper.find('img').prop('src')).toBe('/img.jpg');
   });
 
-  test('does not re-fetch image', () => {
+  test('can update src', () => {
     const wrapper = mount(<CardImage src="" />);
     wrapper.setProps({ src: '/img.jpg' });
 
@@ -43,10 +43,9 @@ describe('CardImage', () => {
     img.onload();
 
     wrapper.update();
-    wrapper.setProps({ src: '/this-wouldnt-happen.jpg' });
+    wrapper.setProps({ src: '/other-img.jpg' });
     wrapper.update();
 
-    expect(wrapper.instance().img).toBe(img);
-    expect(wrapper.find('img').prop('src')).toBe('/img.jpg');
+    expect(wrapper.find('img').prop('src')).toBe('/other-img.jpg');
   });
 });

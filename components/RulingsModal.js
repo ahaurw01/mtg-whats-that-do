@@ -4,6 +4,7 @@ import WizardsIcon from './WizardsIcon';
 import ScryfallIcon from './ScryfallIcon';
 import { getImageSources, isDoubleFaced } from '../utils/card-data';
 import Iconify from './Iconify';
+import CardImage from './CardImage';
 
 const makeCommentData = ruling => {
   let source;
@@ -66,8 +67,10 @@ const RulingsModal = ({ card, rulings }) => (
           </Comment.Group>
         </Grid.Column>
         <Grid.Column only="computer" width="4">
-          <img src={getImageSources(card)[0]} />
-          {isDoubleFaced(card) && <img src={getImageSources(card)[1]} />}
+          <CardImage sources={getImageSources(card)} indexShowing={0} />
+          {isDoubleFaced(card) && (
+            <CardImage sources={getImageSources(card)} indexShowing={1} />
+          )}
         </Grid.Column>
       </Grid>
     </Modal.Content>

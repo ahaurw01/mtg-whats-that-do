@@ -1,6 +1,6 @@
 import React from 'react';
 import fetchMock from 'fetch-mock';
-import CardManager from '../../components/CardManager';
+import CardManager, { retrieveSavedState } from '../../components/CardManager';
 import CardFinder from '../../components/CardFinder';
 import CardResult from '../../components/CardResult';
 import { Button } from 'semantic-ui-react';
@@ -165,18 +165,32 @@ describe('CardManager', () => {
   });
 
   describe('retrieveSavedState', () => {
+    afterEach(() => {
+      location.hash = '';
+      localStorage.clear();
+    });
+
+    test('uses hash state', () => {
+      location.hash = '#%5B"Saheeli%20Rai"%2C"Saheeli%2C%20the%20Gifted"%5D';
+
+      expect(retrieveSavedState()).toEqual({
+        cards: [
+          { isPinned: false, name: 'Saheeli Rai' },
+          { isPinned: false, name: 'Saheeli, the Gifted' },
+        ],
+      });
+    });
+
     test('is default state if no storage exists', () => {
       localStorage.clear();
 
-      const manager = shallow(<CardManager />).instance();
-      expect(manager.retrieveSavedState()).toEqual({ cards: [] });
+      expect(retrieveSavedState()).toEqual({ cards: [] });
     });
 
     test('is default state if no storage is bogus', () => {
       localStorage.setItem('CardManager#state', 'BOGUS');
 
-      const manager = shallow(<CardManager />).instance();
-      expect(manager.retrieveSavedState()).toEqual({ cards: [] });
+      expect(retrieveSavedState()).toEqual({ cards: [] });
     });
 
     test('is from storage', () => {
@@ -187,9 +201,48 @@ describe('CardManager', () => {
         })
       );
 
-      const manager = shallow(<CardManager />).instance();
-      expect(manager.retrieveSavedState()).toEqual({
+      expect(retrieveSavedState()).toEqual({
         cards: [{ name: 'Fling', isPinned: true }],
+      });
+    });
+
+    test('prioritizes hash', () => {
+      location.hash = '#%5B"Saheeli%20Rai"%2C"Saheeli%2C%20the%20Gifted"%5D';
+      localStorage.setItem(
+        'CardManager#state',
+        JSON.stringify({
+          cards: [{ name: 'Fling', isPinned: true }],
+        })
+      );
+
+      expect(retrieveSavedState()).toEqual({
+        cards: [
+          { isPinned: false, name: 'Saheeli Rai' },
+          { isPinned: false, name: 'Saheeli, the Gifted' },
+        ],
+      });
+    });
+
+    test('is from storage if hash is bogus', () => {
+      location.hash = '#BOGUS';
+      localStorage.setItem(
+        'CardManager#state',
+        JSON.stringify({
+          cards: [{ name: 'Fling', isPinned: true }],
+        })
+      );
+
+      expect(retrieveSavedState()).toEqual({
+        cards: [{ name: 'Fling', isPinned: true }],
+      });
+    });
+
+    test('is default state if all options fail', () => {
+      location.hash = '#BOGUS';
+      localStorage.setItem('CardManager#state', 'BOGUS');
+
+      expect(retrieveSavedState()).toEqual({
+        cards: [],
       });
     });
   });
@@ -209,6 +262,14 @@ describe('CardManager', () => {
       expect(wrapper.find(CardResult)).toHaveLength(1);
       expect(wrapper.find(CardResult).prop('name')).toBe('Fling');
       expect(wrapper.find(CardResult).prop('isPinned')).toBe(true);
+    });
+
+    test('clears hash after mount', () => {
+      location.hash = '#something';
+
+      const wrapper = shallow(<CardManager />);
+
+      expect(location.hash).toBe('');
     });
   });
 

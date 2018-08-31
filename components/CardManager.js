@@ -6,25 +6,34 @@ import Column from './Column';
 
 export const LOCAL_STORAGE_STATE_KEY = 'CardManager#state';
 
+// Prioritize hash-based state. If not there, look for storage-based state.
+export function retrieveSavedState() {
+  try {
+    const hash = (location.hash || '').replace('#', '');
+    const names = JSON.parse(decodeURIComponent(hash));
+    return { cards: names.map(name => ({ name, isPinned: false })) };
+  } catch (e) {
+    // Ignore error
+  }
+
+  try {
+    const savedState = JSON.parse(
+      localStorage.getItem(LOCAL_STORAGE_STATE_KEY)
+    );
+    if (!savedState || !savedState.cards) {
+      throw new Error();
+    }
+    return savedState;
+  } catch (e) {
+    return { cards: [] };
+  }
+}
+
 export default class CardManager extends Component {
   state = { cards: [] };
 
-  retrieveSavedState = () => {
-    try {
-      const savedState = JSON.parse(
-        localStorage.getItem(LOCAL_STORAGE_STATE_KEY)
-      );
-      if (!savedState || !savedState.cards) {
-        throw new Error();
-      }
-      return savedState;
-    } catch (e) {
-      return { cards: [] };
-    }
-  };
-
   componentDidMount() {
-    this.setState(this.retrieveSavedState());
+    this.setState(retrieveSavedState(), () => (location.hash = ''));
   }
 
   saveState = () => {

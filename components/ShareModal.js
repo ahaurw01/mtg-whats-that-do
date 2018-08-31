@@ -81,7 +81,6 @@ export default class ShareModal extends Component {
             />
           </Modal.Description>
         </Modal.Content>
-        <style jsx>{``}</style>
       </Modal>
     );
   }

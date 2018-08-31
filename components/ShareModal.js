@@ -50,7 +50,7 @@ export default class ShareModal extends Component {
     return (
       <Modal closeIcon size="tiny" onClose={onClose} open={isOpen}>
         <Modal.Header>
-          <Icon name="share" /> Share Link
+          <Icon name="share alternate" /> Share Link
         </Modal.Header>
         <Modal.Content>
           <Modal.Description>
@@ -60,6 +60,7 @@ export default class ShareModal extends Component {
             </p>
             <Input
               size="big"
+              fluid
               ref={input => (this.input = input)}
               value={constructLink()}
               readOnly

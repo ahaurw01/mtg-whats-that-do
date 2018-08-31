@@ -19,7 +19,7 @@ export const constructLink = () => {
       ? 'http://localhost:1337'
       : 'https://whatsthatdo.net';
 
-  if (stringifiedNames) url += stringifiedNames;
+  if (stringifiedNames) url += `#${stringifiedNames}`;
 
   return url;
 };

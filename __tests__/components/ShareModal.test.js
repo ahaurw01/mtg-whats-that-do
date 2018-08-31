@@ -36,7 +36,7 @@ describe('ShareModal', () => {
         })
       );
       expect(constructLink()).toBe(
-        'https://whatsthatdo.net%5B%22Saheeli%20Rai%22%5D'
+        'https://whatsthatdo.net#%5B%22Saheeli%20Rai%22%5D'
       );
     });
 
@@ -61,7 +61,7 @@ describe('ShareModal', () => {
         })
       );
       expect(constructLink()).toBe(
-        "https://whatsthatdo.net%5B%22Saheeli%20Rai%22%2C%22Zndrsplt's%20Judgment%22%2C%22Who%20%2F%2F%20What%20%2F%2F%20When%20%2F%2F%20Where%20%2F%2F%20Why%22%5D"
+        "https://whatsthatdo.net#%5B%22Saheeli%20Rai%22%2C%22Zndrsplt's%20Judgment%22%2C%22Who%20%2F%2F%20What%20%2F%2F%20When%20%2F%2F%20Where%20%2F%2F%20Why%22%5D"
       );
     });
   });

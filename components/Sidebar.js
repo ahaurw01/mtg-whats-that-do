@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { Icon, Menu, Segment, Sidebar, Button } from 'semantic-ui-react';
+import { Icon, Menu, Sidebar } from 'semantic-ui-react';
 
 const SiteSidebar = ({ isOpen, onClose, onOpenShareModal, onClearCards }) => (
   <Sidebar
@@ -35,6 +35,7 @@ SiteSidebar.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   onOpenShareModal: PropTypes.func.isRequired,
+  onClearCards: PropTypes.func.isRequired,
 };
 
 export default SiteSidebar;

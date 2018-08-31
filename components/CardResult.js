@@ -56,7 +56,7 @@ export default class CardResult extends Component {
             {card && <OracleModal card={card} />}
             {card && <RulingsModal card={card} rulings={rulings} />}
             <Button icon onClick={onRequestRemove}>
-              <Icon name="trash outline" />
+              <Icon name="trash" />
             </Button>
             <Button icon toggle active={isPinned} onClick={onRequestPin}>
               <Icon name="pin" />

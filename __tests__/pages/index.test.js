@@ -13,7 +13,7 @@ describe('Index', () => {
     wrapper
       .find(MainHeader)
       .find('a')
-      .at(0)
+      .at(1)
       .simulate('click');
 
     expect(clearCards.mock.calls).toHaveLength(1);

@@ -4,7 +4,7 @@ import CardFinder from './CardFinder';
 import { Grid } from 'semantic-ui-react';
 import Column from './Column';
 
-const LOCAL_STORAGE_STATE_KEY = 'CardManager#state';
+export const LOCAL_STORAGE_STATE_KEY = 'CardManager#state';
 
 export default class CardManager extends Component {
   state = { cards: [] };

@@ -46,9 +46,15 @@ export default class ShareModal extends Component {
   };
 
   render() {
-    const { isOpen, onClose } = this.props;
+    const { isOpen } = this.props;
     return (
-      <Modal closeIcon size="tiny" onClose={onClose} open={isOpen}>
+      <Modal
+        closeIcon
+        centered={false}
+        size="tiny"
+        onClose={this.onClose}
+        open={isOpen}
+      >
         <Modal.Header>
           <Icon name="share alternate" /> Share Link
         </Modal.Header>

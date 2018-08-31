@@ -28,7 +28,7 @@ export default class Index extends Component {
     this.setState({ isSidebarOpen: false });
   };
 
-  onClearCards = () => {
+  clearCards = () => {
     this.cardManager.clearCards();
     this.closeSidebar();
   };
@@ -38,13 +38,17 @@ export default class Index extends Component {
     return (
       <Page>
         <StorageErrorBoundary>
-          <MainHeader onOpenSidebar={this.openSidebar} />
+          <MainHeader
+            onOpenSidebar={this.openSidebar}
+            onClearCards={this.clearCards}
+            onOpenShareModal={this.openShareModal}
+          />
           <CardManager ref={cardManager => (this.cardManager = cardManager)} />
           <Sidebar
             isOpen={isSidebarOpen}
             onClose={this.closeSidebar}
             onOpenShareModal={this.openShareModal}
-            onClearCards={this.onClearCards}
+            onClearCards={this.clearCards}
           />
           <ShareModal
             isOpen={isShareModalOpen}

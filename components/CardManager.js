@@ -81,7 +81,7 @@ export default class CardManager extends Component {
   render() {
     const { cards } = this.state;
     return (
-      <Grid stackable padded>
+      <Grid stackable padded reversed="mobile">
         {cards.map(({ name, isPinned }) => (
           <Column key={name}>
             <CardResult

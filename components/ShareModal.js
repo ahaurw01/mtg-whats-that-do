@@ -32,6 +32,7 @@ export default class ShareModal extends Component {
 
   state = {
     copied: false,
+    isOpen: false,
   };
 
   onClose = () => {
@@ -45,8 +46,21 @@ export default class ShareModal extends Component {
     this.setState({ copied: true });
   };
 
+  componentWillUpdate(nextProps) {
+    if (nextProps.isOpen && !this.props.isOpen) {
+      if (navigator.share) {
+        navigator.share({ title: "What's that do?", url: constructLink() });
+        this.props.onClose();
+      } else {
+        this.setState({ isOpen: true });
+      }
+    } else if (!nextProps.isOpen && this.props.isOpen) {
+      this.setState({ isOpen: false });
+    }
+  }
+
   render() {
-    const { isOpen } = this.props;
+    const { isOpen } = this.state;
     return (
       <Modal
         closeIcon

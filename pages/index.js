@@ -33,6 +33,21 @@ export default class Index extends Component {
     this.closeSidebar();
   };
 
+  onKeyDown = e => {
+    if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
+      e.preventDefault();
+      this.clearCards();
+    }
+  };
+
+  componentDidMount() {
+    document.addEventListener('keydown', this.onKeyDown);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('keydown', this.onKeyDown);
+  }
+
   render() {
     const { isShareModalOpen, isSidebarOpen } = this.state;
     return (

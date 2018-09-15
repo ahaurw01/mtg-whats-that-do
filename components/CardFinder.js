@@ -17,6 +17,13 @@ export default class CardFinder extends Component {
     };
   }
 
+  onKeyDown = e => {
+    if (e.key === 'p' && (e.metaKey || e.ctrlKey)) {
+      e.preventDefault();
+      this.input.focus();
+    }
+  };
+
   onSearchChange = (e, { value }) => {
     this.setState({ value });
     if (value.length < 3) {
@@ -51,6 +58,14 @@ export default class CardFinder extends Component {
     this.setState({ results: [], value: '' });
   };
 
+  componentDidMount() {
+    document.addEventListener('keydown', this.onKeyDown);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('keydown', this.onKeyDown);
+  }
+
   render() {
     const { results, loading, value } = this.state;
     return (
@@ -67,6 +82,7 @@ export default class CardFinder extends Component {
                 autoComplete: 'off',
                 placeholder: 'Find a card...',
                 autoFocus: true,
+                ref: input => (this.input = input),
               }}
             />
           }

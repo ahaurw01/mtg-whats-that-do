@@ -5,6 +5,8 @@ import RulingsModal from './RulingsModal';
 import OracleModal from './OracleModal';
 import { getImageSources, isDoubleFaced } from '../utils/card-data';
 import CardImage from './CardImage';
+import cx from 'classnames';
+import * as presser from '../utils/presser';
 
 export default class CardResult extends Component {
   static propTypes = {
@@ -12,6 +14,7 @@ export default class CardResult extends Component {
     onRequestRemove: PropTypes.func.isRequired,
     onRequestPin: PropTypes.func.isRequired,
     isPinned: PropTypes.bool.isRequired,
+    isFocused: PropTypes.bool.isRequired,
   };
 
   state = {
@@ -36,7 +39,16 @@ export default class CardResult extends Component {
           rulings: result.data,
         })
       );
+
+    presser.on('remove', () => {
+      if (this.props.isFocused) this.props.onRequestRemove();
+    });
+    presser.on('pin', () => {
+      if (this.props.isFocused) this.props.onRequestPin();
+    });
   }
+
+  componentWillUnmount() {}
 
   flip = () => {
     this.setState(({ faceIndex }) => ({
@@ -46,10 +58,10 @@ export default class CardResult extends Component {
 
   render() {
     const { card, rulings, faceIndex } = this.state;
-    const { onRequestRemove, onRequestPin, isPinned } = this.props;
+    const { onRequestRemove, onRequestPin, isPinned, isFocused } = this.props;
     const imageSources = getImageSources(card);
     return (
-      <Segment raised className="result">
+      <Segment className={cx({ cardIsFocused: isFocused })}>
         <CardImage sources={imageSources} indexShowing={faceIndex} />
         <div className="actions">
           <Button.Group>
@@ -68,16 +80,16 @@ export default class CardResult extends Component {
             )}
           </Button.Group>
         </div>
-
         <style jsx>{`
-          img {
-            width: 100%;
-            border-radius: 4px;
-          }
           .actions {
             display: flex;
             justify-content: space-around;
             margin-top: 10px;
+          }
+        `}</style>
+        <style global jsx>{`
+          .cardIsFocused {
+            box-shadow: 0 0 12px 6px rgba(0, 0, 0, 0.5) !important;
           }
         `}</style>
       </Segment>

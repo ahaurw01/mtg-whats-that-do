@@ -22,6 +22,10 @@ export default class CardFinder extends Component {
     this.input.focus();
   };
 
+  blur = () => {
+    this.input.blur();
+  };
+
   onSearchChange = (e, { value }) => {
     this.setState({ value });
     if (value.length < 3) {
@@ -58,10 +62,14 @@ export default class CardFinder extends Component {
 
   componentDidMount() {
     presser.on('search', this.focus);
+    presser.on('nextCard', this.blur);
+    presser.on('previousCard', this.blur);
   }
 
   componentWillUnmount() {
     presser.off('search', this.focus);
+    presser.off('nextCard', this.blur);
+    presser.off('previousCard', this.blur);
   }
 
   render() {

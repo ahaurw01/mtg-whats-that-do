@@ -3,6 +3,7 @@ import CardResult from './CardResult';
 import CardFinder from './CardFinder';
 import { Grid } from 'semantic-ui-react';
 import Column from './Column';
+import * as presser from '../utils/presser';
 
 export const LOCAL_STORAGE_STATE_KEY = 'CardManager#state';
 
@@ -11,7 +12,9 @@ export function retrieveSavedState() {
   try {
     const hash = (location.hash || '').replace('#', '');
     const names = JSON.parse(decodeURIComponent(hash));
-    return { cards: names.map(name => ({ name, isPinned: false })) };
+    return {
+      cards: names.map(name => ({ name, isPinned: false, isFocused: false })),
+    };
   } catch (e) {
     // Ignore error
   }
@@ -34,10 +37,22 @@ export default class CardManager extends Component {
 
   componentDidMount() {
     this.setState(retrieveSavedState(), () => (location.hash = ''));
+    presser.on('nextCard', this.focusNextCard);
+    presser.on('previousCard', this.focusPreviousCard);
+    presser.on('search', this.blurCards);
+  }
+
+  componentWillUnmount() {
+    presser.off('nextCard', this.focusNextCard);
+    presser.off('previousCard', this.focusPreviousCard);
+    presser.off('search', this.blurCards);
   }
 
   saveState = () => {
-    const stateJson = JSON.stringify(this.state);
+    const state = {
+      cards: this.state.cards.map(card => ({ ...card, isFocused: false })),
+    };
+    const stateJson = JSON.stringify(state);
     localStorage.setItem(LOCAL_STORAGE_STATE_KEY, stateJson);
   };
 
@@ -54,6 +69,7 @@ export default class CardManager extends Component {
         cards: prevState.cards.slice().concat({
           name,
           isPinned: false,
+          isFocused: false,
         }),
       }));
     }
@@ -74,6 +90,49 @@ export default class CardManager extends Component {
     }));
   }
 
+  focusNextCard = () => {
+    this.setState(prevState => {
+      const currentFocusIndex = prevState.cards.findIndex(
+        card => card.isFocused
+      );
+      const newFocusIndex =
+        currentFocusIndex === -1 ||
+        currentFocusIndex === prevState.cards.length - 1
+          ? 0
+          : currentFocusIndex + 1;
+      return {
+        cards: prevState.cards.map((card, index) => ({
+          ...card,
+          isFocused: index === newFocusIndex,
+        })),
+      };
+    });
+  };
+
+  focusPreviousCard = () => {
+    this.setState(prevState => {
+      const currentFocusIndex = prevState.cards.findIndex(
+        card => card.isFocused
+      );
+      const newFocusIndex =
+        currentFocusIndex === -1 || currentFocusIndex === 0
+          ? prevState.cards.length - 1
+          : currentFocusIndex - 1;
+      return {
+        cards: prevState.cards.map((card, index) => ({
+          ...card,
+          isFocused: index === newFocusIndex,
+        })),
+      };
+    });
+  };
+
+  blurCards = () => {
+    this.setState(prevState => ({
+      cards: prevState.cards.map(card => ({ ...card, isFocused: false })),
+    }));
+  };
+
   componentDidUpdate() {
     this.saveState();
   }
@@ -82,9 +141,10 @@ export default class CardManager extends Component {
     const { cards } = this.state;
     return (
       <Grid stackable padded reversed="mobile">
-        {cards.map(({ name, isPinned }) => (
+        {cards.map(({ name, isPinned, isFocused }) => (
           <Column key={name}>
             <CardResult
+              isFocused={isFocused}
               name={name}
               isPinned={isPinned}
               onRequestRemove={() => this.removeCard(name)}

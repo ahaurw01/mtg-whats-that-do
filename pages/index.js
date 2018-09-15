@@ -6,6 +6,7 @@ import StorageErrorBoundary from '../components/StorageErrorBoundary';
 import Sidebar from '../components/Sidebar';
 import ShareModal from '../components/ShareModal';
 import ShortcutsModal from '../components/ShortcutsModal';
+import * as presser from '../utils/presser';
 
 export default class Index extends Component {
   state = {
@@ -43,19 +44,12 @@ export default class Index extends Component {
     this.closeSidebar();
   };
 
-  onKeyDown = e => {
-    if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
-      e.preventDefault();
-      this.clearCards();
-    }
-  };
-
   componentDidMount() {
-    document.addEventListener('keydown', this.onKeyDown);
+    presser.on('clear', this.clearCards);
   }
 
   componentWillUnmount() {
-    document.removeEventListener('keydown', this.onKeyDown);
+    presser.off('clear', this.clearCards);
   }
 
   render() {

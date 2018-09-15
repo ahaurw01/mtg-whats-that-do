@@ -3,7 +3,7 @@ import CardResult from './CardResult';
 import CardFinder from './CardFinder';
 import { Grid } from 'semantic-ui-react';
 import Column from './Column';
-import * as presser from '../utils/presser';
+import Presser from '../utils/presser';
 
 export const LOCAL_STORAGE_STATE_KEY = 'CardManager#state';
 
@@ -37,15 +37,14 @@ export default class CardManager extends Component {
 
   componentDidMount() {
     this.setState(retrieveSavedState(), () => (location.hash = ''));
-    presser.on('nextCard', this.focusNextCard);
-    presser.on('previousCard', this.focusPreviousCard);
-    presser.on('search', this.blurCards);
+    this.presser = new Presser();
+    this.presser.on('nextCard', this.focusNextCard);
+    this.presser.on('previousCard', this.focusPreviousCard);
+    this.presser.on('search', this.blurCards);
   }
 
   componentWillUnmount() {
-    presser.off('nextCard', this.focusNextCard);
-    presser.off('previousCard', this.focusPreviousCard);
-    presser.off('search', this.blurCards);
+    this.presser.off();
   }
 
   saveState = () => {

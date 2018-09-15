@@ -1,8 +1,9 @@
-import * as presser from '../../utils/presser';
+import Presser from '../../utils/presser';
 
 describe('presser', () => {
-  let preventDefault;
+  let presser, preventDefault;
   beforeEach(() => {
+    presser = new Presser();
     preventDefault = jest.fn();
     KeyboardEvent.prototype.preventDefault = preventDefault;
   });
@@ -124,7 +125,7 @@ describe('presser', () => {
       throw new Error('should not be called');
     };
     presser.on('remove', handler);
-    presser.off('remove', handler);
+    presser.off();
 
     const event = new KeyboardEvent('keydown', {
       key: 'k',

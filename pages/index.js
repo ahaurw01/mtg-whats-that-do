@@ -6,7 +6,7 @@ import StorageErrorBoundary from '../components/StorageErrorBoundary';
 import Sidebar from '../components/Sidebar';
 import ShareModal from '../components/ShareModal';
 import ShortcutsModal from '../components/ShortcutsModal';
-import * as presser from '../utils/presser';
+import Presser from '../utils/presser';
 
 export default class Index extends Component {
   state = {
@@ -45,11 +45,12 @@ export default class Index extends Component {
   };
 
   componentDidMount() {
-    presser.on('clear', this.clearCards);
+    this.presser = new Presser();
+    this.presser.on('clear', this.clearCards);
   }
 
   componentWillUnmount() {
-    presser.off('clear', this.clearCards);
+    this.presser.off();
   }
 
   render() {

@@ -1,28 +1,4 @@
-let target;
-function init() {
-  target = document.createElement('div');
-  document.addEventListener('keydown', e => {
-    for (let event in events) {
-      if (events[event].check(e)) {
-        events[event].preventDefault && e.preventDefault();
-        target.dispatchEvent(new Event(event));
-        return;
-      }
-    }
-  });
-}
-
-export function on(event, fn) {
-  if (!target) init();
-  target.addEventListener(event, fn);
-}
-
-export function off(event, fn) {
-  if (!target) init();
-  target.removeEventListener(event, fn);
-}
-
-const events = {
+const EVENTS = {
   search: {
     check: e => e.key === 'p' && (e.metaKey || e.ctrlKey),
     preventDefault: true,
@@ -45,3 +21,28 @@ const events = {
   pin: { check: e => e.key === 'p', preventDefault: false },
   remove: { check: e => e.key === 'k', preventDefault: false },
 };
+
+export default class Presser {
+  constructor() {
+    this.target = document.createElement('div');
+    document.addEventListener('keydown', this.handleKeyDown);
+  }
+
+  on(event, fn) {
+    this.target.addEventListener(event, fn);
+  }
+
+  off() {
+    document.removeEventListener('keydown', this.handleKeyDown);
+  }
+
+  handleKeyDown = e => {
+    for (let event in EVENTS) {
+      if (EVENTS[event].check(e)) {
+        EVENTS[event].preventDefault && e.preventDefault();
+        this.target.dispatchEvent(new Event(event));
+        return;
+      }
+    }
+  };
+}

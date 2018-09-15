@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Search, Input, Segment } from 'semantic-ui-react';
-import * as presser from '../utils/presser';
+import Presser from '../utils/presser';
 
 export default class CardFinder extends Component {
   static propTypes = {
@@ -61,15 +61,14 @@ export default class CardFinder extends Component {
   };
 
   componentDidMount() {
-    presser.on('search', this.focus);
-    presser.on('nextCard', this.blur);
-    presser.on('previousCard', this.blur);
+    this.presser = new Presser();
+    this.presser.on('search', this.focus);
+    this.presser.on('nextCard', this.blur);
+    this.presser.on('previousCard', this.blur);
   }
 
   componentWillUnmount() {
-    presser.off('search', this.focus);
-    presser.off('nextCard', this.blur);
-    presser.off('previousCard', this.blur);
+    this.presser.off();
   }
 
   render() {

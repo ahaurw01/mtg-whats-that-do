@@ -175,8 +175,8 @@ describe('CardManager', () => {
 
       expect(retrieveSavedState()).toEqual({
         cards: [
-          { isPinned: false, name: 'Saheeli Rai' },
-          { isPinned: false, name: 'Saheeli, the Gifted' },
+          { isPinned: false, name: 'Saheeli Rai', isFocused: false },
+          { isPinned: false, name: 'Saheeli, the Gifted', isFocused: false },
         ],
       });
     });
@@ -217,8 +217,8 @@ describe('CardManager', () => {
 
       expect(retrieveSavedState()).toEqual({
         cards: [
-          { isPinned: false, name: 'Saheeli Rai' },
-          { isPinned: false, name: 'Saheeli, the Gifted' },
+          { isPinned: false, name: 'Saheeli Rai', isFocused: false },
+          { isPinned: false, name: 'Saheeli, the Gifted', isFocused: false },
         ],
       });
     });
@@ -277,10 +277,12 @@ describe('CardManager', () => {
     test('saves state', () => {
       const wrapper = shallow(<CardManager />);
 
-      wrapper.setState({ cards: [{ name: 'Fling', isPinned: true }] });
+      wrapper.setState({
+        cards: [{ name: 'Fling', isPinned: true, isFocused: false }],
+      });
 
       expect(localStorage.getItem('CardManager#state')).toEqual(
-        '{"cards":[{"name":"Fling","isPinned":true}]}'
+        '{"cards":[{"name":"Fling","isPinned":true,"isFocused":false}]}'
       );
     });
   });

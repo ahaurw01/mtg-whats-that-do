@@ -6,7 +6,7 @@ import OracleModal from './OracleModal';
 import { getImageSources, isDoubleFaced } from '../utils/card-data';
 import CardImage from './CardImage';
 import cx from 'classnames';
-import * as presser from '../utils/presser';
+import Presser from '../utils/presser';
 
 export default class CardResult extends Component {
   static propTypes = {
@@ -14,7 +14,11 @@ export default class CardResult extends Component {
     onRequestRemove: PropTypes.func.isRequired,
     onRequestPin: PropTypes.func.isRequired,
     isPinned: PropTypes.bool.isRequired,
-    isFocused: PropTypes.bool.isRequired,
+    isFocused: PropTypes.bool,
+  };
+
+  static defaultProps = {
+    isFocused: false,
   };
 
   state = {
@@ -40,15 +44,18 @@ export default class CardResult extends Component {
         })
       );
 
-    presser.on('remove', () => {
+    this.presser = new Presser();
+    this.presser.on('remove', () => {
       if (this.props.isFocused) this.props.onRequestRemove();
     });
-    presser.on('pin', () => {
+    this.presser.on('pin', () => {
       if (this.props.isFocused) this.props.onRequestPin();
     });
   }
 
-  componentWillUnmount() {}
+  componentWillUnmount() {
+    this.presser.off();
+  }
 
   flip = () => {
     this.setState(({ faceIndex }) => ({

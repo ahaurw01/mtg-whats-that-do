@@ -5,11 +5,13 @@ import MainHeader from '../components/MainHeader';
 import StorageErrorBoundary from '../components/StorageErrorBoundary';
 import Sidebar from '../components/Sidebar';
 import ShareModal from '../components/ShareModal';
+import ShortcutsModal from '../components/ShortcutsModal';
 
 export default class Index extends Component {
   state = {
     isShareModalOpen: false,
     isSidebarOpen: false,
+    isShortcutsOpen: false,
   };
 
   openShareModal = () => {
@@ -26,6 +28,14 @@ export default class Index extends Component {
 
   closeSidebar = () => {
     this.setState({ isSidebarOpen: false });
+  };
+
+  openShortcutsModal = () => {
+    this.setState({ isShortcutsOpen: true });
+  };
+
+  closeShortcutsModal = () => {
+    this.setState({ isShortcutsOpen: false });
   };
 
   clearCards = () => {
@@ -49,7 +59,7 @@ export default class Index extends Component {
   }
 
   render() {
-    const { isShareModalOpen, isSidebarOpen } = this.state;
+    const { isShareModalOpen, isSidebarOpen, isShortcutsOpen } = this.state;
     return (
       <Page>
         <StorageErrorBoundary>
@@ -57,6 +67,7 @@ export default class Index extends Component {
             onOpenSidebar={this.openSidebar}
             onClearCards={this.clearCards}
             onOpenShareModal={this.openShareModal}
+            onOpenShortcutsModal={this.openShortcutsModal}
           />
           <CardManager ref={cardManager => (this.cardManager = cardManager)} />
           <Sidebar
@@ -68,6 +79,10 @@ export default class Index extends Component {
           <ShareModal
             isOpen={isShareModalOpen}
             onClose={this.closeShareModal}
+          />
+          <ShortcutsModal
+            isOpen={isShortcutsOpen}
+            onClose={this.closeShortcutsModal}
           />
         </StorageErrorBoundary>
       </Page>

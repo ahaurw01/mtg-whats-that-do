@@ -9,6 +9,16 @@ const ShortcutsModal = ({ isOpen, onClose }) => (
     <Modal.Content>
       <List>
         <List.Item>
+          <Icon name="close" />
+          <List.Content>
+            <List.Header>
+              <kbd>esc</kbd>
+            </List.Header>
+            <List.Description>Close modals like this one.</List.Description>
+          </List.Content>
+        </List.Item>
+
+        <List.Item>
           <Icon name="search" />
           <List.Content>
             <List.Header>
@@ -17,6 +27,7 @@ const ShortcutsModal = ({ isOpen, onClose }) => (
             <List.Description>Seach for a card.</List.Description>
           </List.Content>
         </List.Item>
+
         <List.Item>
           <Icon name="trash" />
           <List.Content>
@@ -26,19 +37,87 @@ const ShortcutsModal = ({ isOpen, onClose }) => (
             <List.Description>Clear cards.</List.Description>
           </List.Content>
         </List.Item>
+
         <List.Item>
-          <Icon name="close" />
+          <Icon name="arrow right" />
           <List.Content>
             <List.Header>
-              <kbd>esc</kbd>
+              <kbd>ctrl</kbd> + <kbd>j</kbd> or <kbd>⌘</kbd> + <kbd>j</kbd>
             </List.Header>
-            <List.Description>Close modals like this one.</List.Description>
+            <List.Description>Focus the next card showing.</List.Description>
+          </List.Content>
+        </List.Item>
+
+        <List.Item>
+          <Icon name="arrow left" />
+          <List.Content>
+            <List.Header>
+              <kbd>ctrl</kbd> + <kbd>h</kbd> or <kbd>⌘</kbd> + <kbd>h</kbd>
+            </List.Header>
+            <List.Description>
+              Focus the previous card showing.
+            </List.Description>
+          </List.Content>
+        </List.Item>
+
+        <List.Item>
+          <Icon name="info" />
+          <List.Content>
+            <List.Header>
+              <kbd>o</kbd>
+            </List.Header>
+            <List.Description>
+              Open the oracle modal for the focused card.
+            </List.Description>
+          </List.Content>
+        </List.Item>
+
+        <List.Item>
+          <Icon name="legal" />
+          <List.Content>
+            <List.Header>
+              <kbd>r</kbd>
+            </List.Header>
+            <List.Description>
+              Open the rulings modal for the focused card.
+            </List.Description>
+          </List.Content>
+        </List.Item>
+
+        <List.Item>
+          <Icon name="trash" />
+          <List.Content>
+            <List.Header>
+              <kbd>k</kbd>
+            </List.Header>
+            <List.Description>Remove the focused card.</List.Description>
+          </List.Content>
+        </List.Item>
+
+        <List.Item>
+          <Icon name="pin" />
+          <List.Content>
+            <List.Header>
+              <kbd>p</kbd>
+            </List.Header>
+            <List.Description>Pin the focused card.</List.Description>
+          </List.Content>
+        </List.Item>
+
+        <List.Item>
+          <Icon name="refresh" />
+          <List.Content>
+            <List.Header>
+              <kbd>f</kbd>
+            </List.Header>
+            <List.Description>Flip the focused card.</List.Description>
           </List.Content>
         </List.Item>
       </List>
     </Modal.Content>
     <style global jsx>{`
       kbd {
+        min-width: 1.8em;
         margin-bottom: 0.5em;
         color: #444444;
         font-family: 'Lucida Grande', Lucida, Verdana, sans-serif;

@@ -25,6 +25,8 @@ export default class CardResult extends Component {
     card: null,
     rulings: [],
     faceIndex: 0,
+    isOracleModalOpen: false,
+    isRulingsModalOpen: false,
   };
 
   componentDidMount() {
@@ -51,6 +53,27 @@ export default class CardResult extends Component {
     this.presser.on('pin', () => {
       if (this.props.isFocused) this.props.onRequestPin();
     });
+    this.presser.on('oracle', () => {
+      if (this.props.isFocused && this.state.card) {
+        this.closeRulingsModal();
+        this.openOracleModal();
+      }
+    });
+    this.presser.on('rulings', () => {
+      if (
+        this.props.isFocused &&
+        this.state.rulings &&
+        this.state.rulings.length
+      ) {
+        this.closeOracleModal();
+        this.openRulingsModal();
+      }
+    });
+    this.presser.on('flip', () => {
+      if (this.props.isFocused && isDoubleFaced(this.state.card)) {
+        this.flip();
+      }
+    });
   }
 
   componentWillUnmount() {
@@ -63,8 +86,30 @@ export default class CardResult extends Component {
     }));
   };
 
+  openOracleModal = () => {
+    this.setState({ isOracleModalOpen: true });
+  };
+
+  closeOracleModal = () => {
+    this.setState({ isOracleModalOpen: false });
+  };
+
+  openRulingsModal = () => {
+    this.setState({ isRulingsModalOpen: true });
+  };
+
+  closeRulingsModal = () => {
+    this.setState({ isRulingsModalOpen: false });
+  };
+
   render() {
-    const { card, rulings, faceIndex } = this.state;
+    const {
+      card,
+      rulings,
+      faceIndex,
+      isOracleModalOpen,
+      isRulingsModalOpen,
+    } = this.state;
     const { onRequestRemove, onRequestPin, isPinned, isFocused } = this.props;
     const imageSources = getImageSources(card);
     return (
@@ -72,8 +117,27 @@ export default class CardResult extends Component {
         <CardImage sources={imageSources} indexShowing={faceIndex} />
         <div className="actions">
           <Button.Group>
-            {card && <OracleModal card={card} />}
-            {card && <RulingsModal card={card} rulings={rulings} />}
+            {card && (
+              <Button
+                icon
+                primary
+                title="Oracle"
+                onClick={this.openOracleModal}
+              >
+                <Icon name="info" />
+              </Button>
+            )}
+            {card && (
+              <Button
+                icon
+                secondary
+                disabled={!rulings.length}
+                title="Rulings"
+                onClick={this.openRulingsModal}
+              >
+                <Icon name="legal" />
+              </Button>
+            )}
             <Button icon onClick={onRequestRemove}>
               <Icon name="trash" />
             </Button>
@@ -99,6 +163,21 @@ export default class CardResult extends Component {
             box-shadow: 0 0 12px 6px rgba(0, 0, 0, 0.5) !important;
           }
         `}</style>
+        {card && (
+          <OracleModal
+            card={card}
+            isOpen={isOracleModalOpen}
+            onClose={this.closeOracleModal}
+          />
+        )}
+        {card && (
+          <RulingsModal
+            card={card}
+            rulings={rulings}
+            isOpen={isRulingsModalOpen}
+            onClose={this.closeRulingsModal}
+          />
+        )}
       </Segment>
     );
   }

@@ -55,30 +55,17 @@ describe('RulingsModal', () => {
     },
   ];
 
-  test('renders a trigger button', () => {
-    const wrapper = mount(
-      <RulingsModal card={mockCard} rulings={mockRulings} />
-    );
-
-    expect(wrapper.find(Button)).toHaveLength(1);
-    expect(wrapper.find(Button).prop('title')).toEqual('Rulings');
-  });
-
-  test('renders a disabled trigger button if no rulings', () => {
-    const wrapper = mount(<RulingsModal card={mockCard} rulings={[]} />);
-
-    expect(wrapper.find(Button)).toHaveLength(1);
-    expect(wrapper.find(Button).prop('title')).toEqual('Rulings');
-    expect(wrapper.find(Button).prop('disabled')).toEqual(true);
-  });
-
   test('renders formatted rulings', () => {
     const wizardsIcon = mount(<WizardsIcon />);
     const scryfallIcon = mount(<ScryfallIcon />);
     const wrapper = mount(
-      <RulingsModal card={mockCard} rulings={mockRulings} />
+      <RulingsModal
+        onClose={jest.fn()}
+        isOpen
+        card={mockCard}
+        rulings={mockRulings}
+      />
     );
-    wrapper.find(Button).simulate('click');
 
     const modal = document.querySelector('.modal');
     expect(modal).toBeDefined();
@@ -122,9 +109,13 @@ describe('RulingsModal', () => {
   // These tests are difficult because semantic ui portal rendering is not supported here.
   test('renders the card image', () => {
     const wrapper = mount(
-      <RulingsModal card={mockCard} rulings={mockRulings} />
+      <RulingsModal
+        onClose={jest.fn()}
+        isOpen
+        card={mockCard}
+        rulings={mockRulings}
+      />
     );
-    wrapper.find(Button).simulate('click');
 
     const modal = document.querySelector('.modal');
     expect(modal).toBeDefined();
@@ -133,9 +124,13 @@ describe('RulingsModal', () => {
 
   test('renders both card faces', () => {
     const wrapper = mount(
-      <RulingsModal card={mockCardWithFaces} rulings={mockRulings} />
+      <RulingsModal
+        onClose={jest.fn()}
+        isOpen
+        card={mockCardWithFaces}
+        rulings={mockRulings}
+      />
     );
-    wrapper.find(Button).simulate('click');
 
     const modal = document.querySelector('.modal');
     expect(modal).toBeDefined();

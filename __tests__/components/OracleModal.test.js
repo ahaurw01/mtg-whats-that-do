@@ -66,16 +66,10 @@ describe('OracleModal', () => {
     ],
   };
 
-  test('renders a trigger button', () => {
-    const wrapper = mount(<OracleModal card={mockCard} />);
-
-    expect(wrapper.find(Button)).toHaveLength(1);
-    expect(wrapper.find(Button).prop('title')).toEqual('Oracle');
-  });
-
   test('renders single faced card data', () => {
-    const wrapper = mount(<OracleModal card={mockCard} />);
-    wrapper.find(Button).simulate('click');
+    const wrapper = mount(
+      <OracleModal onClose={jest.fn()} isOpen card={mockCard} />
+    );
 
     const modal = document.querySelector('.modal');
     expect(modal).toBeDefined();
@@ -87,8 +81,9 @@ describe('OracleModal', () => {
   });
 
   test('renders double faced card data', () => {
-    const wrapper = mount(<OracleModal card={mockCardWithFaces} />);
-    wrapper.find(Button).simulate('click');
+    const wrapper = mount(
+      <OracleModal onClose={jest.fn()} isOpen card={mockCardWithFaces} />
+    );
 
     const modal = document.querySelector('.modal');
     expect(modal).toBeDefined();
@@ -109,8 +104,9 @@ describe('OracleModal', () => {
 
   // These tests are difficult because semantic ui portal rendering is not supported here.
   test('renders the card image', () => {
-    const wrapper = mount(<OracleModal card={mockCard} />);
-    wrapper.find(Button).simulate('click');
+    const wrapper = mount(
+      <OracleModal onClose={jest.fn()} isOpen card={mockCard} />
+    );
 
     const modal = document.querySelector('.modal');
     expect(modal).toBeDefined();
@@ -118,8 +114,9 @@ describe('OracleModal', () => {
   });
 
   test('renders both card faces', () => {
-    const wrapper = mount(<OracleModal card={mockCardWithFaces} />);
-    wrapper.find(Button).simulate('click');
+    const wrapper = mount(
+      <OracleModal onClose={jest.fn()} isOpen card={mockCardWithFaces} />
+    );
 
     const modal = document.querySelector('.modal');
     expect(modal).toBeDefined();

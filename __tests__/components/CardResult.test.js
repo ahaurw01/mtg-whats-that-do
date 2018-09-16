@@ -2,6 +2,8 @@ import React from 'react';
 import fetchMock from 'fetch-mock';
 import CardResult from '../../components/CardResult';
 import CardImage from '../../components/CardImage';
+import OracleModal from '../../components/OracleModal';
+import RulingsModal from '../../components/RulingsModal';
 import { Button, Icon } from 'semantic-ui-react';
 import { mount } from 'enzyme';
 
@@ -279,6 +281,161 @@ describe('CardResult', () => {
       ]);
       expect(wrapper.find(CardImage).prop('indexShowing')).toEqual(1);
       done();
+    });
+  });
+
+  describe('presser events', () => {
+    let wrapper, onRequestRemove, onRequestPin;
+    beforeEach(done => {
+      onRequestRemove = jest.fn();
+      onRequestPin = jest.fn();
+      wrapper = mount(
+        <CardResult
+          name="Goblin Balloon Brigade"
+          onRequestRemove={onRequestRemove}
+          onRequestPin={onRequestPin}
+          isPinned={false}
+        />
+      );
+      setImmediate(done);
+    });
+
+    describe('remove', () => {
+      test('does nothing if not focused', () => {
+        wrapper.instance().presser._emit('remove');
+
+        expect(onRequestRemove).not.toHaveBeenCalled();
+      });
+
+      test('calls onRequestRemove if focused', () => {
+        wrapper.setProps({ isFocused: true });
+        wrapper.instance().presser._emit('remove');
+
+        expect(onRequestRemove).toHaveBeenCalled();
+      });
+    });
+
+    describe('pin', () => {
+      test('does nothing if not focused', () => {
+        wrapper.instance().presser._emit('pin');
+
+        expect(onRequestPin).not.toHaveBeenCalled();
+      });
+
+      test('calls onRequestPin if focused', () => {
+        wrapper.setProps({ isFocused: true });
+        wrapper.instance().presser._emit('pin');
+
+        expect(onRequestPin).toHaveBeenCalled();
+      });
+    });
+
+    describe('oracle', () => {
+      test('does nothing if not focused', () => {
+        wrapper.instance().presser._emit('oracle');
+
+        expect(wrapper.state('isOracleModalOpen')).toBe(false);
+      });
+
+      test('does nothing if no card', () => {
+        wrapper.setState({ card: null });
+        wrapper.setProps({ isFocused: true });
+        wrapper.instance().presser._emit('oracle');
+
+        expect(wrapper.state('isOracleModalOpen')).toBe(false);
+      });
+
+      test('opens oracle modal if focused', () => {
+        wrapper.setProps({ isFocused: true });
+        wrapper.instance().presser._emit('oracle');
+
+        expect(wrapper.state('isOracleModalOpen')).toBe(true);
+      });
+
+      test('closes rulings modal if focused', () => {
+        wrapper.setProps({ isFocused: true });
+        wrapper.setState({ isRulingsModalOpen: true });
+        wrapper.instance().presser._emit('oracle');
+
+        expect(wrapper.state('isRulingsModalOpen')).toBe(false);
+      });
+    });
+
+    describe('rulings', () => {
+      test('does nothing if not focused', () => {
+        wrapper.instance().presser._emit('rulings');
+
+        expect(wrapper.state('isRulingsModalOpen')).toBe(false);
+      });
+
+      test('does nothing if no rulings', () => {
+        wrapper.setState({ rulings: [] });
+        wrapper.setProps({ isFocused: true });
+        wrapper.instance().presser._emit('rulings');
+
+        expect(wrapper.state('isRulingsModalOpen')).toBe(false);
+      });
+
+      test('opens rulings modal if focused', () => {
+        wrapper.setProps({ isFocused: true });
+        wrapper.instance().presser._emit('rulings');
+
+        expect(wrapper.state('isRulingsModalOpen')).toBe(true);
+      });
+
+      test('closes oracle modal if focused', () => {
+        wrapper.setProps({ isFocused: true });
+        wrapper.setState({ isOracleModalOpen: true });
+        wrapper.instance().presser._emit('rulings');
+
+        expect(wrapper.state('isOracleModalOpen')).toBe(false);
+      });
+    });
+
+    describe('flip', () => {
+      test('does nothing if not focused', () => {
+        wrapper.setState({
+          card: {
+            card_faces: [
+              {
+                image_uris: {},
+              },
+              {
+                image_uris: {},
+              },
+            ],
+          },
+        });
+        wrapper.instance().presser._emit('flip');
+
+        expect(wrapper.state('faceIndex')).toBe(0);
+      });
+
+      test('does nothing if not double faced', () => {
+        wrapper.setProps({ isFocused: true });
+        wrapper.instance().presser._emit('flip');
+
+        expect(wrapper.state('faceIndex')).toBe(0);
+      });
+
+      test('flips if focused', () => {
+        wrapper.setProps({ isFocused: true });
+        wrapper.setState({
+          card: {
+            card_faces: [
+              {
+                image_uris: {},
+              },
+              {
+                image_uris: {},
+              },
+            ],
+          },
+        });
+        wrapper.instance().presser._emit('flip');
+
+        expect(wrapper.state('faceIndex')).toBe(1);
+      });
     });
   });
 });

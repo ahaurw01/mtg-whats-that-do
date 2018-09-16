@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { Button, Modal, Comment, Grid, Icon } from 'semantic-ui-react';
+import { Modal, Comment, Grid, Icon } from 'semantic-ui-react';
 import WizardsIcon from './WizardsIcon';
 import ScryfallIcon from './ScryfallIcon';
 import { getImageSources, isDoubleFaced } from '../utils/card-data';
@@ -34,15 +34,8 @@ const makeCommentData = ruling => {
   };
 };
 
-const RulingsModal = ({ card, rulings }) => (
-  <Modal
-    closeIcon
-    trigger={
-      <Button icon secondary disabled={!rulings.length} title="Rulings">
-        <Icon name="legal" />
-      </Button>
-    }
-  >
+const RulingsModal = ({ card, rulings, isOpen, onClose }) => (
+  <Modal closeIcon onClose={onClose} open={isOpen}>
     <Modal.Header>
       <Icon name="legal" /> Rulings: {card.name}
     </Modal.Header>
@@ -92,6 +85,8 @@ RulingsModal.propTypes = {
       comment: PropTypes.string,
     })
   ).isRequired,
+  isOpen: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
 };
 
 export default RulingsModal;

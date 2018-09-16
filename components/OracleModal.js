@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { Button, Modal, Segment, Grid, Icon, Header } from 'semantic-ui-react';
+import { Modal, Segment, Grid, Icon, Header } from 'semantic-ui-react';
 import {
   getImageSources,
   isDoubleFaced,
@@ -10,15 +10,8 @@ import PowerToughness from './PowerToughness';
 import cx from 'classnames';
 import CardImage from './CardImage';
 
-const OracleModal = ({ card }) => (
-  <Modal
-    closeIcon
-    trigger={
-      <Button icon primary title="Oracle">
-        <Icon name="info" />
-      </Button>
-    }
-  >
+const OracleModal = ({ card, isOpen, onClose }) => (
+  <Modal closeIcon onClose={onClose} open={isOpen}>
     <Modal.Header>
       <Icon name="info" /> Oracle: {card.name}
     </Modal.Header>
@@ -98,6 +91,8 @@ const OracleModal = ({ card }) => (
 
 OracleModal.propTypes = {
   card: PropTypes.object.isRequired,
+  isOpen: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
 };
 
 export default OracleModal;

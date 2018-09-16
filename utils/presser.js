@@ -15,11 +15,26 @@ const EVENTS = {
     check: e => e.key === 'h' && (e.metaKey || e.ctrlKey),
     preventDefault: true,
   },
-  oracle: { check: e => e.key === 'o', preventDefault: false },
-  rulings: { check: e => e.key === 'r', preventDefault: false },
-  flip: { check: e => e.key === 'f', preventDefault: false },
-  pin: { check: e => e.key === 'p', preventDefault: false },
-  remove: { check: e => e.key === 'k', preventDefault: false },
+  oracle: {
+    check: e => e.key === 'o' && !e.metaKey && !e.ctrlKey,
+    preventDefault: false,
+  },
+  rulings: {
+    check: e => e.key === 'r' && !e.metaKey && !e.ctrlKey,
+    preventDefault: false,
+  },
+  flip: {
+    check: e => e.key === 'f' && !e.metaKey && !e.ctrlKey,
+    preventDefault: false,
+  },
+  pin: {
+    check: e => e.key === 'p' && !e.metaKey && !e.ctrlKey,
+    preventDefault: false,
+  },
+  remove: {
+    check: e => e.key === 'k' && !e.metaKey && !e.ctrlKey,
+    preventDefault: false,
+  },
 };
 
 export default class Presser {

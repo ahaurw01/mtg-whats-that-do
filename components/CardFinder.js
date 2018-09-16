@@ -97,6 +97,7 @@ export default class CardFinder extends Component {
           onSearchChange={this.onSearchChange}
           onResultSelect={this.onResultSelect}
           value={value}
+          selectFirstResult
         />
       </Segment>
     );

@@ -7,10 +7,16 @@ export default class MainHeader extends Component {
     onClearCards: PropTypes.func.isRequired,
     onOpenShareModal: PropTypes.func.isRequired,
     onOpenSidebar: PropTypes.func.isRequired,
+    onOpenShortcutsModal: PropTypes.func.isRequired,
   };
 
   render() {
-    const { onOpenSidebar, onClearCards, onOpenShareModal } = this.props;
+    const {
+      onOpenSidebar,
+      onClearCards,
+      onOpenShareModal,
+      onOpenShortcutsModal,
+    } = this.props;
     return (
       <Header
         as="h1"
@@ -47,6 +53,7 @@ export default class MainHeader extends Component {
           >
             <Menu.Item as="a" name="Share link" onClick={onOpenShareModal} />
             <Menu.Item as="a" name="Clear cards" onClick={onClearCards} />
+            <Menu.Item as="a" name="Shortcuts" onClick={onOpenShortcutsModal} />
             <Menu.Item
               as="a"
               href="https://github.com/ahaurw01/mtg-whats-that-do/issues"

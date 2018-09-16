@@ -1,6 +1,7 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Search, Input, Segment } from 'semantic-ui-react';
+import Presser from '../utils/presser';
 
 export default class CardFinder extends Component {
   static propTypes = {
@@ -17,11 +18,12 @@ export default class CardFinder extends Component {
     };
   }
 
-  onKeyDown = e => {
-    if (e.key === 'p' && (e.metaKey || e.ctrlKey)) {
-      e.preventDefault();
-      this.input.focus();
-    }
+  focus = () => {
+    this.input.focus();
+  };
+
+  blur = () => {
+    this.input.blur();
   };
 
   onSearchChange = (e, { value }) => {
@@ -59,11 +61,14 @@ export default class CardFinder extends Component {
   };
 
   componentDidMount() {
-    document.addEventListener('keydown', this.onKeyDown);
+    this.presser = new Presser();
+    this.presser.on('search', this.focus);
+    this.presser.on('nextCard', this.blur);
+    this.presser.on('previousCard', this.blur);
   }
 
   componentWillUnmount() {
-    document.removeEventListener('keydown', this.onKeyDown);
+    this.presser.off();
   }
 
   render() {
@@ -92,6 +97,7 @@ export default class CardFinder extends Component {
           onSearchChange={this.onSearchChange}
           onResultSelect={this.onResultSelect}
           value={value}
+          selectFirstResult
         />
       </Segment>
     );

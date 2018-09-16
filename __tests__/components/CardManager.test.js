@@ -175,8 +175,8 @@ describe('CardManager', () => {
 
       expect(retrieveSavedState()).toEqual({
         cards: [
-          { isPinned: false, name: 'Saheeli Rai' },
-          { isPinned: false, name: 'Saheeli, the Gifted' },
+          { isPinned: false, name: 'Saheeli Rai', isFocused: false },
+          { isPinned: false, name: 'Saheeli, the Gifted', isFocused: false },
         ],
       });
     });
@@ -217,8 +217,8 @@ describe('CardManager', () => {
 
       expect(retrieveSavedState()).toEqual({
         cards: [
-          { isPinned: false, name: 'Saheeli Rai' },
-          { isPinned: false, name: 'Saheeli, the Gifted' },
+          { isPinned: false, name: 'Saheeli Rai', isFocused: false },
+          { isPinned: false, name: 'Saheeli, the Gifted', isFocused: false },
         ],
       });
     });
@@ -277,11 +277,155 @@ describe('CardManager', () => {
     test('saves state', () => {
       const wrapper = shallow(<CardManager />);
 
-      wrapper.setState({ cards: [{ name: 'Fling', isPinned: true }] });
+      wrapper.setState({
+        cards: [{ name: 'Fling', isPinned: true, isFocused: false }],
+      });
 
       expect(localStorage.getItem('CardManager#state')).toEqual(
-        '{"cards":[{"name":"Fling","isPinned":true}]}'
+        '{"cards":[{"name":"Fling","isPinned":true,"isFocused":false}]}'
       );
+    });
+  });
+
+  describe('presser events', () => {
+    localStorage.setItem(
+      'CardManager#state',
+      JSON.stringify({
+        cards: [{ name: 'Fling', isPinned: true }],
+      })
+    );
+
+    test('nextCard sets first card as focused', () => {
+      const wrapper = shallow(<CardManager />);
+      wrapper.setState({
+        cards: [
+          { name: 'Fling', isPinned: false, isFocused: false },
+          { name: 'Shock', isPinned: false, isFocused: false },
+          { name: 'Grapeshot', isPinned: false, isFocused: false },
+        ],
+      });
+
+      wrapper.instance().presser._emit('nextCard');
+
+      expect(wrapper.state('cards')).toEqual([
+        { name: 'Fling', isPinned: false, isFocused: true },
+        { name: 'Shock', isPinned: false, isFocused: false },
+        { name: 'Grapeshot', isPinned: false, isFocused: false },
+      ]);
+    });
+
+    test('nextCard sets next card as focused', () => {
+      const wrapper = shallow(<CardManager />);
+      wrapper.setState({
+        cards: [
+          { name: 'Fling', isPinned: false, isFocused: true },
+          { name: 'Shock', isPinned: false, isFocused: false },
+          { name: 'Grapeshot', isPinned: false, isFocused: false },
+        ],
+      });
+
+      wrapper.instance().presser._emit('nextCard');
+
+      expect(wrapper.state('cards')).toEqual([
+        { name: 'Fling', isPinned: false, isFocused: false },
+        { name: 'Shock', isPinned: false, isFocused: true },
+        { name: 'Grapeshot', isPinned: false, isFocused: false },
+      ]);
+    });
+
+    test('nextCard wraps around', () => {
+      const wrapper = shallow(<CardManager />);
+      wrapper.setState({
+        cards: [
+          { name: 'Fling', isPinned: false, isFocused: false },
+          { name: 'Shock', isPinned: false, isFocused: false },
+          { name: 'Grapeshot', isPinned: false, isFocused: true },
+        ],
+      });
+
+      wrapper.instance().presser._emit('nextCard');
+
+      expect(wrapper.state('cards')).toEqual([
+        { name: 'Fling', isPinned: false, isFocused: true },
+        { name: 'Shock', isPinned: false, isFocused: false },
+        { name: 'Grapeshot', isPinned: false, isFocused: false },
+      ]);
+    });
+
+    test('previousCard sets last card as focused', () => {
+      const wrapper = shallow(<CardManager />);
+      wrapper.setState({
+        cards: [
+          { name: 'Fling', isPinned: false, isFocused: false },
+          { name: 'Shock', isPinned: false, isFocused: false },
+          { name: 'Grapeshot', isPinned: false, isFocused: false },
+        ],
+      });
+
+      wrapper.instance().presser._emit('previousCard');
+
+      expect(wrapper.state('cards')).toEqual([
+        { name: 'Fling', isPinned: false, isFocused: false },
+        { name: 'Shock', isPinned: false, isFocused: false },
+        { name: 'Grapeshot', isPinned: false, isFocused: true },
+      ]);
+    });
+
+    test('previousCard sets previous card as focused', () => {
+      const wrapper = shallow(<CardManager />);
+      wrapper.setState({
+        cards: [
+          { name: 'Fling', isPinned: false, isFocused: false },
+          { name: 'Shock', isPinned: false, isFocused: true },
+          { name: 'Grapeshot', isPinned: false, isFocused: false },
+        ],
+      });
+
+      wrapper.instance().presser._emit('previousCard');
+
+      expect(wrapper.state('cards')).toEqual([
+        { name: 'Fling', isPinned: false, isFocused: true },
+        { name: 'Shock', isPinned: false, isFocused: false },
+        { name: 'Grapeshot', isPinned: false, isFocused: false },
+      ]);
+    });
+
+    test('previousCard wraps around', () => {
+      const wrapper = shallow(<CardManager />);
+      wrapper.setState({
+        cards: [
+          { name: 'Fling', isPinned: false, isFocused: true },
+          { name: 'Shock', isPinned: false, isFocused: false },
+          { name: 'Grapeshot', isPinned: false, isFocused: false },
+        ],
+      });
+
+      wrapper.instance().presser._emit('previousCard');
+
+      expect(wrapper.state('cards')).toEqual([
+        { name: 'Fling', isPinned: false, isFocused: false },
+        { name: 'Shock', isPinned: false, isFocused: false },
+        { name: 'Grapeshot', isPinned: false, isFocused: true },
+      ]);
+    });
+
+    test('search clears focus', () => {
+      const wrapper = shallow(<CardManager />);
+      wrapper.setState({
+        cards: [
+          { name: 'Fling', isPinned: false, isFocused: false },
+          { name: 'Shock', isPinned: false, isFocused: true },
+          { name: 'Grapeshot', isPinned: false, isFocused: false },
+        ],
+      });
+
+      wrapper.instance().presser._emit('search');
+
+      expect(wrapper.state('cards')).toEqual([
+        { name: 'Fling', isPinned: false, isFocused: false },
+        { name: 'Shock', isPinned: false, isFocused: false },
+        { name: 'Grapeshot', isPinned: false, isFocused: false },
+      ]);
     });
   });
 });

@@ -45,4 +45,7 @@ export default class Presser {
       }
     }
   };
+
+  // Used for testing - manually fire an event.
+  _emit = event => this.target.dispatchEvent(new Event(event));
 }

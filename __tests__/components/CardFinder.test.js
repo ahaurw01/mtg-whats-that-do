@@ -108,4 +108,23 @@ describe('CardFinder', () => {
     expect(onCardSelected.mock.calls).toHaveLength(1);
     expect(onCardSelected.mock.calls[0][0]).toEqual('Serra Angel');
   });
+
+  test('adjusts focus from presser events', () => {
+    const wrapper = mount(<CardFinder onCardSelected={jest.fn()} />);
+
+    const input = document.activeElement;
+    expect(input).toBeInstanceOf(HTMLInputElement);
+
+    wrapper.instance().presser._emit('nextCard');
+    expect(document.activeElement).not.toBe(input);
+
+    wrapper.instance().presser._emit('search');
+    expect(document.activeElement).toBe(input);
+
+    wrapper.instance().presser._emit('previousCard');
+    expect(document.activeElement).not.toBe(input);
+
+    wrapper.instance().presser._emit('search');
+    expect(document.activeElement).toBe(input);
+  });
 });

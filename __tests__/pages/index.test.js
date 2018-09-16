@@ -18,4 +18,14 @@ describe('Index', () => {
 
     expect(clearCards.mock.calls).toHaveLength(1);
   });
+
+  test('presser can clear cards', () => {
+    const wrapper = mount(<Index />);
+    const clearCards = jest.fn();
+    wrapper.find(CardManager).instance().clearCards = clearCards;
+
+    wrapper.instance().presser._emit('clear');
+
+    expect(clearCards.mock.calls).toHaveLength(1);
+  });
 });

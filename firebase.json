@@ -1,15 +1,15 @@
 {
   "hosting": {
     "public": "out",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "rewrites": [
+      {
+        "source": "/share/**",
+        "function": "share"
+      }
     ]
   },
   "functions": {
-    "predeploy": [
-      "npm --prefix $RESOURCE_DIR run lint"
-    ]
+    "predeploy": ["npm --prefix $RESOURCE_DIR run lint"]
   }
 }

@@ -60,3 +60,6 @@ typings/
 # Next.js build directory
 .next
 out
+
+# Firebase stuff
+/.firebase

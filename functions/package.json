@@ -11,8 +11,8 @@
   },
   "dependencies": {
     "express": "^4.16.3",
-    "firebase-admin": "~5.8.1",
-    "firebase-functions": "^0.8.1",
+    "firebase-admin": "^6.0.0",
+    "firebase-functions": "^2.0.5",
     "shortid": "^2.2.13"
   },
   "devDependencies": {

@@ -4,7 +4,7 @@
   "description": "Look up many cards in one view.",
   "main": "index.js",
   "scripts": {
-    "dev": "next -p 1337",
+    "dev": "node dev-server",
     "lint": "eslint **/*.js",
     "unit": "jest",
     "unit:watch": "npm run unit -- --watchAll",
@@ -17,9 +17,7 @@
     "type": "git",
     "url": "git+https://github.com/ahaurw01/mtg-whats-that-do.git"
   },
-  "keywords": [
-    "mtg"
-  ],
+  "keywords": ["mtg"],
   "author": "Aaron Haurwitz <aaron.haurwitz@gmail.com>",
   "license": "MIT",
   "bugs": {
@@ -44,10 +42,7 @@
     "react-addons-test-utils": "^15.6.2"
   },
   "lint-staged": {
-    "*.js": [
-      "prettier --single-quote --trailing-comma es5 --write",
-      "git add"
-    ]
+    "*.js": ["prettier --single-quote --trailing-comma es5 --write", "git add"]
   },
   "dependencies": {
     "classnames": "^2.2.6",
@@ -57,14 +52,9 @@
     "semantic-ui-react": "^0.82.3"
   },
   "babel": {
-    "presets": [
-      "env",
-      "next/babel"
-    ]
+    "presets": ["env", "next/babel"]
   },
   "jest": {
-    "setupFiles": [
-      "<rootDir>/jest-setup.js"
-    ]
+    "setupFiles": ["<rootDir>/jest-setup.js"]
   }
 }

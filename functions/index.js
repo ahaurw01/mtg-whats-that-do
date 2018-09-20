@@ -2,6 +2,7 @@ const crypto = require('crypto');
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 const express = require('express');
+const cors = require('cors');
 const shortId = require('shortid');
 
 admin.initializeApp(functions.config().firebase);
@@ -9,6 +10,20 @@ const db = admin.firestore();
 db.settings({ timestampsInSnapshots: true });
 
 const app = express();
+app.use(
+  cors({
+    origin(origin, cb) {
+      if (
+        origin === 'http://localhost:1337' ||
+        origin === 'https://whatsthatdo.net'
+      ) {
+        return cb(null, true);
+      } else {
+        return cb(new Error('Blocked from CORS'));
+      }
+    },
+  })
+);
 
 app.post('/share', makeShareCode);
 app.get('/share/:code', getShare);

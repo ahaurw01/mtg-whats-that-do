@@ -5,6 +5,10 @@ import MainHeader from '../../components/MainHeader';
 import { mount } from 'enzyme';
 
 describe('Index', () => {
+  beforeEach(() => {
+    CardManager.getShareCode = () => '';
+  });
+
   test('cards are cleared', () => {
     const wrapper = mount(<Index />);
     const clearCards = jest.fn();

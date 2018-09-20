@@ -7,36 +7,52 @@ import Presser from '../utils/presser';
 
 export const LOCAL_STORAGE_STATE_KEY = 'CardManager#state';
 
-// Prioritize hash-based state. If not there, look for storage-based state.
-export function retrieveSavedState() {
-  try {
-    const hash = (location.hash || '').replace('#', '');
-    const names = JSON.parse(decodeURIComponent(hash));
-    return {
-      cards: names.map(name => ({ name, isPinned: false, isFocused: false })),
-    };
-  } catch (e) {
-    // Ignore error
-  }
-
-  try {
-    const savedState = JSON.parse(
-      localStorage.getItem(LOCAL_STORAGE_STATE_KEY)
-    );
-    if (!savedState || !savedState.cards) {
-      throw new Error();
-    }
-    return savedState;
-  } catch (e) {
-    return { cards: [] };
-  }
-}
-
 export default class CardManager extends Component {
+  static getShareCode() {
+    return location.pathname.replace(/^[/]/, '');
+  }
+
+  static getStateFromShare() {
+    const code = CardManager.getShareCode();
+    if (!code) return Promise.reject(new Error('no code'));
+
+    return fetch(`https://whatsthatdo.net/share/${code}`)
+      .then(result => result.json())
+      .then(({ cardNames }) => ({
+        cards: cardNames.map(name => ({
+          name,
+          isPinned: false,
+          isFocused: false,
+        })),
+      }));
+  }
+
+  static getStateFromLocalStorage() {
+    return new Promise((resolve, reject) => {
+      try {
+        const savedState = JSON.parse(
+          localStorage.getItem(LOCAL_STORAGE_STATE_KEY)
+        );
+        if (!savedState || !savedState.cards) {
+          throw new Error('no proper saved state');
+        }
+        resolve(savedState);
+      } catch (e) {
+        reject(e);
+      }
+    });
+  }
+
+  static retrieveSavedState() {
+    return CardManager.getStateFromShare()
+      .catch(() => CardManager.getStateFromLocalStorage())
+      .catch(() => ({ cards: [] }));
+  }
+
   state = { cards: [] };
 
   componentDidMount() {
-    this.setState(retrieveSavedState(), () => (location.hash = ''));
+    CardManager.retrieveSavedState().then(state => this.setState(state));
     this.presser = new Presser();
     this.presser.on('nextCard', this.focusNextCard);
     this.presser.on('previousCard', this.focusPreviousCard);

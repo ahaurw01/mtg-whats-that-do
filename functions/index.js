@@ -1,4 +1,3 @@
-const crypto = require('crypto');
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 const express = require('express');
@@ -32,13 +31,13 @@ const runtimeOpts = {
   timeoutSeconds: 20,
   memory: '128MB',
 };
-exports.share = functions.https.onRequest(app);
+exports.share = functions.runWith(runtimeOpts).https.onRequest(app);
 
 function makeShareCode(req, res) {
   const code = shortId.generate();
   const { cardNames } = req.body;
 
-  const docRef = db
+  db
     .collection('shares')
     .doc(code)
     .set({ cardNames })

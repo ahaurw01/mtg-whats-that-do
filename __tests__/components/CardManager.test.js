@@ -30,6 +30,7 @@ describe('CardManager', () => {
     fetchMock.get('https://whatsthatdo.net/share/share-code', mockShareData);
     localStorage.clear();
     jest.spyOn(CardManager, 'getShareCode').mockImplementation(() => '');
+    jest.spyOn(window.history, 'replaceState').mockImplementation(jest.fn());
   });
 
   afterEach(() => {
@@ -184,6 +185,8 @@ describe('CardManager', () => {
         expect(wrapper.find(CardResult)).toHaveLength(1);
         expect(wrapper.find(CardResult).prop('name')).toBe('Fling');
         expect(wrapper.find(CardResult).prop('isPinned')).toBe(true);
+
+        expect(window.history.replaceState).not.toHaveBeenCalled();
         done();
       });
     });
@@ -219,6 +222,8 @@ describe('CardManager', () => {
             .at(1)
             .prop('isPinned')
         ).toBe(false);
+
+        expect(window.history.replaceState).toHaveBeenCalledWith({}, '', '/');
         done();
       });
     });

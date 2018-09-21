@@ -16,15 +16,19 @@ export default class CardManager extends Component {
     const code = CardManager.getShareCode();
     if (!code) return Promise.reject(new Error('no code'));
 
-    return fetch(`https://whatsthatdo.net/share/${code}`)
-      .then(result => result.json())
-      .then(({ cardNames }) => ({
-        cards: cardNames.map(name => ({
-          name,
-          isPinned: false,
-          isFocused: false,
-        })),
-      }));
+    return (
+      fetch(`https://whatsthatdo.net/share/${code}`)
+        .then(result => result.json())
+        .then(({ cardNames }) => ({
+          cards: cardNames.map(name => ({
+            name,
+            isPinned: false,
+            isFocused: false,
+          })),
+        }))
+        // Remove the code from the url so you can refresh the page and not lose any updates.
+        .then(window.history.replaceState({}, '', '/'))
+    );
   }
 
   static getStateFromLocalStorage() {

@@ -1,6 +1,6 @@
 import React from 'react';
 import fetchMock from 'fetch-mock';
-import CardManager, { retrieveSavedState } from '../../components/CardManager';
+import CardManager from '../../components/CardManager';
 import CardFinder from '../../components/CardFinder';
 import CardResult from '../../components/CardResult';
 import { Button } from 'semantic-ui-react';
@@ -17,6 +17,9 @@ describe('CardManager', () => {
   const mockRulingsData = {
     data: [],
   };
+  const mockShareData = {
+    cardNames: ['Lightning Bolt', 'Fear'],
+  };
 
   beforeEach(() => {
     fetchMock.get(
@@ -24,7 +27,10 @@ describe('CardManager', () => {
       mockCardData
     );
     fetchMock.get('rulings uri', mockRulingsData);
+    fetchMock.get('https://whatsthatdo.net/share/share-code', mockShareData);
     localStorage.clear();
+    jest.spyOn(CardManager, 'getShareCode').mockImplementation(() => '');
+    jest.spyOn(window.history, 'replaceState').mockImplementation(jest.fn());
   });
 
   afterEach(() => {
@@ -164,91 +170,8 @@ describe('CardManager', () => {
     expect(wrapper.find(CardResult).prop('name')).toEqual('Lightning Bolt');
   });
 
-  describe('retrieveSavedState', () => {
-    afterEach(() => {
-      location.hash = '';
-      localStorage.clear();
-    });
-
-    test('uses hash state', () => {
-      location.hash = '#%5B"Saheeli%20Rai"%2C"Saheeli%2C%20the%20Gifted"%5D';
-
-      expect(retrieveSavedState()).toEqual({
-        cards: [
-          { isPinned: false, name: 'Saheeli Rai', isFocused: false },
-          { isPinned: false, name: 'Saheeli, the Gifted', isFocused: false },
-        ],
-      });
-    });
-
-    test('is default state if no storage exists', () => {
-      localStorage.clear();
-
-      expect(retrieveSavedState()).toEqual({ cards: [] });
-    });
-
-    test('is default state if no storage is bogus', () => {
-      localStorage.setItem('CardManager#state', 'BOGUS');
-
-      expect(retrieveSavedState()).toEqual({ cards: [] });
-    });
-
-    test('is from storage', () => {
-      localStorage.setItem(
-        'CardManager#state',
-        JSON.stringify({
-          cards: [{ name: 'Fling', isPinned: true }],
-        })
-      );
-
-      expect(retrieveSavedState()).toEqual({
-        cards: [{ name: 'Fling', isPinned: true }],
-      });
-    });
-
-    test('prioritizes hash', () => {
-      location.hash = '#%5B"Saheeli%20Rai"%2C"Saheeli%2C%20the%20Gifted"%5D';
-      localStorage.setItem(
-        'CardManager#state',
-        JSON.stringify({
-          cards: [{ name: 'Fling', isPinned: true }],
-        })
-      );
-
-      expect(retrieveSavedState()).toEqual({
-        cards: [
-          { isPinned: false, name: 'Saheeli Rai', isFocused: false },
-          { isPinned: false, name: 'Saheeli, the Gifted', isFocused: false },
-        ],
-      });
-    });
-
-    test('is from storage if hash is bogus', () => {
-      location.hash = '#BOGUS';
-      localStorage.setItem(
-        'CardManager#state',
-        JSON.stringify({
-          cards: [{ name: 'Fling', isPinned: true }],
-        })
-      );
-
-      expect(retrieveSavedState()).toEqual({
-        cards: [{ name: 'Fling', isPinned: true }],
-      });
-    });
-
-    test('is default state if all options fail', () => {
-      location.hash = '#BOGUS';
-      localStorage.setItem('CardManager#state', 'BOGUS');
-
-      expect(retrieveSavedState()).toEqual({
-        cards: [],
-      });
-    });
-  });
-
   describe('componentDidMount', () => {
-    test('updates state to saved state', () => {
+    test('updates state to saved state', done => {
       localStorage.setItem(
         'CardManager#state',
         JSON.stringify({
@@ -257,19 +180,93 @@ describe('CardManager', () => {
       );
 
       const wrapper = shallow(<CardManager />);
-      wrapper.update();
+      setImmediate(() => {
+        wrapper.update();
+        expect(wrapper.find(CardResult)).toHaveLength(1);
+        expect(wrapper.find(CardResult).prop('name')).toBe('Fling');
+        expect(wrapper.find(CardResult).prop('isPinned')).toBe(true);
 
-      expect(wrapper.find(CardResult)).toHaveLength(1);
-      expect(wrapper.find(CardResult).prop('name')).toBe('Fling');
-      expect(wrapper.find(CardResult).prop('isPinned')).toBe(true);
+        expect(window.history.replaceState).not.toHaveBeenCalled();
+        done();
+      });
     });
 
-    test('clears hash after mount', () => {
-      location.hash = '#something';
+    test('updates state to shared state', done => {
+      CardManager.getShareCode.mockImplementation(() => 'share-code');
 
       const wrapper = shallow(<CardManager />);
+      setImmediate(() => {
+        wrapper.update();
+        expect(wrapper.find(CardResult)).toHaveLength(2);
+        expect(
+          wrapper
+            .find(CardResult)
+            .at(0)
+            .prop('name')
+        ).toBe('Lightning Bolt');
+        expect(
+          wrapper
+            .find(CardResult)
+            .at(0)
+            .prop('isPinned')
+        ).toBe(false);
+        expect(
+          wrapper
+            .find(CardResult)
+            .at(1)
+            .prop('name')
+        ).toBe('Fear');
+        expect(
+          wrapper
+            .find(CardResult)
+            .at(1)
+            .prop('isPinned')
+        ).toBe(false);
 
-      expect(location.hash).toBe('');
+        expect(window.history.replaceState).toHaveBeenCalledWith({}, '', '/');
+        done();
+      });
+    });
+
+    test('prioritizes shared state', done => {
+      localStorage.setItem(
+        'CardManager#state',
+        JSON.stringify({
+          cards: [{ name: 'Fling', isPinned: true }],
+        })
+      );
+      CardManager.getShareCode.mockImplementation(() => 'share-code');
+
+      const wrapper = shallow(<CardManager />);
+      setImmediate(() => {
+        wrapper.update();
+        expect(wrapper.find(CardResult)).toHaveLength(2);
+        expect(
+          wrapper
+            .find(CardResult)
+            .at(0)
+            .prop('name')
+        ).toBe('Lightning Bolt');
+        expect(
+          wrapper
+            .find(CardResult)
+            .at(0)
+            .prop('isPinned')
+        ).toBe(false);
+        expect(
+          wrapper
+            .find(CardResult)
+            .at(1)
+            .prop('name')
+        ).toBe('Fear');
+        expect(
+          wrapper
+            .find(CardResult)
+            .at(1)
+            .prop('isPinned')
+        ).toBe(false);
+        done();
+      });
     });
   });
 

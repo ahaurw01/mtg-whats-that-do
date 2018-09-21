@@ -65,10 +65,12 @@ export default class ShareModal extends Component {
       getShareUrl().then(url => {
         this.setState({ url, isLoading: false });
 
-        if (navigator.share) {
-          navigator.share({ title: "What's that do?", url });
-          this.props.onClose();
-        }
+        // Disabling for now: the delay is enough that the browser might not think you
+        // are responding to an input gesture.
+        // if (navigator.share) {
+        //   navigator.share({ title: "What's that do?", url });
+        //   this.props.onClose();
+        // }
       });
     } else if (!nextProps.isOpen && this.props.isOpen) {
       this.setState({ isOpen: false, isLoading: false });

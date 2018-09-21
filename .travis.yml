@@ -1,6 +1,7 @@
 language: node_js
 install:
   - yarn
+  - cd functions && yarn && cd ..
 deploy:
   provider: script
   on:

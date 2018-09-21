@@ -3,25 +3,36 @@ import PropTypes from 'prop-types';
 import { Modal, Icon, Input } from 'semantic-ui-react';
 import { LOCAL_STORAGE_STATE_KEY } from './CardManager';
 
-export const constructLink = () => {
-  const stringifiedNames = (() => {
-    try {
-      const cards = JSON.parse(localStorage[LOCAL_STORAGE_STATE_KEY]).cards;
-      if (cards.length === 0) throw new Error('no cards to serialize');
-      return encodeURIComponent(JSON.stringify(cards.map(card => card.name)));
-    } catch (e) {
-      return '';
-    }
-  })();
+export const constructPayload = () => {
+  try {
+    const cards = JSON.parse(localStorage[LOCAL_STORAGE_STATE_KEY]).cards;
+    if (cards.length === 0) throw new Error('no cards to serialize');
+    return JSON.stringify({ cardNames: cards.map(card => card.name) });
+  } catch (e) {
+    return null;
+  }
+};
 
-  let url =
+export const getShareUrl = () => {
+  const base =
     process.env.NODE_ENV === 'development'
       ? 'http://localhost:1337'
       : 'https://whatsthatdo.net';
+  const payload = constructPayload();
+  if (!payload) return Promise.resolve(base);
 
-  if (stringifiedNames) url += `#${stringifiedNames}`;
-
-  return url;
+  return fetch(
+    'https://us-central1-whats-that-do.cloudfunctions.net/share/share',
+    {
+      method: 'POST',
+      body: payload,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
+  )
+    .then(result => result.json())
+    .then(({ code }) => `${base}/${code}`);
 };
 
 export default class ShareModal extends Component {
@@ -33,6 +44,8 @@ export default class ShareModal extends Component {
   state = {
     copied: false,
     isOpen: false,
+    isLoading: false,
+    url: '',
   };
 
   onClose = () => {
@@ -48,19 +61,22 @@ export default class ShareModal extends Component {
 
   componentWillUpdate(nextProps) {
     if (nextProps.isOpen && !this.props.isOpen) {
-      if (navigator.share) {
-        navigator.share({ title: "What's that do?", url: constructLink() });
-        this.props.onClose();
-      } else {
-        this.setState({ isOpen: true });
-      }
+      this.setState({ isLoading: true, isOpen: true });
+      getShareUrl().then(url => {
+        this.setState({ url, isLoading: false });
+
+        if (navigator.share) {
+          navigator.share({ title: "What's that do?", url });
+          this.props.onClose();
+        }
+      });
     } else if (!nextProps.isOpen && this.props.isOpen) {
-      this.setState({ isOpen: false });
+      this.setState({ isOpen: false, isLoading: false });
     }
   }
 
   render() {
-    const { isOpen } = this.state;
+    const { isOpen, isLoading, url } = this.state;
     return (
       <Modal
         closeIcon
@@ -73,28 +89,39 @@ export default class ShareModal extends Component {
           <Icon name="share alternate" /> Share Link
         </Modal.Header>
         <Modal.Content>
-          <Modal.Description>
-            <p>
-              Send this link to a friend or bookmark it to view the cards
-              currently showing.
-            </p>
-            <Input
-              size="big"
-              fluid
-              ref={input => (this.input = input)}
-              value={constructLink()}
-              readOnly
-              autoFocus
-              onFocus={e => e.target.select()}
-              action={{
-                icon: this.state.copied ? 'check' : 'copy',
-                content: this.state.copied ? 'Copied' : 'Copy',
-                color: this.state.copied ? 'green' : null,
-                onClick: this.copy,
-              }}
-            />
-          </Modal.Description>
+          {isLoading ? (
+            <div className="center">
+              <Icon name="spinner" loading size="massive" />
+            </div>
+          ) : (
+            <Modal.Description>
+              <p>
+                Send this link to a friend or bookmark it to view the cards
+                currently showing.
+              </p>
+              <Input
+                size="big"
+                fluid
+                ref={input => (this.input = input)}
+                value={url}
+                readOnly
+                autoFocus
+                onFocus={e => e.target.select()}
+                action={{
+                  icon: this.state.copied ? 'check' : 'copy',
+                  content: this.state.copied ? 'Copied' : 'Copy',
+                  color: this.state.copied ? 'green' : null,
+                  onClick: this.copy,
+                }}
+              />
+            </Modal.Description>
+          )}
         </Modal.Content>
+        <style jsx>{`
+          .center {
+            text-align: center;
+          }
+        `}</style>
       </Modal>
     );
   }

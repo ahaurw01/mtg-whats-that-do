@@ -1,29 +1,33 @@
 import React from 'react';
-import ShareModal, { constructLink } from '../../components/ShareModal';
+import ShareModal, {
+  constructPayload,
+  getShareUrl,
+} from '../../components/ShareModal';
 import { Modal, Button, Segment } from 'semantic-ui-react';
 import { mount } from 'enzyme';
+import fetchMock from 'fetch-mock';
 
 describe('ShareModal', () => {
   beforeEach(() => {
     localStorage.clear();
   });
 
-  describe('constructLink', () => {
-    test('makes link with missing card data', () => {
-      expect(constructLink()).toBe('https://whatsthatdo.net');
+  describe('constructPayload', () => {
+    test('is null with missing card data', () => {
+      expect(constructPayload()).toBe(null);
     });
 
-    test('makes link with no card data', () => {
+    test('is null with no card data', () => {
       localStorage.setItem(
         'CardManager#state',
         JSON.stringify({
           cards: [],
         })
       );
-      expect(constructLink()).toBe('https://whatsthatdo.net');
+      expect(constructPayload()).toBe(null);
     });
 
-    test('makes link with one card', () => {
+    test('makes payload with one card', () => {
       localStorage.setItem(
         'CardManager#state',
         JSON.stringify({
@@ -31,16 +35,15 @@ describe('ShareModal', () => {
             {
               name: 'Saheeli Rai',
               isPinned: false,
+              isFocused: false,
             },
           ],
         })
       );
-      expect(constructLink()).toBe(
-        'https://whatsthatdo.net#%5B%22Saheeli%20Rai%22%5D'
-      );
+      expect(constructPayload()).toEqual('{"cardNames":["Saheeli Rai"]}');
     });
 
-    test('makes link with multiple cards', () => {
+    test('makes payload with multiple cards', () => {
       localStorage.setItem(
         'CardManager#state',
         JSON.stringify({
@@ -60,44 +63,90 @@ describe('ShareModal', () => {
           ],
         })
       );
-      expect(constructLink()).toBe(
-        "https://whatsthatdo.net#%5B%22Saheeli%20Rai%22%2C%22Zndrsplt's%20Judgment%22%2C%22Who%20%2F%2F%20What%20%2F%2F%20When%20%2F%2F%20Where%20%2F%2F%20Why%22%5D"
+      expect(constructPayload()).toEqual(
+        `{\"cardNames\":[\"Saheeli Rai\",\"Zndrsplt's Judgment\",\"Who // What // When // Where // Why\"]}`
       );
     });
   });
 
-  describe('opening the modal', () => {
-    test('opens the modal if no share API is present', () => {
-      window.navigator.share = undefined;
+  describe('getShareUrl', () => {
+    test('is base url if no card data', () => {
+      return getShareUrl().then(result => {
+        expect(result).toBe('https://whatsthatdo.net');
+      });
+    });
 
-      const wrapper = mount(<ShareModal isOpen={false} onClose={jest.fn()} />);
+    test('has share code if card data exists', () => {
+      localStorage.setItem(
+        'CardManager#state',
+        JSON.stringify({
+          cards: [
+            {
+              name: 'Saheeli Rai',
+              isPinned: false,
+              isFocused: false,
+            },
+          ],
+        })
+      );
+      fetchMock.postOnce('*', { code: 'abcxyz' });
 
-      expect(wrapper.find(Modal)).toHaveLength(1);
-      expect(wrapper.find(Modal).prop('open')).toBe(false);
-
-      wrapper.setProps({ isOpen: true });
-      wrapper.update();
-      expect(wrapper.find(Modal).prop('open')).toBe(true);
+      return getShareUrl().then(result => {
+        expect(result).toBe('https://whatsthatdo.net/abcxyz');
+      });
     });
   });
 
-  test('invokes navigator.share() instead if present', () => {
-    window.navigator.share = jest.fn();
-    const onClose = jest.fn();
+  describe('opening the modal', () => {
+    test('isLoading until url is ready', done => {
+      const wrapper = mount(<ShareModal isOpen={false} onClose={jest.fn()} />);
+      expect(wrapper.state('isLoading')).toBe(false);
 
-    const wrapper = mount(<ShareModal isOpen={false} onClose={onClose} />);
+      wrapper.setProps({ isOpen: true });
+      wrapper.update();
 
-    expect(wrapper.find(Modal)).toHaveLength(1);
-    expect(wrapper.find(Modal).prop('open')).toBe(false);
+      expect(wrapper.state('isLoading')).toBe(true);
 
-    wrapper.setProps({ isOpen: true });
-    wrapper.update();
-    expect(wrapper.find(Modal).prop('open')).toBe(false);
-    expect(window.navigator.share).toHaveBeenCalledTimes(1);
-    expect(window.navigator.share).toHaveBeenCalledWith({
-      url: 'https://whatsthatdo.net',
-      title: "What's that do?",
+      setImmediate(() => {
+        expect(wrapper.state('isLoading')).toBe(false);
+        done();
+      });
     });
-    expect(onClose).toHaveBeenCalledTimes(1);
+
+    test('opens the modal if no share API is present', done => {
+      window.navigator.share = undefined;
+
+      const wrapper = mount(<ShareModal isOpen={false} onClose={jest.fn()} />);
+      expect(wrapper.state('isOpen')).toBe(false);
+
+      wrapper.setProps({ isOpen: true });
+      wrapper.update();
+
+      expect(wrapper.state('isOpen')).toBe(true);
+
+      setImmediate(() => {
+        expect(wrapper.state('isOpen')).toBe(true);
+        done();
+      });
+    });
+
+    test('closes the modal if share API is present', done => {
+      window.navigator.share = jest.fn();
+      const onClose = jest.fn();
+
+      const wrapper = mount(<ShareModal isOpen={false} onClose={onClose} />);
+      expect(wrapper.state('isOpen')).toBe(false);
+
+      wrapper.setProps({ isOpen: true });
+      wrapper.update();
+
+      expect(wrapper.state('isOpen')).toBe(true);
+      expect(onClose).toHaveBeenCalledTimes(0);
+
+      setImmediate(() => {
+        expect(onClose).toHaveBeenCalledTimes(1);
+        done();
+      });
+    });
   });
 });

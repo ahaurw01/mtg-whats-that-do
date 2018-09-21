@@ -35,6 +35,8 @@ export const getShareUrl = () => {
     .then(({ code }) => `${base}/${code}`);
 };
 
+const isIOS = () => navigator.userAgent.match(/ipad|iphone|ipod/i);
+
 export default class ShareModal extends Component {
   static propTypes = {
     isOpen: PropTypes.bool.isRequired,
@@ -54,8 +56,22 @@ export default class ShareModal extends Component {
   };
 
   copy = () => {
-    this.input.select();
-    document.execCommand('copy');
+    if (!isIOS()) {
+      this.input.select();
+      document.execCommand('copy');
+    } else {
+      const input = this.input.inputRef;
+      const range = document.createRange();
+      input.contentEditable = true;
+      range.selectNodeContents(input);
+      const selection = window.getSelection();
+      selection.removeAllRanges();
+      selection.addRange(range);
+      input.setSelectionRange(0, 999999);
+      input.contentEditable = false;
+      document.execCommand('copy');
+    }
+
     this.setState({ copied: true });
   };
 

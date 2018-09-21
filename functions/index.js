@@ -9,20 +9,7 @@ const db = admin.firestore();
 db.settings({ timestampsInSnapshots: true });
 
 const app = express();
-app.use(
-  cors({
-    origin(origin, cb) {
-      if (
-        origin === 'http://localhost:1337' ||
-        origin === 'https://whatsthatdo.net'
-      ) {
-        return cb(null, true);
-      } else {
-        return cb(new Error('Blocked from CORS'));
-      }
-    },
-  })
-);
+app.use(cors());
 
 app.post('/share', makeShareCode);
 app.get('/share/:code', getShare);

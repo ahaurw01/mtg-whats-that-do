@@ -25,7 +25,12 @@
   },
   "homepage": "https://github.com/ahaurw01/mtg-whats-that-do#readme",
   "devDependencies": {
-    "babel-eslint": "^8.2.1",
+    "@babel/core": "^7.1.0",
+    "@babel/preset-env": "^7.1.0",
+    "@zeit/next-css": "^1.0.1",
+    "babel-core": "^7.0.0-bridge.0",
+    "babel-eslint": "^9.0.0",
+    "babel-jest": "^23.6.0",
     "enzyme": "^3.3.0",
     "enzyme-adapter-react-16": "^1.1.1",
     "eslint": "^4.16.0",
@@ -34,27 +39,32 @@
     "fetch-mock": "^6.0.0",
     "firebase-tools": "^3.17.4",
     "husky": "^0.14.3",
-    "jest": "^22.1.4",
+    "identity-obj-proxy": "^3.0.0",
+    "jest": "^23.6.0",
     "jest-localstorage-mock": "^2.2.0",
     "lint-staged": "^6.1.0",
     "prettier": "^1.10.2",
     "prop-types": "^15.6.0",
-    "react-addons-test-utils": "^15.6.2"
+    "react-addons-test-utils": "^15.6.2",
+    "webpack": "^4.19.1"
   },
   "lint-staged": {
     "*.js": ["prettier --single-quote --trailing-comma es5 --write", "git add"]
   },
   "dependencies": {
     "classnames": "^2.2.6",
-    "next": "^4.2.3",
+    "next": "^7.0.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "semantic-ui-react": "^0.82.3"
   },
   "babel": {
-    "presets": ["env", "next/babel"]
+    "presets": ["@babel/env", "next/babel"]
   },
   "jest": {
-    "setupFiles": ["<rootDir>/jest-setup.js"]
+    "setupFiles": ["<rootDir>/jest-setup.js"],
+    "moduleNameMapper": {
+      "\\.css$": "identity-obj-proxy"
+    }
   }
 }

@@ -2,6 +2,7 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Modal, Icon, Input } from 'semantic-ui-react';
 import { LOCAL_STORAGE_STATE_KEY } from './CardManager';
+import styles from './ShareModal.css';
 
 export const constructPayload = () => {
   try {
@@ -108,7 +109,7 @@ export default class ShareModal extends Component {
         </Modal.Header>
         <Modal.Content>
           {isLoading ? (
-            <div className="center">
+            <div className={styles.center}>
               <Icon name="spinner" loading size="massive" />
             </div>
           ) : (
@@ -135,11 +136,6 @@ export default class ShareModal extends Component {
             </Modal.Description>
           )}
         </Modal.Content>
-        <style jsx>{`
-          .center {
-            text-align: center;
-          }
-        `}</style>
       </Modal>
     );
   }

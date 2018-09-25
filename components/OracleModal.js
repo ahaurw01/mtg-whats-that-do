@@ -9,6 +9,7 @@ import Iconify from './Iconify';
 import PowerToughness from './PowerToughness';
 import cx from 'classnames';
 import CardImage from './CardImage';
+import styles from './OracleModal.css';
 
 const OracleModal = ({ card, isOpen, onClose }) => (
   <Modal closeIcon onClose={onClose} open={isOpen}>
@@ -20,7 +21,7 @@ const OracleModal = ({ card, isOpen, onClose }) => (
         <Grid.Column computer="12" mobile="16">
           {getOracleData(card).map((oracle, index) => (
             <Segment key={index}>
-              <Header as="h3" className="oracle-card-header">
+              <Header as="h3" className={styles.oracleCardHeader}>
                 {oracle.name} <Iconify shadow>{oracle.mana_cost}</Iconify>
               </Header>
               <p>{oracle.type_line}</p>
@@ -68,24 +69,6 @@ const OracleModal = ({ card, isOpen, onClose }) => (
         </Grid.Column>
       </Grid>
     </Modal.Content>
-    <style global jsx>{`
-      .oracle-card-header {
-        display: flex;
-        align-items: center;
-      }
-      .oracle-card-header i {
-        margin-left: 2px;
-      }
-      .oracle-card-header i:first-of-type {
-        margin-left: 10px;
-      }
-      .ms-loyalty-start {
-        font-size: 32px !important;
-      }
-      i[class*='ms-loyalty']:not(.ms-loyalty-start) {
-        font-size: 28px !important;
-      }
-    `}</style>
   </Modal>
 );
 

@@ -1,0 +1,9 @@
+.actions {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 10px;
+}
+
+.cardIsFocused {
+  box-shadow: 0 0 12px 6px rgba(0, 0, 0, 0.5) !important;
+}

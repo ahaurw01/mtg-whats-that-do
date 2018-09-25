@@ -7,6 +7,7 @@ import { getImageSources, isDoubleFaced } from '../utils/card-data';
 import CardImage from './CardImage';
 import cx from 'classnames';
 import Presser from '../utils/presser';
+import styles from './CardResult.css';
 
 export default class CardResult extends Component {
   static propTypes = {
@@ -113,9 +114,9 @@ export default class CardResult extends Component {
     const { onRequestRemove, onRequestPin, isPinned, isFocused } = this.props;
     const imageSources = getImageSources(card);
     return (
-      <Segment className={cx({ cardIsFocused: isFocused })}>
+      <Segment className={cx({ [styles.cardIsFocused]: isFocused })}>
         <CardImage sources={imageSources} indexShowing={faceIndex} />
-        <div className="actions">
+        <div className={styles.actions}>
           <Button.Group>
             {card && (
               <Button
@@ -151,18 +152,7 @@ export default class CardResult extends Component {
             )}
           </Button.Group>
         </div>
-        <style jsx>{`
-          .actions {
-            display: flex;
-            justify-content: space-around;
-            margin-top: 10px;
-          }
-        `}</style>
-        <style global jsx>{`
-          .cardIsFocused {
-            box-shadow: 0 0 12px 6px rgba(0, 0, 0, 0.5) !important;
-          }
-        `}</style>
+
         {card && (
           <OracleModal
             card={card}

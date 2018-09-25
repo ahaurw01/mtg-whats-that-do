@@ -1,0 +1,26 @@
+:global kbd {
+  min-width: 1.8em;
+  margin-bottom: 0.5em;
+  color: #444444;
+  font-family: 'Lucida Grande', Lucida, Verdana, sans-serif;
+  font-weight: normal;
+  font-style: normal;
+  text-align: center;
+  line-height: 1em;
+  text-shadow: 0 1px 0 #fff;
+  display: inline-block;
+  padding: 0.3em 0.55em;
+  border-radius: 6px;
+  background-clip: padding-box;
+  border: 1px solid #bbb;
+  background-color: #f7f7f7;
+  background-image: linear-gradient(top, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0));
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(
+      startColorstr='#1a000000',
+      endColorstr='#00000000',
+      GradientType=0
+    );
+  box-shadow: 0px 2px 0 #bbbbbb, 0 3px 1px #999999, 0 3px 0 #bbbbbb,
+    inset 0 1px 1px #ffffff, inset 0 -1px 3px #cccccc;
+}

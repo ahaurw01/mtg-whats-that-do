@@ -67,12 +67,6 @@ const RulingsModal = ({ card, rulings, isOpen, onClose }) => (
         </Grid.Column>
       </Grid>
     </Modal.Content>
-    <style jsx>{`
-      img {
-        width: 100%;
-        border-radius: 4px;
-      }
-    `}</style>
   </Modal>
 );
 

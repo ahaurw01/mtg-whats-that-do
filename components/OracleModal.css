@@ -1,0 +1,17 @@
+.oracleCardHeader {
+  display: flex;
+  align-items: center;
+}
+.oracleCardHeader i {
+  margin-left: 2px;
+}
+.oracleCardHeader i:first-of-type {
+  margin-left: 10px;
+}
+
+:global .ms-loyalty-start {
+  font-size: 32px !important;
+}
+:global(i[class*='ms-loyalty']:not(.ms-loyalty-start)) {
+  font-size: 28px !important;
+}

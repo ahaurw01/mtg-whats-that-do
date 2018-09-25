@@ -1,6 +1,7 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Header, Menu, Responsive } from 'semantic-ui-react';
+import { Header, Menu, Responsive, Button } from 'semantic-ui-react';
+import styles from './MainHeader.css';
 
 export default class MainHeader extends Component {
   static propTypes = {
@@ -8,6 +9,7 @@ export default class MainHeader extends Component {
     onOpenShareModal: PropTypes.func.isRequired,
     onOpenSidebar: PropTypes.func.isRequired,
     onOpenShortcutsModal: PropTypes.func.isRequired,
+    onOpenCardFinderModal: PropTypes.func.isRequired,
   };
 
   render() {
@@ -16,6 +18,7 @@ export default class MainHeader extends Component {
       onClearCards,
       onOpenShareModal,
       onOpenShortcutsModal,
+      onOpenCardFinderModal,
     } = this.props;
     return (
       <Header
@@ -33,6 +36,14 @@ export default class MainHeader extends Component {
         >
           {"What's that do?"}
         </span>
+
+        <Button
+          color="green"
+          className={styles.findACard}
+          onClick={onOpenCardFinderModal}
+        >
+          Find a card
+        </Button>
 
         <Responsive maxWidth={767}>
           <Menu

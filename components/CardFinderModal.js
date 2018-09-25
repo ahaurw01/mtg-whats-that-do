@@ -1,22 +1,20 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Search, Input, Segment } from 'semantic-ui-react';
-import Presser from '../utils/presser';
+import { Modal, Search, Input, Segment } from 'semantic-ui-react';
 
-export default class CardFinder extends Component {
+export default class CardFinderModal extends Component {
   static propTypes = {
     onCardSelected: PropTypes.func.isRequired,
+    onClose: PropTypes.func.isRequired,
+    isOpen: PropTypes.bool.isRequired,
   };
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      results: [],
-      loading: false,
-      value: '',
-      lastFetchTime: 0,
-    };
-  }
+  state = {
+    results: [],
+    loading: false,
+    value: '',
+    lastFetchTime: 0,
+  };
 
   focus = () => {
     this.input.focus();
@@ -60,46 +58,38 @@ export default class CardFinder extends Component {
     this.setState({ results: [], value: '' });
   };
 
-  componentDidMount() {
-    this.presser = new Presser();
-    this.presser.on('search', this.focus);
-    this.presser.on('nextCard', this.blur);
-    this.presser.on('previousCard', this.blur);
-  }
-
-  componentWillUnmount() {
-    this.presser.off();
-  }
-
   render() {
     const { results, loading, value } = this.state;
+    const { isOpen, onClose } = this.props;
     return (
-      <Segment raised>
-        <Search
-          results={results}
-          fluid
-          input={
-            <Input
-              fluid
-              input={{
-                className: '',
-                tabIndex: '0',
-                autoComplete: 'off',
-                placeholder: 'Find a card...',
-                autoFocus: true,
-                ref: input => (this.input = input),
-              }}
-            />
-          }
-          loading={loading}
-          minCharacters={3}
-          noResultsMessage="No cards found."
-          onSearchChange={this.onSearchChange}
-          onResultSelect={this.onResultSelect}
-          value={value}
-          selectFirstResult
-        />
-      </Segment>
+      <Modal centered={false} size="tiny" onClose={onClose} open={isOpen}>
+        <Segment raised>
+          <Search
+            results={results}
+            fluid
+            input={
+              <Input
+                fluid
+                input={{
+                  className: '',
+                  tabIndex: '0',
+                  autoComplete: 'off',
+                  placeholder: 'Find a card...',
+                  autoFocus: true,
+                  ref: input => (this.input = input),
+                }}
+              />
+            }
+            loading={loading}
+            minCharacters={3}
+            noResultsMessage="No cards found."
+            onSearchChange={this.onSearchChange}
+            onResultSelect={this.onResultSelect}
+            value={value}
+            selectFirstResult
+          />
+        </Segment>
+      </Modal>
     );
   }
 }

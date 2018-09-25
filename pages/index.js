@@ -6,6 +6,7 @@ import StorageErrorBoundary from '../components/StorageErrorBoundary';
 import Sidebar from '../components/Sidebar';
 import ShareModal from '../components/ShareModal';
 import ShortcutsModal from '../components/ShortcutsModal';
+import CardFinderModal from '../components/CardFinderModal';
 import Presser from '../utils/presser';
 
 export default class Index extends Component {
@@ -13,6 +14,7 @@ export default class Index extends Component {
     isShareModalOpen: false,
     isSidebarOpen: false,
     isShortcutsOpen: false,
+    isCardFinderModalOpen: false,
   };
 
   openShareModal = () => {
@@ -39,14 +41,28 @@ export default class Index extends Component {
     this.setState({ isShortcutsOpen: false });
   };
 
+  openCardFinderModal = () => {
+    this.setState({ isCardFinderModalOpen: true });
+  };
+
+  closeCardFinderModal = () => {
+    this.setState({ isCardFinderModalOpen: false });
+  };
+
   clearCards = () => {
     this.cardManager.clearCards();
     this.closeSidebar();
   };
 
+  cardSelected = name => {
+    this.cardManager.addCard(name);
+    this.closeCardFinderModal();
+  };
+
   componentDidMount() {
     this.presser = new Presser();
     this.presser.on('clear', this.clearCards);
+    this.presser.on('search', this.openCardFinderModal);
   }
 
   componentWillUnmount() {
@@ -54,7 +70,12 @@ export default class Index extends Component {
   }
 
   render() {
-    const { isShareModalOpen, isSidebarOpen, isShortcutsOpen } = this.state;
+    const {
+      isShareModalOpen,
+      isSidebarOpen,
+      isShortcutsOpen,
+      isCardFinderModalOpen,
+    } = this.state;
     return (
       <Page>
         <StorageErrorBoundary>
@@ -63,6 +84,7 @@ export default class Index extends Component {
             onClearCards={this.clearCards}
             onOpenShareModal={this.openShareModal}
             onOpenShortcutsModal={this.openShortcutsModal}
+            onOpenCardFinderModal={this.openCardFinderModal}
           />
           <CardManager ref={cardManager => (this.cardManager = cardManager)} />
           <Sidebar
@@ -78,6 +100,11 @@ export default class Index extends Component {
           <ShortcutsModal
             isOpen={isShortcutsOpen}
             onClose={this.closeShortcutsModal}
+          />
+          <CardFinderModal
+            isOpen={isCardFinderModalOpen}
+            onClose={this.closeCardFinderModal}
+            onCardSelected={this.cardSelected}
           />
         </StorageErrorBoundary>
       </Page>

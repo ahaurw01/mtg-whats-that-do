@@ -1,6 +1,5 @@
 import { Component } from 'react';
 import CardResult from './CardResult';
-import CardFinder from './CardFinder';
 import { Grid } from 'semantic-ui-react';
 import Column from './Column';
 import Presser from '../utils/presser';
@@ -171,9 +170,6 @@ export default class CardManager extends Component {
             />
           </Column>
         ))}
-        <Column>
-          <CardFinder onCardSelected={this.addCard} />
-        </Column>
       </Grid>
     );
   }

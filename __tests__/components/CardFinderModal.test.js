@@ -1,9 +1,9 @@
 import React from 'react';
 import fetchMock from 'fetch-mock';
-import CardFinder from '../../components/CardFinder';
+import CardFinderModal from '../../components/CardFinderModal';
 import { mount } from 'enzyme';
 
-describe('CardFinder', () => {
+describe('CardFinderModal', () => {
   afterEach(() => {
     fetchMock.restore();
   });
@@ -13,7 +13,9 @@ describe('CardFinder', () => {
       data: ['Serra Angel'],
     });
 
-    const wrapper = mount(<CardFinder onCardSelected={() => null} />);
+    const wrapper = mount(
+      <CardFinderModal onCardSelected={jest.fn()} onClose={jest.fn()} isOpen />
+    );
 
     wrapper
       .find('input')
@@ -29,7 +31,9 @@ describe('CardFinder', () => {
       data: ['Serra Angel'],
     });
 
-    const wrapper = mount(<CardFinder onCardSelected={() => null} />);
+    const wrapper = mount(
+      <CardFinderModal onCardSelected={jest.fn()} onClose={jest.fn()} isOpen />
+    );
 
     wrapper.find('input').simulate('change', { target: { value: '' } });
     wrapper.find('input').simulate('change', { target: { value: 'S' } });
@@ -45,7 +49,9 @@ describe('CardFinder', () => {
       data: ['Serra Angel'],
     });
 
-    const wrapper = mount(<CardFinder onCardSelected={() => null} />);
+    const wrapper = mount(
+      <CardFinderModal onCardSelected={jest.fn()} onClose={jest.fn()} isOpen />
+    );
 
     wrapper
       .find('input')
@@ -58,7 +64,9 @@ describe('CardFinder', () => {
   });
 
   test('renders results', () => {
-    const wrapper = mount(<CardFinder onCardSelected={() => null} />);
+    const wrapper = mount(
+      <CardFinderModal onCardSelected={jest.fn()} onClose={jest.fn()} isOpen />
+    );
     wrapper.setState({
       results: [
         {
@@ -96,7 +104,13 @@ describe('CardFinder', () => {
 
   test('invokes onCardSelected', () => {
     const onCardSelected = jest.fn();
-    const wrapper = mount(<CardFinder onCardSelected={onCardSelected} />);
+    const wrapper = mount(
+      <CardFinderModal
+        onCardSelected={onCardSelected}
+        onClose={jest.fn()}
+        isOpen
+      />
+    );
     wrapper.setState({ results: [{ title: 'Serra Angel' }] });
 
     wrapper.find('.result').simulate('click', {
@@ -107,24 +121,5 @@ describe('CardFinder', () => {
 
     expect(onCardSelected.mock.calls).toHaveLength(1);
     expect(onCardSelected.mock.calls[0][0]).toEqual('Serra Angel');
-  });
-
-  test('adjusts focus from presser events', () => {
-    const wrapper = mount(<CardFinder onCardSelected={jest.fn()} />);
-
-    const input = document.activeElement;
-    expect(input).toBeInstanceOf(HTMLInputElement);
-
-    wrapper.instance().presser._emit('nextCard');
-    expect(document.activeElement).not.toBe(input);
-
-    wrapper.instance().presser._emit('search');
-    expect(document.activeElement).toBe(input);
-
-    wrapper.instance().presser._emit('previousCard');
-    expect(document.activeElement).not.toBe(input);
-
-    wrapper.instance().presser._emit('search');
-    expect(document.activeElement).toBe(input);
   });
 });

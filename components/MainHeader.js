@@ -12,6 +12,14 @@ export default class MainHeader extends Component {
     onOpenCardFinderModal: PropTypes.func.isRequired,
   };
 
+  state = {
+    isInitialized: false,
+  };
+
+  componentDidMount() {
+    this.setState({ isInitialized: true });
+  }
+
   render() {
     const {
       onOpenSidebar,
@@ -20,6 +28,7 @@ export default class MainHeader extends Component {
       onOpenShortcutsModal,
       onOpenCardFinderModal,
     } = this.props;
+    const { isInitialized } = this.state;
     return (
       <Header
         as="h1"
@@ -37,7 +46,7 @@ export default class MainHeader extends Component {
           {"What's that do?"}
         </span>
 
-        <FindACardButton onClick={onOpenCardFinderModal} />
+        {isInitialized && <FindACardButton onClick={onOpenCardFinderModal} />}
 
         <Responsive maxWidth={767}>
           <Menu

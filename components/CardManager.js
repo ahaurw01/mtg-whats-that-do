@@ -3,6 +3,7 @@ import CardResult from './CardResult';
 import { Grid } from 'semantic-ui-react';
 import Column from './Column';
 import Presser from '../utils/presser';
+import NoCardsYet from './NoCardsYet';
 
 export const LOCAL_STORAGE_STATE_KEY = 'CardManager#state';
 
@@ -52,10 +53,12 @@ export default class CardManager extends Component {
       .catch(() => ({ cards: [] }));
   }
 
-  state = { cards: [] };
+  state = { cards: [], isInitialized: false };
 
   componentDidMount() {
-    CardManager.retrieveSavedState().then(state => this.setState(state));
+    CardManager.retrieveSavedState().then(state =>
+      this.setState({ ...state, isInitialized: true })
+    );
     this.presser = new Presser();
     this.presser.on('nextCard', this.focusNextCard);
     this.presser.on('previousCard', this.focusPreviousCard);
@@ -149,21 +152,24 @@ export default class CardManager extends Component {
   }
 
   render() {
-    const { cards } = this.state;
+    const { cards, isInitialized } = this.state;
     return (
-      <Grid stackable padded reversed="mobile">
-        {cards.map(({ name, isPinned, isFocused }) => (
-          <Column key={name}>
-            <CardResult
-              isFocused={isFocused}
-              name={name}
-              isPinned={isPinned}
-              onRequestRemove={() => this.removeCard(name)}
-              onRequestPin={() => this.pinCard(name)}
-            />
-          </Column>
-        ))}
-      </Grid>
+      <div>
+        {isInitialized && cards.length === 0 && <NoCardsYet />}
+        <Grid stackable padded reversed="mobile">
+          {cards.map(({ name, isPinned, isFocused }) => (
+            <Column key={name}>
+              <CardResult
+                isFocused={isFocused}
+                name={name}
+                isPinned={isPinned}
+                onRequestRemove={() => this.removeCard(name)}
+                onRequestPin={() => this.pinCard(name)}
+              />
+            </Column>
+          ))}
+        </Grid>
+      </div>
     );
   }
 }

@@ -65,6 +65,7 @@ export default class CardFinderModal extends Component {
       <Modal centered={false} size="tiny" onClose={onClose} open={isOpen}>
         <Segment raised>
           <Search
+            size="huge"
             results={results}
             fluid
             input={

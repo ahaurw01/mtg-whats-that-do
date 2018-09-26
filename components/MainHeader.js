@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Header, Menu, Responsive, Button } from 'semantic-ui-react';
-import styles from './MainHeader.css';
+import { Header, Menu, Responsive } from 'semantic-ui-react';
+import FindACardButton from './FindACardButton';
 
 export default class MainHeader extends Component {
   static propTypes = {
@@ -37,13 +37,7 @@ export default class MainHeader extends Component {
           {"What's that do?"}
         </span>
 
-        <Button
-          color="green"
-          className={styles.findACard}
-          onClick={onOpenCardFinderModal}
-        >
-          Find a card
-        </Button>
+        <FindACardButton onClick={onOpenCardFinderModal} />
 
         <Responsive maxWidth={767}>
           <Menu

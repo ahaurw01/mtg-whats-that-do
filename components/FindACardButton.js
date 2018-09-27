@@ -3,17 +3,17 @@ import { Responsive, Button } from 'semantic-ui-react';
 import styles from './FindACardButton.css';
 
 const FindACardButton = ({ onClick }) => (
-  <div>
+  <div className={styles.noLineHeight}>
     <Responsive maxWidth={767}>
       <Button
-        color="green"
+        color="blue"
         icon="search"
         onClick={onClick}
         className={styles.mobile}
       />
     </Responsive>
     <Responsive minWidth={768}>
-      <Button color="green" className={styles.desktop} onClick={onClick}>
+      <Button color="blue" className={styles.desktop} onClick={onClick}>
         Find a card
       </Button>
     </Responsive>

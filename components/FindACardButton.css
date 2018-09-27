@@ -1,3 +1,8 @@
+.noLineHeight,
+.noLineHeight div {
+  line-height: 0;
+}
+
 .mobile {
   position: fixed;
   padding: 1em !important;

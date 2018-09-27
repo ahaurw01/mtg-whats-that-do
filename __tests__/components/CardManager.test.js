@@ -1,8 +1,8 @@
 import React from 'react';
 import fetchMock from 'fetch-mock';
 import CardManager from '../../components/CardManager';
-import CardFinder from '../../components/CardFinder';
 import CardResult from '../../components/CardResult';
+import NoCardsYet from '../../components/NoCardsYet';
 import { Button } from 'semantic-ui-react';
 import { shallow, mount } from 'enzyme';
 
@@ -37,19 +37,9 @@ describe('CardManager', () => {
     fetchMock.restore();
   });
 
-  test('renders just the CardFinder to start', () => {
-    const wrapper = shallow(<CardManager />);
-
-    expect(wrapper.find(CardFinder)).toHaveLength(1);
-    expect(wrapper.find(CardResult)).toHaveLength(0);
-  });
-
   test('adds new cards', done => {
     const wrapper = mount(<CardManager />);
-    wrapper
-      .find(CardFinder)
-      .at(0)
-      .prop('onCardSelected')('Serra Angel');
+    wrapper.instance().addCard('Serra Angel');
     wrapper.update();
 
     expect(wrapper.find(CardResult)).toHaveLength(1);
@@ -60,10 +50,7 @@ describe('CardManager', () => {
         .prop('name')
     ).toEqual('Serra Angel');
 
-    wrapper
-      .find(CardFinder)
-      .at(0)
-      .prop('onCardSelected')('Goblin King');
+    wrapper.instance().addCard('Goblin King');
     wrapper.update();
 
     expect(wrapper.find(CardResult)).toHaveLength(2);
@@ -82,18 +69,9 @@ describe('CardManager', () => {
 
   test('removes cards', () => {
     const wrapper = shallow(<CardManager />);
-    wrapper
-      .find(CardFinder)
-      .at(0)
-      .prop('onCardSelected')('Serra Angel');
-    wrapper
-      .find(CardFinder)
-      .at(0)
-      .prop('onCardSelected')('Lightning Bolt');
-    wrapper
-      .find(CardFinder)
-      .at(0)
-      .prop('onCardSelected')('Goblin King');
+    wrapper.instance().addCard('Serra Angel');
+    wrapper.instance().addCard('Lightning Bolt');
+    wrapper.instance().addCard('Goblin King');
     wrapper.update();
 
     expect(wrapper.find(CardResult)).toHaveLength(3);
@@ -121,18 +99,9 @@ describe('CardManager', () => {
 
   test('clears cards', () => {
     const wrapper = shallow(<CardManager />);
-    wrapper
-      .find(CardFinder)
-      .at(0)
-      .prop('onCardSelected')('Serra Angel');
-    wrapper
-      .find(CardFinder)
-      .at(0)
-      .prop('onCardSelected')('Lightning Bolt');
-    wrapper
-      .find(CardFinder)
-      .at(0)
-      .prop('onCardSelected')('Goblin King');
+    wrapper.instance().addCard('Serra Angel');
+    wrapper.instance().addCard('Lightning Bolt');
+    wrapper.instance().addCard('Goblin King');
     wrapper.update();
 
     expect(wrapper.find(CardResult)).toHaveLength(3);
@@ -144,18 +113,9 @@ describe('CardManager', () => {
 
   test('does not clear pinned cards', () => {
     const wrapper = shallow(<CardManager />);
-    wrapper
-      .find(CardFinder)
-      .at(0)
-      .prop('onCardSelected')('Serra Angel');
-    wrapper
-      .find(CardFinder)
-      .at(0)
-      .prop('onCardSelected')('Lightning Bolt');
-    wrapper
-      .find(CardFinder)
-      .at(0)
-      .prop('onCardSelected')('Goblin King');
+    wrapper.instance().addCard('Serra Angel');
+    wrapper.instance().addCard('Lightning Bolt');
+    wrapper.instance().addCard('Goblin King');
 
     wrapper.update();
     wrapper
@@ -168,6 +128,20 @@ describe('CardManager', () => {
     wrapper.update();
     expect(wrapper.find(CardResult)).toHaveLength(1);
     expect(wrapper.find(CardResult).prop('name')).toEqual('Lightning Bolt');
+  });
+
+  test('renders NoCardsYet if no cards present', done => {
+    const wrapper = mount(<CardManager />);
+    setImmediate(() => {
+      wrapper.update();
+      expect(wrapper.find(NoCardsYet)).toHaveLength(1);
+      wrapper.instance().addCard('Serra Angel');
+      setImmediate(() => {
+        wrapper.update();
+        expect(wrapper.find(NoCardsYet)).toHaveLength(0);
+        done();
+      });
+    });
   });
 
   describe('componentDidMount', () => {
@@ -403,25 +377,6 @@ describe('CardManager', () => {
         { name: 'Fling', isPinned: false, isFocused: false },
         { name: 'Shock', isPinned: false, isFocused: false },
         { name: 'Grapeshot', isPinned: false, isFocused: true },
-      ]);
-    });
-
-    test('search clears focus', () => {
-      const wrapper = shallow(<CardManager />);
-      wrapper.setState({
-        cards: [
-          { name: 'Fling', isPinned: false, isFocused: false },
-          { name: 'Shock', isPinned: false, isFocused: true },
-          { name: 'Grapeshot', isPinned: false, isFocused: false },
-        ],
-      });
-
-      wrapper.instance().presser._emit('search');
-
-      expect(wrapper.state('cards')).toEqual([
-        { name: 'Fling', isPinned: false, isFocused: false },
-        { name: 'Shock', isPinned: false, isFocused: false },
-        { name: 'Grapeshot', isPinned: false, isFocused: false },
       ]);
     });
   });

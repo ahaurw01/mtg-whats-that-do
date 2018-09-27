@@ -62,6 +62,7 @@ export default class CardManager extends Component {
     this.presser = new Presser();
     this.presser.on('nextCard', this.focusNextCard);
     this.presser.on('previousCard', this.focusPreviousCard);
+    this.presser.on('search', this.blurCards);
   }
 
   componentWillUnmount() {
@@ -145,6 +146,12 @@ export default class CardManager extends Component {
         })),
       };
     });
+  };
+
+  blurCards = () => {
+    this.setState(prevState => ({
+      cards: prevState.cards.map(card => ({ ...card, isFocused: false })),
+    }));
   };
 
   componentDidUpdate() {

@@ -2,6 +2,7 @@ import React from 'react';
 import fetchMock from 'fetch-mock';
 import CardManager from '../../components/CardManager';
 import CardResult from '../../components/CardResult';
+import NoCardsYet from '../../components/NoCardsYet';
 import { Button } from 'semantic-ui-react';
 import { shallow, mount } from 'enzyme';
 
@@ -127,6 +128,20 @@ describe('CardManager', () => {
     wrapper.update();
     expect(wrapper.find(CardResult)).toHaveLength(1);
     expect(wrapper.find(CardResult).prop('name')).toEqual('Lightning Bolt');
+  });
+
+  test('renders NoCardsYet if no cards present', done => {
+    const wrapper = mount(<CardManager />);
+    setImmediate(() => {
+      wrapper.update();
+      expect(wrapper.find(NoCardsYet)).toHaveLength(1);
+      wrapper.instance().addCard('Serra Angel');
+      setImmediate(() => {
+        wrapper.update();
+        expect(wrapper.find(NoCardsYet)).toHaveLength(0);
+        done();
+      });
+    });
   });
 
   describe('componentDidMount', () => {

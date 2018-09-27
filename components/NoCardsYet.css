@@ -1,0 +1,43 @@
+.text {
+  color: rgba(51, 51, 51, 0.3) !important;
+  text-align: center !important;
+}
+
+.text :global(.icon) {
+  font-size: 1em !important;
+  display: inline !important;
+}
+
+.mobileText {
+  composes: text;
+  margin-top: 33vh !important;
+}
+
+.desktopText {
+  composes: text;
+  margin-top: 40vh !important;
+}
+
+.fauxButton {
+  border: 1px solid #eeeeee;
+  border-radius: 4px;
+  padding: 0.78571429em 1.5em 0.78571429em;
+  font-size: 1rem;
+  position: relative;
+  top: -4px;
+}
+
+.fadeIn {
+  animation: fadeIn 1s;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

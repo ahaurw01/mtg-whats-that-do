@@ -1,17 +1,22 @@
-import { Responsive, Header, Icon, Button } from 'semantic-ui-react';
+import { Responsive, Header, Icon, Container } from 'semantic-ui-react';
 import styles from './NoCardsYet.css';
 
 const NoCardsYet = () => (
-  <div>
+  <div className={styles.fadeIn}>
     <Responsive maxWidth={767}>
-      <Header as="h1">
-        Add a card with the <Icon name="search" /> button.
-      </Header>
+      <Container>
+        <Header as="h1" className={styles.mobileText}>
+          Hit the <Icon name="search" /> button <Icon name="hand point down" />
+        </Header>
+      </Container>
     </Responsive>
     <Responsive minWidth={768}>
-      <Header as="h1">
-        Add a card with the <Button>Find a card</Button> button 👆.
-      </Header>
+      <Container>
+        <Header as="h1" className={styles.desktopText}>
+          Hit the <span className={styles.fauxButton}>Find a card</span> button{' '}
+          <Icon name="hand point up" />
+        </Header>
+      </Container>
     </Responsive>
   </div>
 );

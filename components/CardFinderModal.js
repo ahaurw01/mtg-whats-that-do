@@ -1,6 +1,7 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Modal, Search, Input, Segment } from 'semantic-ui-react';
+import { Modal, Search, Input } from 'semantic-ui-react';
+import styles from './CardFinderModal.css';
 
 export default class CardFinderModal extends Component {
   static propTypes = {
@@ -63,9 +64,8 @@ export default class CardFinderModal extends Component {
     const { isOpen, onClose } = this.props;
     return (
       <Modal centered={false} size="tiny" onClose={onClose} open={isOpen}>
-        <Segment raised>
+        <Modal.Content scrolling className={styles.content}>
           <Search
-            size="huge"
             results={results}
             fluid
             input={
@@ -88,8 +88,9 @@ export default class CardFinderModal extends Component {
             onResultSelect={this.onResultSelect}
             value={value}
             selectFirstResult
+            className={styles.search}
           />
-        </Segment>
+        </Modal.Content>
       </Modal>
     );
   }

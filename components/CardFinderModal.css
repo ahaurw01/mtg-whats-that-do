@@ -1,0 +1,7 @@
+.search :global(.results) {
+  position: static !important;
+}
+
+.content {
+  max-height: 85vh !important;
+}

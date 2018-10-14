@@ -33,6 +33,14 @@ export default class CardResult extends Component {
     isPrintingsModalOpen: false,
   };
 
+  selectCard = id => {
+    // get the card
+    const { allPrintings } = this.state;
+    const card = allPrintings.find(card => card.id === id);
+    this.setState({ card });
+    this.closePrintingsModal();
+  };
+
   componentDidMount() {
     const { name } = this.props;
     fetch(
@@ -187,6 +195,7 @@ export default class CardResult extends Component {
             allPrintings={allPrintings}
             isOpen={isPrintingsModalOpen}
             onClose={this.closePrintingsModal}
+            selectCard={this.selectCard}
           />
         )}
 

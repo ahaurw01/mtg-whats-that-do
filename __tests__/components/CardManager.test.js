@@ -7,12 +7,25 @@ import { Button } from 'semantic-ui-react';
 import { shallow, mount } from 'enzyme';
 
 describe('CardManager', () => {
-  const mockCardData = {
-    image_uris: {
-      large: 'image uri',
-    },
-    scryfall_uri: 'card uri',
-    rulings_uri: 'rulings uri',
+  const mockCardsData = {
+    data: [
+      {
+        id: '1',
+        image_uris: {
+          large: 'image uri',
+        },
+        scryfall_uri: 'card uri',
+        rulings_uri: 'rulings uri',
+      },
+      {
+        id: '2',
+        image_uris: {
+          large: 'image uri',
+        },
+        scryfall_uri: 'card uri',
+        rulings_uri: 'rulings uri',
+      },
+    ],
   };
   const mockRulingsData = {
     data: [],
@@ -23,8 +36,8 @@ describe('CardManager', () => {
 
   beforeEach(() => {
     fetchMock.get(
-      'begin:https://api.scryfall.com/cards/named?exact=',
-      mockCardData
+      'begin:https://api.scryfall.com/cards/search?order=released&q=%21%E2%80%9C',
+      mockCardsData
     );
     fetchMock.get('rulings uri', mockRulingsData);
     fetchMock.get('https://whatsthatdo.net/share/share-code', mockShareData);

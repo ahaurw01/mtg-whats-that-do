@@ -4,6 +4,7 @@ import { Modal, Grid } from 'semantic-ui-react';
 
 class PrintingsModal extends Component {
   onPrintingSelect = e => {
+    e.preventDefault();
     const cardID = e.target.id;
     this.props.selectCard(cardID);
   };
@@ -16,8 +17,10 @@ class PrintingsModal extends Component {
           <Grid>
             <Grid.Column computer="12" mobile="16">
               {allPrintings.map(card => (
-                <h4 key={card.id} id={card.id} onClick={this.onPrintingSelect}>
-                  {card.set_name} ({card.set})
+                <h4 key={card.id}>
+                  <a id={card.id} onClick={this.onPrintingSelect} href="">
+                    {card.set_name} ({card.set})
+                  </a>
                 </h4>
               ))}
             </Grid.Column>

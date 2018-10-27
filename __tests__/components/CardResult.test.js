@@ -90,6 +90,18 @@ describe('CardResult', () => {
       },
     ],
   };
+  const mockCardsDataWithOnePrinting = {
+    data: [
+      {
+        id: '1',
+        image_uris: {
+          large: 'image uri',
+        },
+        scryfall_uri: 'card uri',
+        rulings_uri: 'rulings uri',
+      },
+    ],
+  };
 
   beforeEach(() => {
     fetchMock.getOnce('*', mockCardsData);
@@ -317,6 +329,52 @@ describe('CardResult', () => {
         'image uri face 2',
       ]);
       expect(wrapper.find(CardImage).prop('indexShowing')).toEqual(1);
+      done();
+    });
+  });
+
+  test('does not show printings button if only one printing', done => {
+    fetchMock.restore();
+    fetchMock.getOnce('*', mockCardsDataWithOnePrinting);
+    fetchMock.getOnce('rulings uri', mockRulingsData);
+    const wrapper = mount(
+      <CardResult
+        name="Goblin Balloon Brigade"
+        onRequestRemove={() => null}
+        onRequestPin={() => null}
+        isPinned={false}
+      />
+    );
+
+    setImmediate(() => {
+      wrapper.update();
+      const icon = wrapper
+        .find('.actions')
+        .find(Icon)
+        .filter({ name: 'picture' });
+      expect(icon).toHaveLength(0);
+      done();
+    });
+  });
+
+  test('shows alternative printings button if more than one printing', done => {
+    const wrapper = mount(
+      <CardResult
+        name="Goblin Balloon Brigade"
+        onRequestRemove={() => null}
+        onRequestPin={() => null}
+        isPinned={false}
+      />
+    );
+
+    setImmediate(() => {
+      wrapper.update();
+      const icon = wrapper
+        .find('.actions')
+        .find(Icon)
+        .filter({ name: 'picture' });
+      expect(icon).toHaveLength(1);
+      expect(icon.parent().is('button')).toBe(true);
       done();
     });
   });

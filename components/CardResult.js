@@ -54,11 +54,7 @@ export default class CardResult extends Component {
         const card = cards[0];
         this.setState({ card });
         if (cards.length > 1) {
-          const allPrintings = [];
-          cards.forEach(card => {
-            allPrintings.push(card);
-          });
-          this.setState({ allPrintings });
+          this.setState({ allPrintings: cards });
         }
         return fetch(card.rulings_uri);
       })

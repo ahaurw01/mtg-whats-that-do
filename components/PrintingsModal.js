@@ -18,7 +18,7 @@ class PrintingsModal extends Component {
             <Grid.Column computer="12" mobile="16">
               {allPrintings.map(card => (
                 <h4 key={card.id}>
-                  <a id={card.id} onClick={this.onPrintingSelect} href="">
+                  <a id={card.id} onClick={this.onPrintingSelect} href="#">
                     {card.set_name} ({card.set})
                   </a>
                 </h4>

@@ -7,8 +7,6 @@ import RulingsModal from '../../components/RulingsModal';
 import { Button, Icon } from 'semantic-ui-react';
 import { mount } from 'enzyme';
 
-test('blank', () => {});
-
 describe('CardResult', () => {
   const mockCardsData = {
     data: [

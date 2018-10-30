@@ -8,12 +8,25 @@ import { Button, Icon } from 'semantic-ui-react';
 import { mount } from 'enzyme';
 
 describe('CardResult', () => {
-  const mockCardData = {
-    image_uris: {
-      large: 'image uri',
-    },
-    scryfall_uri: 'card uri',
-    rulings_uri: 'rulings uri',
+  const mockCardsData = {
+    data: [
+      {
+        id: '1',
+        image_uris: {
+          large: 'image uri',
+        },
+        scryfall_uri: 'card uri',
+        rulings_uri: 'rulings uri',
+      },
+      {
+        id: '2',
+        image_uris: {
+          large: 'image uri',
+        },
+        scryfall_uri: 'card uri',
+        rulings_uri: 'rulings uri',
+      },
+    ],
   };
   const mockRulingsData = {
     data: [
@@ -37,25 +50,59 @@ describe('CardResult', () => {
       },
     ],
   };
-  const mockCardDataWithFaces = {
-    card_faces: [
+  const mockCardsDataWithFaces = {
+    data: [
       {
-        image_uris: {
-          large: 'image uri face 1',
-        },
+        id: '1',
+        card_faces: [
+          {
+            image_uris: {
+              large: 'image uri face 1',
+            },
+          },
+          {
+            image_uris: {
+              large: 'image uri face 2',
+            },
+          },
+        ],
+        scryfall_uri: 'card uri',
+        rulings_uri: 'rulings uri',
       },
       {
-        image_uris: {
-          large: 'image uri face 2',
-        },
+        id: '2',
+        card_faces: [
+          {
+            image_uris: {
+              large: 'image uri face 1',
+            },
+          },
+          {
+            image_uris: {
+              large: 'image uri face 2',
+            },
+          },
+        ],
+        scryfall_uri: 'card uri',
+        rulings_uri: 'rulings uri',
       },
     ],
-    scryfall_uri: 'card uri',
-    rulings_uri: 'rulings uri',
+  };
+  const mockCardsDataWithOnePrinting = {
+    data: [
+      {
+        id: '1',
+        image_uris: {
+          large: 'image uri',
+        },
+        scryfall_uri: 'card uri',
+        rulings_uri: 'rulings uri',
+      },
+    ],
   };
 
   beforeEach(() => {
-    fetchMock.getOnce('*', mockCardData);
+    fetchMock.getOnce('*', mockCardsData);
     fetchMock.getOnce('rulings uri', mockRulingsData);
   });
 
@@ -74,10 +121,10 @@ describe('CardResult', () => {
     setImmediate(() => {
       expect(fetchMock.calls()).toHaveLength(2);
       expect(fetchMock.calls()[0][0]).toEqual(
-        'https://api.scryfall.com/cards/named?exact=Goblin%20Balloon%20Brigade'
+        'https://api.scryfall.com/cards/search?order=released&q=%21%E2%80%9CGoblin%20Balloon%20Brigade%E2%80%9D+include%3Aextras&unique=prints'
       );
       expect(fetchMock.calls()[1][0]).toEqual('rulings uri');
-      expect(wrapper.state('card')).toEqual(mockCardData);
+      expect(wrapper.state('card')).toEqual(mockCardsData.data[0]);
       expect(wrapper.state('rulings')).toEqual(mockRulingsData.data);
 
       done();
@@ -105,7 +152,7 @@ describe('CardResult', () => {
 
   test('renders face image', done => {
     fetchMock.restore();
-    fetchMock.getOnce('*', mockCardDataWithFaces);
+    fetchMock.getOnce('*', mockCardsDataWithFaces);
     fetchMock.getOnce('rulings uri', mockRulingsData);
 
     const wrapper = mount(
@@ -141,7 +188,7 @@ describe('CardResult', () => {
 
     setImmediate(() => {
       wrapper.update();
-      expect(wrapper.find('.actions').find(Button)).toHaveLength(4);
+      expect(wrapper.find('.actions').find(Button)).toHaveLength(5);
       const button = wrapper
         .find('.actions')
         .find(Button)
@@ -163,7 +210,7 @@ describe('CardResult', () => {
 
     setImmediate(() => {
       wrapper.update();
-      expect(wrapper.find('.actions').find(Button)).toHaveLength(4);
+      expect(wrapper.find('.actions').find(Button)).toHaveLength(5);
       const button = wrapper
         .find('.actions')
         .find(Button)
@@ -176,7 +223,7 @@ describe('CardResult', () => {
 
   test('renders disabled rulings button if no rulings', done => {
     fetchMock.restore();
-    fetchMock.getOnce('*', mockCardData);
+    fetchMock.getOnce('*', mockCardsData);
     fetchMock.getOnce('rulings uri', { data: [] });
 
     const wrapper = mount(
@@ -190,7 +237,7 @@ describe('CardResult', () => {
 
     setImmediate(() => {
       wrapper.update();
-      expect(wrapper.find('.actions').find(Button)).toHaveLength(4);
+      expect(wrapper.find('.actions').find(Button)).toHaveLength(5);
       const button = wrapper
         .find('.actions')
         .find(Button)
@@ -224,7 +271,7 @@ describe('CardResult', () => {
 
   test('shows flip button if double faced', done => {
     fetchMock.restore();
-    fetchMock.getOnce('*', mockCardDataWithFaces);
+    fetchMock.getOnce('*', mockCardsDataWithFaces);
     fetchMock.getOnce('rulings uri', mockRulingsData);
 
     const wrapper = mount(
@@ -250,7 +297,7 @@ describe('CardResult', () => {
 
   test('shows other face when flip button is clicked', done => {
     fetchMock.restore();
-    fetchMock.getOnce('*', mockCardDataWithFaces);
+    fetchMock.getOnce('*', mockCardsDataWithFaces);
     fetchMock.getOnce('rulings uri', mockRulingsData);
 
     const wrapper = mount(
@@ -280,6 +327,52 @@ describe('CardResult', () => {
         'image uri face 2',
       ]);
       expect(wrapper.find(CardImage).prop('indexShowing')).toEqual(1);
+      done();
+    });
+  });
+
+  test('does not show printings button if only one printing', done => {
+    fetchMock.restore();
+    fetchMock.getOnce('*', mockCardsDataWithOnePrinting);
+    fetchMock.getOnce('rulings uri', mockRulingsData);
+    const wrapper = mount(
+      <CardResult
+        name="Goblin Balloon Brigade"
+        onRequestRemove={() => null}
+        onRequestPin={() => null}
+        isPinned={false}
+      />
+    );
+
+    setImmediate(() => {
+      wrapper.update();
+      const icon = wrapper
+        .find('.actions')
+        .find(Icon)
+        .filter({ name: 'picture' });
+      expect(icon).toHaveLength(0);
+      done();
+    });
+  });
+
+  test('shows alternative printings button if more than one printing', done => {
+    const wrapper = mount(
+      <CardResult
+        name="Goblin Balloon Brigade"
+        onRequestRemove={() => null}
+        onRequestPin={() => null}
+        isPinned={false}
+      />
+    );
+
+    setImmediate(() => {
+      wrapper.update();
+      const icon = wrapper
+        .find('.actions')
+        .find(Icon)
+        .filter({ name: 'picture' });
+      expect(icon).toHaveLength(1);
+      expect(icon.parent().is('button')).toBe(true);
       done();
     });
   });

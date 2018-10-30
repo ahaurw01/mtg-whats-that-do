@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Button, Segment, Icon } from 'semantic-ui-react';
 import RulingsModal from './RulingsModal';
 import OracleModal from './OracleModal';
+import PrintingsModal from './PrintingsModal';
 import { getImageSources, isDoubleFaced } from '../utils/card-data';
 import CardImage from './CardImage';
 import cx from 'classnames';
@@ -24,20 +25,37 @@ export default class CardResult extends Component {
 
   state = {
     card: null,
+    allPrintings: null,
     rulings: [],
     faceIndex: 0,
     isOracleModalOpen: false,
     isRulingsModalOpen: false,
+    isPrintingsModalOpen: false,
+  };
+
+  selectCard = id => {
+    // get the card
+    const { allPrintings } = this.state;
+    const card = allPrintings.find(card => card.id === id);
+    this.setState({ card });
+    this.closePrintingsModal();
   };
 
   componentDidMount() {
     const { name } = this.props;
     fetch(
-      `https://api.scryfall.com/cards/named?exact=${encodeURIComponent(name)}`
+      `https://api.scryfall.com/cards/search?order=released&q=%21%E2%80%9C${encodeURIComponent(
+        name
+      )}%E2%80%9D+include%3Aextras&unique=prints`
     )
       .then(result => result.json())
-      .then(card => {
+      .then(result => {
+        const cards = result.data;
+        const card = cards[0];
         this.setState({ card });
+        if (cards.length > 1) {
+          this.setState({ allPrintings: cards });
+        }
         return fetch(card.rulings_uri);
       })
       .then(result => result.json())
@@ -103,13 +121,23 @@ export default class CardResult extends Component {
     this.setState({ isRulingsModalOpen: false });
   };
 
+  openPrintingsModal = () => {
+    this.setState({ isPrintingsModalOpen: true });
+  };
+
+  closePrintingsModal = () => {
+    this.setState({ isPrintingsModalOpen: false });
+  };
+
   render() {
     const {
       card,
+      allPrintings,
       rulings,
       faceIndex,
       isOracleModalOpen,
       isRulingsModalOpen,
+      isPrintingsModalOpen,
     } = this.state;
     const { onRequestRemove, onRequestPin, isPinned, isFocused } = this.props;
     const imageSources = getImageSources(card);
@@ -150,8 +178,22 @@ export default class CardResult extends Component {
                 <Icon name="refresh" />
               </Button>
             )}
+            {allPrintings && (
+              <Button icon onClick={this.openPrintingsModal}>
+                <Icon name="picture" />
+              </Button>
+            )}
           </Button.Group>
         </div>
+
+        {allPrintings && (
+          <PrintingsModal
+            allPrintings={allPrintings}
+            isOpen={isPrintingsModalOpen}
+            onClose={this.closePrintingsModal}
+            selectCard={this.selectCard}
+          />
+        )}
 
         {card && (
           <OracleModal

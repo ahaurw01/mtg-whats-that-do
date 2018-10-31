@@ -17,7 +17,9 @@
     "type": "git",
     "url": "git+https://github.com/ahaurw01/mtg-whats-that-do.git"
   },
-  "keywords": ["mtg"],
+  "keywords": [
+    "mtg"
+  ],
   "author": "Aaron Haurwitz <aaron.haurwitz@gmail.com>",
   "license": "MIT",
   "bugs": {
@@ -37,7 +39,7 @@
     "eslint-config-prettier": "^2.9.0",
     "eslint-plugin-react": "^7.6.1",
     "fetch-mock": "^6.0.0",
-    "firebase-tools": "^3.17.4",
+    "firebase-tools": "6.0.0",
     "husky": "^0.14.3",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^23.6.0",
@@ -49,7 +51,10 @@
     "webpack": "^4.19.1"
   },
   "lint-staged": {
-    "*.js": ["prettier --single-quote --trailing-comma es5 --write", "git add"]
+    "*.js": [
+      "prettier --single-quote --trailing-comma es5 --write",
+      "git add"
+    ]
   },
   "dependencies": {
     "classnames": "^2.2.6",
@@ -59,10 +64,15 @@
     "semantic-ui-react": "^0.82.3"
   },
   "babel": {
-    "presets": ["@babel/env", "next/babel"]
+    "presets": [
+      "@babel/env",
+      "next/babel"
+    ]
   },
   "jest": {
-    "setupFiles": ["<rootDir>/jest-setup.js"],
+    "setupFiles": [
+      "<rootDir>/jest-setup.js"
+    ],
     "moduleNameMapper": {
       "\\.css$": "identity-obj-proxy"
     }

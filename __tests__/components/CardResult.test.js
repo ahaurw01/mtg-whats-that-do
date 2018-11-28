@@ -121,7 +121,7 @@ describe('CardResult', () => {
     setImmediate(() => {
       expect(fetchMock.calls()).toHaveLength(2);
       expect(fetchMock.calls()[0][0]).toEqual(
-        'https://api.scryfall.com/cards/search?order=released&q=%21%E2%80%9CGoblin%20Balloon%20Brigade%E2%80%9D+include%3Aextras&unique=prints'
+        'https://api.scryfall.com/cards/search?q=!%22Goblin%20Balloon%20Brigade%22+include%3Aextras&unique=prints'
       );
       expect(fetchMock.calls()[1][0]).toEqual('rulings uri');
       expect(wrapper.state('card')).toEqual(mockCardsData.data[0]);

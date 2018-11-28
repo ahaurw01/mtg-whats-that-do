@@ -44,9 +44,9 @@ export default class CardResult extends Component {
   componentDidMount() {
     const { name } = this.props;
     fetch(
-      `https://api.scryfall.com/cards/search?order=released&q=%21%E2%80%9C${encodeURIComponent(
-        name
-      )}%E2%80%9D+include%3Aextras&unique=prints`
+      `https://api.scryfall.com/cards/search?q=${encodeURIComponent(
+        `!"${name}"`
+      )}+include%3Aextras&unique=prints`
     )
       .then(result => result.json())
       .then(result => {

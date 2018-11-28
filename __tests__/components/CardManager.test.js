@@ -36,7 +36,7 @@ describe('CardManager', () => {
 
   beforeEach(() => {
     fetchMock.get(
-      'begin:https://api.scryfall.com/cards/search?order=released&q=%21%E2%80%9C',
+      'begin:https://api.scryfall.com/cards/search?q=!%22',
       mockCardsData
     );
     fetchMock.get('rulings uri', mockRulingsData);

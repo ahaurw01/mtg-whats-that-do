@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-import { Icon } from 'semantic-ui-react';
+import InlinedCardBackImage from './InlinedCardBackImage';
 import styles from './CardImage.css';
 
 export default class CardImage extends Component {
@@ -46,46 +46,34 @@ export default class CardImage extends Component {
   }
 
   render() {
-    const { sources, indexShowing } = this.props;
+    let { sources, indexShowing } = this.props;
+    if (!sources.length) {
+      // sources will be [] before we get the card data back.
+      sources = [null];
+    }
     const { loading } = this.state;
-    const firstLoadedSrc = !loading[0]
-      ? sources[0]
-      : !loading[1] ? sources[1] : null;
 
     return (
       <div className={styles.outer}>
         <div
           className={cx(styles.card, { [styles.flipped]: indexShowing === 1 })}
         >
-          {sources.map(
-            (src, index) =>
-              loading[index] ? (
-                <div
-                  className={cx(styles.spin, {
-                    [styles.front]: index === 0,
-                    [styles.back]: index === 1,
-                  })}
-                  key={`spinner-${index}`}
-                >
-                  <Icon name="spinner" loading size="massive" />
-                </div>
-              ) : (
-                <img
-                  src={src}
-                  key={src}
-                  className={cx(styles.img, {
-                    [styles.front]: index === 0,
-                    [styles.back]: index === 1,
-                  })}
-                />
-              )
-          )}
-          {firstLoadedSrc && (
-            <img
-              src={firstLoadedSrc}
-              className={cx(styles.img, styles.placer)}
-            />
-          )}
+          {sources.map((src, index) => {
+            const className = cx(styles.img, {
+              [styles.front]: index === 0,
+              [styles.back]: index === 1,
+            });
+
+            return loading[index] ? (
+              <InlinedCardBackImage
+                className={cx(className, styles.spin)}
+                key={`spinner-${index}`}
+              />
+            ) : (
+              <img src={src} key={src} className={className} />
+            );
+          })}
+          <InlinedCardBackImage className={cx(styles.img, styles.placer)} />
         </div>
       </div>
     );

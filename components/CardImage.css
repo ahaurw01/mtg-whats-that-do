@@ -1,6 +1,7 @@
 .img {
   width: 100%;
   border-radius: 4.75% / 3.5%;
+  -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
 }
 .outer {

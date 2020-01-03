@@ -76,7 +76,7 @@ export default class ShareModal extends Component {
     this.setState({ copied: true });
   };
 
-  componentWillUpdate(nextProps) {
+  UNSAFE_componentWillUpdate(nextProps) {
     if (nextProps.isOpen && !this.props.isOpen) {
       this.setState({ isLoading: true, isOpen: true });
       getShareUrl().then(url => {

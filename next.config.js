@@ -13,4 +13,7 @@ module.exports = {
       '/': { page: '/' },
     };
   },
+  devIndicators: {
+    autoPrerender: false,
+  },
 };

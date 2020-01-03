@@ -11,7 +11,6 @@ const SiteSidebar = ({ isOpen, onClose, onOpenShareModal, onClearCards }) => (
     visible={isOpen}
     width="thin"
     direction="right"
-    target={undefined}
   >
     <Menu.Item onClick={onOpenShareModal}>
       <Icon name="share alternate" />

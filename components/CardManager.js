@@ -7,6 +7,21 @@ import NoCardsYet from './NoCardsYet';
 
 export const LOCAL_STORAGE_STATE_KEY = 'CardManager#state';
 
+function idify(name) {
+  return btoa(name).replace(/=/g, 'z');
+}
+function scrollToCard(name) {
+  // Hack: wait a moment for the search modal to go away, then we can
+  // effectively scroll into view.
+  setTimeout(() => {
+    const id = idify(name);
+    const el = document.querySelector(`#${id}`);
+    if (!el) return;
+
+    el.scrollIntoView({ behavior: 'smooth' });
+  }, 100);
+}
+
 export default class CardManager extends Component {
   static getShareCode() {
     return location.pathname.replace(/^[/]/, '');
@@ -86,13 +101,20 @@ export default class CardManager extends Component {
   addCard = name => {
     // Prevents the same card being added twice
     if (this.state.cards.findIndex(card => card.name === name) === -1) {
-      this.setState(prevState => ({
-        cards: prevState.cards.slice().concat({
-          name,
-          isPinned: false,
-          isFocused: false,
+      this.setState(
+        prevState => ({
+          cards: prevState.cards.slice().concat({
+            name,
+            isPinned: false,
+            isFocused: false,
+          }),
         }),
-      }));
+        () => {
+          scrollToCard(name);
+        }
+      );
+    } else {
+      scrollToCard(name);
     }
   };
 
@@ -165,7 +187,7 @@ export default class CardManager extends Component {
         {isInitialized && cards.length === 0 && <NoCardsYet />}
         <Grid stackable padded reversed="mobile">
           {cards.map(({ name, isPinned, isFocused }) => (
-            <Column key={name}>
+            <Column id={idify(name)} key={name}>
               <CardResult
                 isFocused={isFocused}
                 name={name}

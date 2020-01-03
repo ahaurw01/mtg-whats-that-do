@@ -121,7 +121,7 @@ describe('CardManager', () => {
 
     wrapper.instance().clearCards();
 
-    expect(wrapper.find(CardResult)).toHaveLength(3);
+    expect(wrapper.find(CardResult)).toHaveLength(0);
   });
 
   test('does not clear pinned cards', () => {

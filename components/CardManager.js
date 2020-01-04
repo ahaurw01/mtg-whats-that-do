@@ -19,7 +19,7 @@ function scrollToCard(name) {
     if (!el) return;
 
     el.scrollIntoView({ behavior: 'smooth' });
-  }, 100);
+  }, 200);
 }
 
 export default class CardManager extends Component {

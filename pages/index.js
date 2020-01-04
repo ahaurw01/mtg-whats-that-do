@@ -59,6 +59,10 @@ export default class Index extends Component {
     this.closeCardFinderModal();
   };
 
+  goFullscreen = () => {
+    document.documentElement.requestFullscreen();
+  };
+
   componentDidMount() {
     this.presser = new Presser();
     this.presser.on('clear', this.clearCards);
@@ -92,6 +96,7 @@ export default class Index extends Component {
             onClose={this.closeSidebar}
             onOpenShareModal={this.openShareModal}
             onClearCards={this.clearCards}
+            onGoFullscreen={this.goFullscreen}
           />
           <ShareModal
             isOpen={isShareModalOpen}

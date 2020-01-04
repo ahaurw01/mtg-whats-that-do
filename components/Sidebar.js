@@ -1,7 +1,13 @@
 import PropTypes from 'prop-types';
 import { Icon, Menu, Sidebar } from 'semantic-ui-react';
 
-const SiteSidebar = ({ isOpen, onClose, onOpenShareModal, onClearCards }) => (
+const SiteSidebar = ({
+  isOpen,
+  onClose,
+  onOpenShareModal,
+  onClearCards,
+  onGoFullscreen,
+}) => (
   <Sidebar
     as={Menu}
     animation="overlay"
@@ -28,6 +34,10 @@ const SiteSidebar = ({ isOpen, onClose, onOpenShareModal, onClearCards }) => (
       <Icon name="github" />
       Feedback
     </Menu.Item>
+    <Menu.Item onClick={onGoFullscreen}>
+      <Icon name="expand" />
+      Go Fullscreen
+    </Menu.Item>
   </Sidebar>
 );
 
@@ -36,6 +46,7 @@ SiteSidebar.propTypes = {
   onClose: PropTypes.func.isRequired,
   onOpenShareModal: PropTypes.func.isRequired,
   onClearCards: PropTypes.func.isRequired,
+  onGoFullscreen: PropTypes.func.isRequired,
 };
 
 export default SiteSidebar;

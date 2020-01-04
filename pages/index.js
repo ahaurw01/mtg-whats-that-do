@@ -1,4 +1,5 @@
 import { Component } from 'react';
+import screenfull from 'screenfull';
 import Page from '../components/Page';
 import CardManager from '../components/CardManager';
 import MainHeader from '../components/MainHeader';
@@ -15,6 +16,7 @@ export default class Index extends Component {
     isSidebarOpen: false,
     isShortcutsOpen: false,
     isCardFinderModalOpen: false,
+    isFullscreen: false,
   };
 
   openShareModal = () => {
@@ -59,18 +61,29 @@ export default class Index extends Component {
     this.closeCardFinderModal();
   };
 
-  goFullscreen = () => {
-    document.documentElement.requestFullscreen();
+  setFullscreenState = () => {
+    const { isFullscreen } = screenfull;
+    this.setState({ isFullscreen });
+  };
+
+  toggleFullscreen = () => {
+    if (screenfull.isEnabled) {
+      if (this.state.isFullscreen) screenfull.exit();
+      else screenfull.request();
+    }
   };
 
   componentDidMount() {
     this.presser = new Presser();
     this.presser.on('clear', this.clearCards);
     this.presser.on('search', this.openCardFinderModal);
+
+    if (screenfull.isEnabled) screenfull.on('change', this.setFullscreenState);
   }
 
   componentWillUnmount() {
     this.presser.off();
+    if (screenfull.isEnabled) screenfull.off('change', this.setFullscreenState);
   }
 
   render() {
@@ -79,6 +92,7 @@ export default class Index extends Component {
       isSidebarOpen,
       isShortcutsOpen,
       isCardFinderModalOpen,
+      isFullscreen,
     } = this.state;
     return (
       <Page>
@@ -93,10 +107,12 @@ export default class Index extends Component {
           <CardManager ref={cardManager => (this.cardManager = cardManager)} />
           <Sidebar
             isOpen={isSidebarOpen}
+            isFullscreen={isFullscreen}
+            canGoFullscreen={screenfull.isEnabled}
             onClose={this.closeSidebar}
             onOpenShareModal={this.openShareModal}
             onClearCards={this.clearCards}
-            onGoFullscreen={this.goFullscreen}
+            onToggleFullscreen={this.toggleFullscreen}
           />
           <ShareModal
             isOpen={isShareModalOpen}

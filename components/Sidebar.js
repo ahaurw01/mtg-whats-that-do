@@ -3,10 +3,12 @@ import { Icon, Menu, Sidebar } from 'semantic-ui-react';
 
 const SiteSidebar = ({
   isOpen,
+  isFullscreen,
+  canGoFullscreen,
   onClose,
   onOpenShareModal,
   onClearCards,
-  onGoFullscreen,
+  onToggleFullscreen,
 }) => (
   <Sidebar
     as={Menu}
@@ -34,19 +36,23 @@ const SiteSidebar = ({
       <Icon name="github" />
       Feedback
     </Menu.Item>
-    <Menu.Item onClick={onGoFullscreen}>
-      <Icon name="expand" />
-      Go Fullscreen
-    </Menu.Item>
+    {canGoFullscreen && (
+      <Menu.Item onClick={onToggleFullscreen}>
+        <Icon name={isFullscreen ? 'compress' : 'expand'} />
+        {isFullscreen ? 'Exit Fullscreen' : 'Go Fullscreen'}
+      </Menu.Item>
+    )}
   </Sidebar>
 );
 
 SiteSidebar.propTypes = {
   isOpen: PropTypes.bool.isRequired,
+  isFullscreen: PropTypes.bool.isRequired,
+  canGoFullscreen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   onOpenShareModal: PropTypes.func.isRequired,
   onClearCards: PropTypes.func.isRequired,
-  onGoFullscreen: PropTypes.func.isRequired,
+  onToggleFullscreen: PropTypes.func.isRequired,
 };
 
 export default SiteSidebar;

@@ -37,7 +37,12 @@ const SiteSidebar = ({
       Feedback
     </Menu.Item>
     {canGoFullscreen && (
-      <Menu.Item onClick={onToggleFullscreen}>
+      <Menu.Item
+        onClick={() => {
+          onToggleFullscreen();
+          onClose();
+        }}
+      >
         <Icon name={isFullscreen ? 'compress' : 'expand'} />
         {isFullscreen ? 'Exit Fullscreen' : 'Go Fullscreen'}
       </Menu.Item>

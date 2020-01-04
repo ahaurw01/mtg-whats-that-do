@@ -90,9 +90,10 @@ describe('Sidebar', () => {
 
     test('can click the button', () => {
       const onToggleFullscreen = jest.fn();
+      const onClose = jest.fn();
       const wrapper = mount(
         <Sidebar
-          {...makeProps({ canGoFullscreen: true, onToggleFullscreen })}
+          {...makeProps({ canGoFullscreen: true, onToggleFullscreen, onClose })}
         />
       );
 
@@ -102,6 +103,7 @@ describe('Sidebar', () => {
         .simulate('click');
 
       expect(onToggleFullscreen).toHaveBeenCalled();
+      expect(onClose).toHaveBeenCalled();
     });
   });
 });

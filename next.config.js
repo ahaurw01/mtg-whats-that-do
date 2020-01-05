@@ -17,7 +17,6 @@ module.exports = withOffline({
   devIndicators: {
     autoPrerender: false,
   },
-  generateInDevMode: true,
   workboxOpts: {
     runtimeCaching: [
       {

@@ -17,6 +17,7 @@ const Page = ({ children }) => (
       />
       <title>{"What's that do?"}</title>
       <link rel="shortcut icon" href="/static/favicon.png" />
+      <link rel="manifest" href="/static/manifest.json" />
     </Head>
     {children}
   </div>

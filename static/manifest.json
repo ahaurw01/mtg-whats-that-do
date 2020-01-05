@@ -1,0 +1,13 @@
+{
+  "short_name": "What's that do?",
+  "name": "What's that do?",
+  "icons": [
+    {
+      "src": "/static/favicon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "start_url": "/",
+  "display": "standalone"
+}

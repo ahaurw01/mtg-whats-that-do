@@ -41,7 +41,7 @@ export default class CardResult extends Component {
     const { allPrintings } = this.state;
     const card = allPrintings.find(card => card.id === id);
     this.setState({ card });
-    this.closePrintingsModal();
+    this.closeOracleModal();
   };
 
   componentDidMount() {
@@ -216,6 +216,8 @@ export default class CardResult extends Component {
           <CardModal
             card={card}
             rulings={rulings}
+            allPrintings={allPrintings}
+            onSelectPrinting={this.selectCard}
             isOpen={isOracleModalOpen}
             onClose={this.closeOracleModal}
           />

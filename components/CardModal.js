@@ -2,8 +2,16 @@ import PropTypes from 'prop-types';
 import { Modal, Grid, Tab, Icon } from 'semantic-ui-react';
 import OraclePane from './OraclePane';
 import RulingsPane from './RulingsPane';
+import PrintingsPane from './PrintingsPane';
 
-const CardModal = ({ card, rulings, isOpen, onClose }) => {
+const CardModal = ({
+  card,
+  rulings,
+  allPrintings,
+  isOpen,
+  onClose,
+  onSelectPrinting,
+}) => {
   const panes = [];
   panes.push({
     menuItem: {
@@ -13,7 +21,7 @@ const CardModal = ({ card, rulings, isOpen, onClose }) => {
     },
     render: () => <OraclePane card={card} />,
   });
-  if (rulings.length) {
+  if (rulings && rulings.length) {
     panes.push({
       menuItem: {
         key: 'rulings',
@@ -21,6 +29,21 @@ const CardModal = ({ card, rulings, isOpen, onClose }) => {
         content: 'Rulings',
       },
       render: () => <RulingsPane card={card} rulings={rulings} />,
+    });
+  }
+  if (allPrintings && allPrintings.length > 1) {
+    panes.push({
+      menuItem: {
+        key: 'printings',
+        icon: 'picture',
+        content: 'Printings',
+      },
+      render: () => (
+        <PrintingsPane
+          allPrintings={allPrintings}
+          onSelectPrinting={onSelectPrinting}
+        />
+      ),
     });
   }
 
@@ -49,8 +72,10 @@ CardModal.propTypes = {
       comment: PropTypes.string,
     })
   ).isRequired,
+  allPrintings: PropTypes.array.isRequired,
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
+  onSelectPrinting: PropTypes.func.isRequired,
 };
 
 export default CardModal;

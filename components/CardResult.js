@@ -1,6 +1,7 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Segment, Icon } from 'semantic-ui-react';
+import CardModal from './CardModal';
 import RulingsModal from './RulingsModal';
 import OracleModal from './OracleModal';
 import PrintingsModal from './PrintingsModal';
@@ -212,7 +213,7 @@ export default class CardResult extends Component {
         )}
 
         {card && (
-          <OracleModal
+          <CardModal
             card={card}
             isOpen={isOracleModalOpen}
             onClose={this.closeOracleModal}

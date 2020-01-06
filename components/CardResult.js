@@ -215,6 +215,7 @@ export default class CardResult extends Component {
         {card && (
           <CardModal
             card={card}
+            rulings={rulings}
             isOpen={isOracleModalOpen}
             onClose={this.closeOracleModal}
           />

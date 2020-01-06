@@ -15,7 +15,9 @@ const PricesModal = ({ card, isOpen, onClose }) => {
       <Modal.Content>
         <Grid>
           <Grid.Column computer="16" mobile="16">
-            <Statistic.Group widths={[usd, usd_foil].filter(p => p).length}>
+            <Statistic.Group
+              widths={[usd, usd_foil].filter(p => p).length || 1}
+            >
               {usd && (
                 <Statistic>
                   <Statistic.Value>

@@ -2,8 +2,6 @@ import React from 'react';
 import fetchMock from 'fetch-mock';
 import CardResult from '../../components/CardResult';
 import CardImage from '../../components/CardImage';
-import OracleModal from '../../components/OracleModal';
-import RulingsModal from '../../components/RulingsModal';
 import { Button, Icon } from 'semantic-ui-react';
 import { mount } from 'enzyme';
 
@@ -188,12 +186,34 @@ describe('CardResult', () => {
 
     setImmediate(() => {
       wrapper.update();
-      expect(wrapper.find('.actions').find(Button)).toHaveLength(5);
+      expect(wrapper.find('.actions').find(Button)).toHaveLength(6);
       const button = wrapper
         .find('.actions')
         .find(Button)
         .at(0);
       expect(button.prop('title')).toEqual('Oracle');
+      done();
+    });
+  });
+
+  test('renders prices button', done => {
+    const wrapper = mount(
+      <CardResult
+        name="Goblin Balloon Brigade"
+        onRequestRemove={() => null}
+        onRequestPin={() => null}
+        isPinned={false}
+      />
+    );
+
+    setImmediate(() => {
+      wrapper.update();
+      expect(wrapper.find('.actions').find(Button)).toHaveLength(6);
+      const button = wrapper
+        .find('.actions')
+        .find(Button)
+        .at(5);
+      expect(button.prop('title')).toEqual('Prices');
       done();
     });
   });
@@ -210,7 +230,7 @@ describe('CardResult', () => {
 
     setImmediate(() => {
       wrapper.update();
-      expect(wrapper.find('.actions').find(Button)).toHaveLength(5);
+      expect(wrapper.find('.actions').find(Button)).toHaveLength(6);
       const button = wrapper
         .find('.actions')
         .find(Button)
@@ -237,7 +257,7 @@ describe('CardResult', () => {
 
     setImmediate(() => {
       wrapper.update();
-      expect(wrapper.find('.actions').find(Button)).toHaveLength(5);
+      expect(wrapper.find('.actions').find(Button)).toHaveLength(6);
       const button = wrapper
         .find('.actions')
         .find(Button)

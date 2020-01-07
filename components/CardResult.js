@@ -23,7 +23,7 @@ export default class CardResult extends Component {
 
   state = {
     card: null,
-    allPrintings: null,
+    allPrintings: [],
     rulings: [],
     faceIndex: 0,
     isCardModalOpen: false,

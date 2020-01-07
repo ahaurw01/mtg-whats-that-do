@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import { Tab, Grid, Icon, Statistic, Segment } from 'semantic-ui-react';
-import styles from './PricesModal.css';
+import styles from './PricesPane.css';
 
 const PricesPane = ({ card }) => {
   const { prices = {}, purchase_uris = {} } = card;

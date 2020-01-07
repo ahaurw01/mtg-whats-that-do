@@ -9,7 +9,7 @@ import Iconify from './Iconify';
 import PowerToughness from './PowerToughness';
 import cx from 'classnames';
 import CardImage from './CardImage';
-import styles from './OracleModal.css';
+import styles from './OraclePane.css';
 
 const OraclePane = ({ card }) => (
   <Tab.Pane attached={false}>

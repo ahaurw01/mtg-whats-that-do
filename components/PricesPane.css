@@ -1,0 +1,5 @@
+.dollar {
+  display: inline-block;
+  font-size: 67%;
+  transform: translateY(-25%);
+}

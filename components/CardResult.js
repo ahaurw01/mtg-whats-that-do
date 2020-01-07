@@ -1,9 +1,7 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Segment, Icon } from 'semantic-ui-react';
-import RulingsModal from './RulingsModal';
-import OracleModal from './OracleModal';
-import PrintingsModal from './PrintingsModal';
+import CardModal from './CardModal';
 import { getImageSources, isDoubleFaced } from '../utils/card-data';
 import CardImage from './CardImage';
 import cx from 'classnames';
@@ -25,12 +23,10 @@ export default class CardResult extends Component {
 
   state = {
     card: null,
-    allPrintings: null,
+    allPrintings: [],
     rulings: [],
     faceIndex: 0,
-    isOracleModalOpen: false,
-    isRulingsModalOpen: false,
-    isPrintingsModalOpen: false,
+    isCardModalOpen: false,
   };
 
   selectCard = id => {
@@ -38,7 +34,7 @@ export default class CardResult extends Component {
     const { allPrintings } = this.state;
     const card = allPrintings.find(card => card.id === id);
     this.setState({ card });
-    this.closePrintingsModal();
+    this.closeCardModal();
   };
 
   componentDidMount() {
@@ -74,18 +70,7 @@ export default class CardResult extends Component {
     });
     this.presser.on('oracle', () => {
       if (this.props.isFocused && this.state.card) {
-        this.closeRulingsModal();
-        this.openOracleModal();
-      }
-    });
-    this.presser.on('rulings', () => {
-      if (
-        this.props.isFocused &&
-        this.state.rulings &&
-        this.state.rulings.length
-      ) {
-        this.closeOracleModal();
-        this.openRulingsModal();
+        this.openCardModal();
       }
     });
     this.presser.on('flip', () => {
@@ -105,28 +90,12 @@ export default class CardResult extends Component {
     }));
   };
 
-  openOracleModal = () => {
-    this.setState({ isOracleModalOpen: true });
+  openCardModal = () => {
+    this.setState({ isCardModalOpen: true });
   };
 
-  closeOracleModal = () => {
-    this.setState({ isOracleModalOpen: false });
-  };
-
-  openRulingsModal = () => {
-    this.setState({ isRulingsModalOpen: true });
-  };
-
-  closeRulingsModal = () => {
-    this.setState({ isRulingsModalOpen: false });
-  };
-
-  openPrintingsModal = () => {
-    this.setState({ isPrintingsModalOpen: true });
-  };
-
-  closePrintingsModal = () => {
-    this.setState({ isPrintingsModalOpen: false });
+  closeCardModal = () => {
+    this.setState({ isCardModalOpen: false });
   };
 
   render() {
@@ -135,9 +104,7 @@ export default class CardResult extends Component {
       allPrintings,
       rulings,
       faceIndex,
-      isOracleModalOpen,
-      isRulingsModalOpen,
-      isPrintingsModalOpen,
+      isCardModalOpen,
     } = this.state;
     const { onRequestRemove, onRequestPin, isPinned, isFocused } = this.props;
     const imageSources = getImageSources(card);
@@ -150,21 +117,10 @@ export default class CardResult extends Component {
               <Button
                 icon
                 primary
-                title="Oracle"
-                onClick={this.openOracleModal}
+                title="Card Info"
+                onClick={this.openCardModal}
               >
                 <Icon name="info" />
-              </Button>
-            )}
-            {card && (
-              <Button
-                icon
-                secondary
-                disabled={!rulings.length}
-                title="Rulings"
-                onClick={this.openRulingsModal}
-              >
-                <Icon name="legal" />
               </Button>
             )}
             <Button icon onClick={onRequestRemove}>
@@ -178,36 +134,17 @@ export default class CardResult extends Component {
                 <Icon name="refresh" />
               </Button>
             )}
-            {allPrintings && (
-              <Button icon onClick={this.openPrintingsModal}>
-                <Icon name="picture" />
-              </Button>
-            )}
           </Button.Group>
         </div>
 
-        {allPrintings && (
-          <PrintingsModal
-            allPrintings={allPrintings}
-            isOpen={isPrintingsModalOpen}
-            onClose={this.closePrintingsModal}
-            selectCard={this.selectCard}
-          />
-        )}
-
         {card && (
-          <OracleModal
-            card={card}
-            isOpen={isOracleModalOpen}
-            onClose={this.closeOracleModal}
-          />
-        )}
-        {card && (
-          <RulingsModal
+          <CardModal
             card={card}
             rulings={rulings}
-            isOpen={isRulingsModalOpen}
-            onClose={this.closeRulingsModal}
+            allPrintings={allPrintings}
+            onSelectPrinting={this.selectCard}
+            isOpen={isCardModalOpen}
+            onClose={this.closeCardModal}
           />
         )}
       </Segment>

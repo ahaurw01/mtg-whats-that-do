@@ -1,15 +1,10 @@
 import React from 'react';
-import OracleModal from '../../components/OracleModal';
+import OraclePane from '../../components/OraclePane';
 import CardImage from '../../components/CardImage';
-import { Modal, Button, Segment } from 'semantic-ui-react';
+import { Modal, Button, Segment, Header } from 'semantic-ui-react';
 import { mount } from 'enzyme';
 
-describe('OracleModal', () => {
-  afterEach(() => {
-    const modal = document.querySelector('.modal');
-    if (modal) modal.remove();
-  });
-
+describe('OraclePane', () => {
   const mockCard = {
     id: '1',
     color_identity: 'u',
@@ -67,59 +62,62 @@ describe('OracleModal', () => {
   };
 
   test('renders single faced card data', () => {
-    const wrapper = mount(
-      <OracleModal onClose={jest.fn()} isOpen card={mockCard} />
-    );
+    const wrapper = mount(<OraclePane card={mockCard} />);
 
-    const modal = document.querySelector('.modal');
-    expect(modal).toBeDefined();
-    expect(modal.querySelectorAll('.segment')).toHaveLength(1);
-    expect(modal.querySelector('.segment').innerHTML).toContain('Swan Song');
-    expect(modal.querySelector('.segment').innerHTML).toContain(
+    expect(wrapper.find(Header)).toHaveLength(1);
+    expect(wrapper.find(Header).text()).toContain('Swan Song');
+    expect(wrapper.text()).toContain(
       'Counter target enchantment, instant, or sorcery spell. Its controller creates a 2/2 blue Bird creature token with flying.'
     );
   });
 
   test('renders double faced card data', () => {
-    const wrapper = mount(
-      <OracleModal onClose={jest.fn()} isOpen card={mockCardWithFaces} />
-    );
+    const wrapper = mount(<OraclePane card={mockCardWithFaces} />);
 
-    const modal = document.querySelector('.modal');
-    expect(modal).toBeDefined();
-    expect(modal.querySelectorAll('.segment')).toHaveLength(2);
-    expect(modal.querySelectorAll('.segment')[0].innerHTML).toContain(
-      'Swan Song 1'
-    );
-    expect(modal.querySelectorAll('.segment')[0].innerHTML).toContain(
+    expect(wrapper.find(Header)).toHaveLength(2);
+    expect(
+      wrapper
+        .find(Header)
+        .at(0)
+        .text()
+    ).toContain('Swan Song 1');
+
+    expect(
+      wrapper
+        .find(Segment)
+        .at(0)
+        .text()
+    ).toContain(
       'Counter target enchantment, instant, or sorcery spell. Its controller creates a 2/2 blue Bird creature token with flying.'
     );
-    expect(modal.querySelectorAll('.segment')[1].innerHTML).toContain(
-      'Swan Song 2'
-    );
-    expect(modal.querySelectorAll('.segment')[1].innerHTML).toContain(
+
+    expect(
+      wrapper
+        .find(Header)
+        .at(1)
+        .text()
+    ).toContain('Swan Song 2');
+
+    expect(
+      wrapper
+        .find(Segment)
+        .at(1)
+        .text()
+    ).toContain(
       'Counter target enchantment, instant, or sorcery spell. Its controller creates a 2/2 blue Bird creature token with flying.'
     );
   });
 
   // These tests are difficult because semantic ui portal rendering is not supported here.
   test('renders the card image', () => {
-    const wrapper = mount(
-      <OracleModal onClose={jest.fn()} isOpen card={mockCard} />
-    );
+    const wrapper = mount(<OraclePane card={mockCard} />);
 
-    const modal = document.querySelector('.modal');
-    expect(modal).toBeDefined();
-    expect(modal.querySelectorAll('.spin.front')).toHaveLength(1);
+    expect(wrapper.find(CardImage)).toHaveLength(1);
   });
 
   test('renders both card faces', () => {
-    const wrapper = mount(
-      <OracleModal onClose={jest.fn()} isOpen card={mockCardWithFaces} />
-    );
+    const wrapper = mount(<OraclePane card={mockCardWithFaces} />);
 
-    const modal = document.querySelector('.modal');
-    expect(modal).toBeDefined();
-    expect(modal.querySelectorAll('.spin.front')).toHaveLength(2);
+    expect(wrapper.find(CardImage)).toHaveLength(2);
   });
 });

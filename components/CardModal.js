@@ -3,6 +3,7 @@ import { Modal, Grid, Tab, Icon } from 'semantic-ui-react';
 import OraclePane from './OraclePane';
 import RulingsPane from './RulingsPane';
 import PrintingsPane from './PrintingsPane';
+import PricesPane from './PricesPane';
 
 const CardModal = ({
   card,
@@ -46,6 +47,14 @@ const CardModal = ({
       ),
     });
   }
+  panes.push({
+    menuItem: {
+      key: 'prices',
+      icon: 'dollar',
+      content: 'Prices',
+    },
+    render: () => <PricesPane card={card} />,
+  });
 
   return (
     <Modal closeIcon onClose={onClose} open={isOpen}>

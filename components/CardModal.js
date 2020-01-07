@@ -20,7 +20,9 @@ const CardModal = ({
       icon: 'eye',
       content: 'Oracle',
     },
-    render: () => <OraclePane card={card} />,
+    render() {
+      return <OraclePane card={card} />;
+    },
   });
   if (rulings && rulings.length) {
     panes.push({
@@ -29,7 +31,9 @@ const CardModal = ({
         icon: 'legal',
         content: 'Rulings',
       },
-      render: () => <RulingsPane card={card} rulings={rulings} />,
+      render() {
+        return <RulingsPane card={card} rulings={rulings} />;
+      },
     });
   }
   if (allPrintings && allPrintings.length > 1) {
@@ -39,12 +43,14 @@ const CardModal = ({
         icon: 'picture',
         content: 'Printings',
       },
-      render: () => (
-        <PrintingsPane
-          allPrintings={allPrintings}
-          onSelectPrinting={onSelectPrinting}
-        />
-      ),
+      render() {
+        return (
+          <PrintingsPane
+            allPrintings={allPrintings}
+            onSelectPrinting={onSelectPrinting}
+          />
+        );
+      },
     });
   }
   panes.push({
@@ -53,7 +59,9 @@ const CardModal = ({
       icon: 'dollar',
       content: 'Prices',
     },
-    render: () => <PricesPane card={card} />,
+    render() {
+      return <PricesPane card={card} />;
+    },
   });
 
   return (

@@ -3,7 +3,6 @@ import fetchMock from 'fetch-mock';
 import CardManager from '../../components/CardManager';
 import CardResult from '../../components/CardResult';
 import NoCardsYet from '../../components/NoCardsYet';
-import { Button } from 'semantic-ui-react';
 import { shallow, mount } from 'enzyme';
 
 describe('CardManager', () => {

@@ -27,9 +27,6 @@ export default class CardResult extends Component {
     rulings: [],
     faceIndex: 0,
     isCardModalOpen: false,
-    isRulingsModalOpen: false,
-    isPrintingsModalOpen: false,
-    isPricesModalOpen: false,
   };
 
   selectCard = id => {
@@ -73,15 +70,6 @@ export default class CardResult extends Component {
     });
     this.presser.on('oracle', () => {
       if (this.props.isFocused && this.state.card) {
-        this.openCardModal();
-      }
-    });
-    this.presser.on('rulings', () => {
-      if (
-        this.props.isFocused &&
-        this.state.rulings &&
-        this.state.rulings.length
-      ) {
         this.openCardModal();
       }
     });

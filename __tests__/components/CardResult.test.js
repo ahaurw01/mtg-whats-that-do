@@ -174,7 +174,7 @@ describe('CardResult', () => {
     });
   });
 
-  test('renders oracle button', done => {
+  test('renders card modal button', done => {
     const wrapper = mount(
       <CardResult
         name="Goblin Balloon Brigade"
@@ -186,84 +186,12 @@ describe('CardResult', () => {
 
     setImmediate(() => {
       wrapper.update();
-      expect(wrapper.find('.actions').find(Button)).toHaveLength(6);
+      expect(wrapper.find('.actions').find(Button)).toHaveLength(3);
       const button = wrapper
         .find('.actions')
         .find(Button)
         .at(0);
-      expect(button.prop('title')).toEqual('Oracle');
-      done();
-    });
-  });
-
-  test('renders prices button', done => {
-    const wrapper = mount(
-      <CardResult
-        name="Goblin Balloon Brigade"
-        onRequestRemove={() => null}
-        onRequestPin={() => null}
-        isPinned={false}
-      />
-    );
-
-    setImmediate(() => {
-      wrapper.update();
-      expect(wrapper.find('.actions').find(Button)).toHaveLength(6);
-      const button = wrapper
-        .find('.actions')
-        .find(Button)
-        .at(5);
-      expect(button.prop('title')).toEqual('Prices');
-      done();
-    });
-  });
-
-  test('renders active rulings button if rulings exist', done => {
-    const wrapper = mount(
-      <CardResult
-        name="Goblin Balloon Brigade"
-        onRequestRemove={() => null}
-        onRequestPin={() => null}
-        isPinned={false}
-      />
-    );
-
-    setImmediate(() => {
-      wrapper.update();
-      expect(wrapper.find('.actions').find(Button)).toHaveLength(6);
-      const button = wrapper
-        .find('.actions')
-        .find(Button)
-        .at(1);
-      expect(button.prop('title')).toEqual('Rulings');
-      expect(button.prop('disabled')).toEqual(false);
-      done();
-    });
-  });
-
-  test('renders disabled rulings button if no rulings', done => {
-    fetchMock.restore();
-    fetchMock.getOnce('*', mockCardsData);
-    fetchMock.getOnce('rulings uri', { data: [] });
-
-    const wrapper = mount(
-      <CardResult
-        name="Goblin Balloon Brigade"
-        onRequestRemove={() => null}
-        onRequestPin={() => null}
-        isPinned={false}
-      />
-    );
-
-    setImmediate(() => {
-      wrapper.update();
-      expect(wrapper.find('.actions').find(Button)).toHaveLength(6);
-      const button = wrapper
-        .find('.actions')
-        .find(Button)
-        .at(1);
-      expect(button.prop('title')).toEqual('Rulings');
-      expect(button.prop('disabled')).toEqual(true);
+      expect(button.prop('title')).toEqual('Card Info');
       done();
     });
   });
@@ -375,28 +303,6 @@ describe('CardResult', () => {
     });
   });
 
-  test('shows alternative printings button if more than one printing', done => {
-    const wrapper = mount(
-      <CardResult
-        name="Goblin Balloon Brigade"
-        onRequestRemove={() => null}
-        onRequestPin={() => null}
-        isPinned={false}
-      />
-    );
-
-    setImmediate(() => {
-      wrapper.update();
-      const icon = wrapper
-        .find('.actions')
-        .find(Icon)
-        .filter({ name: 'picture' });
-      expect(icon).toHaveLength(1);
-      expect(icon.parent().is('button')).toBe(true);
-      done();
-    });
-  });
-
   describe('presser events', () => {
     let wrapper, onRequestRemove, onRequestPin;
     beforeEach(done => {
@@ -447,7 +353,7 @@ describe('CardResult', () => {
       test('does nothing if not focused', () => {
         wrapper.instance().presser._emit('oracle');
 
-        expect(wrapper.state('isOracleModalOpen')).toBe(false);
+        expect(wrapper.state('isCardModalOpen')).toBe(false);
       });
 
       test('does nothing if no card', () => {
@@ -455,53 +361,14 @@ describe('CardResult', () => {
         wrapper.setProps({ isFocused: true });
         wrapper.instance().presser._emit('oracle');
 
-        expect(wrapper.state('isOracleModalOpen')).toBe(false);
+        expect(wrapper.state('isCardModalOpen')).toBe(false);
       });
 
-      test('opens oracle modal if focused', () => {
+      test('opens card modal if focused', () => {
         wrapper.setProps({ isFocused: true });
         wrapper.instance().presser._emit('oracle');
 
-        expect(wrapper.state('isOracleModalOpen')).toBe(true);
-      });
-
-      test('closes rulings modal if focused', () => {
-        wrapper.setProps({ isFocused: true });
-        wrapper.setState({ isRulingsModalOpen: true });
-        wrapper.instance().presser._emit('oracle');
-
-        expect(wrapper.state('isRulingsModalOpen')).toBe(false);
-      });
-    });
-
-    describe('rulings', () => {
-      test('does nothing if not focused', () => {
-        wrapper.instance().presser._emit('rulings');
-
-        expect(wrapper.state('isRulingsModalOpen')).toBe(false);
-      });
-
-      test('does nothing if no rulings', () => {
-        wrapper.setState({ rulings: [] });
-        wrapper.setProps({ isFocused: true });
-        wrapper.instance().presser._emit('rulings');
-
-        expect(wrapper.state('isRulingsModalOpen')).toBe(false);
-      });
-
-      test('opens rulings modal if focused', () => {
-        wrapper.setProps({ isFocused: true });
-        wrapper.instance().presser._emit('rulings');
-
-        expect(wrapper.state('isRulingsModalOpen')).toBe(true);
-      });
-
-      test('closes oracle modal if focused', () => {
-        wrapper.setProps({ isFocused: true });
-        wrapper.setState({ isOracleModalOpen: true });
-        wrapper.instance().presser._emit('rulings');
-
-        expect(wrapper.state('isOracleModalOpen')).toBe(false);
+        expect(wrapper.state('isCardModalOpen')).toBe(true);
       });
     });
 

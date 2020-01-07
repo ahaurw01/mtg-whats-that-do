@@ -26,6 +26,7 @@ const PricesPane = ({ card }) => {
               content="No pricing data found for this printing."
             />
           )}
+
           <Statistic.Group widths={[usd, usd_foil].filter(p => p).length || 1}>
             {usd && (
               <Statistic>
@@ -46,6 +47,7 @@ const PricesPane = ({ card }) => {
               </Statistic>
             )}
           </Statistic.Group>
+
           {tcgplayer && (
             <Segment>
               <a target="_blank" rel="noopener noreferrer" href={tcgplayer}>
@@ -53,6 +55,10 @@ const PricesPane = ({ card }) => {
               </a>
             </Segment>
           )}
+
+          <p>
+            <i>Prices are for the selected printing only.</i>
+          </p>
         </Grid.Column>
       </Grid>
     </Tab.Pane>

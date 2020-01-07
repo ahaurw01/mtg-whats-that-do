@@ -65,22 +65,10 @@ const ShortcutsModal = ({ isOpen, onClose }) => (
           <Icon name="info" />
           <List.Content>
             <List.Header>
-              <kbd>o</kbd>
+              <kbd>i</kbd> or <kbd>o</kbd>
             </List.Header>
             <List.Description>
-              Open the oracle modal for the focused card.
-            </List.Description>
-          </List.Content>
-        </List.Item>
-
-        <List.Item>
-          <Icon name="legal" />
-          <List.Content>
-            <List.Header>
-              <kbd>r</kbd>
-            </List.Header>
-            <List.Description>
-              Open the rulings modal for the focused card.
+              Open the info modal for the focused card.
             </List.Description>
           </List.Content>
         </List.Item>

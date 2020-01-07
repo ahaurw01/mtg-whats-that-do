@@ -16,7 +16,7 @@ const EVENTS = {
     preventDefault: true,
   },
   oracle: {
-    check: e => e.key === 'o' && !e.metaKey && !e.ctrlKey,
+    check: e => (e.key === 'o' || e.key === 'i') && !e.metaKey && !e.ctrlKey,
     preventDefault: false,
   },
   rulings: {

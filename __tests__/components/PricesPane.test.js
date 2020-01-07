@@ -1,12 +1,23 @@
 import React from 'react';
 import PricesPane from '../../components/PricesPane';
-import { Statistic } from 'semantic-ui-react';
+import { Statistic, Message } from 'semantic-ui-react';
 import { mount } from 'enzyme';
 
 describe('PricesPane', () => {
   const makeProps = extra => ({
     card: {},
     ...extra,
+  });
+
+  describe('no prices available', () => {
+    test('renders a message', () => {
+      const wrapper = mount(<PricesPane {...makeProps()} />);
+
+      expect(wrapper.find(Message)).toHaveLength(1);
+      expect(wrapper.find(Message).prop('content')).toBe(
+        'No pricing data found for this printing.'
+      );
+    });
   });
 
   describe('both prices available', () => {

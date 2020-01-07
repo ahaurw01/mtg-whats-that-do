@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { Tab, Segment, Grid, Icon, Header } from 'semantic-ui-react';
+import { Tab, Segment, Grid, Header } from 'semantic-ui-react';
 import {
   getImageSources,
   isDoubleFaced,

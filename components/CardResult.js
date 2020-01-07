@@ -26,7 +26,7 @@ export default class CardResult extends Component {
     allPrintings: null,
     rulings: [],
     faceIndex: 0,
-    isOracleModalOpen: false,
+    isCardModalOpen: false,
     isRulingsModalOpen: false,
     isPrintingsModalOpen: false,
     isPricesModalOpen: false,
@@ -37,7 +37,7 @@ export default class CardResult extends Component {
     const { allPrintings } = this.state;
     const card = allPrintings.find(card => card.id === id);
     this.setState({ card });
-    this.closeOracleModal();
+    this.closeCardModal();
   };
 
   componentDidMount() {
@@ -73,8 +73,7 @@ export default class CardResult extends Component {
     });
     this.presser.on('oracle', () => {
       if (this.props.isFocused && this.state.card) {
-        this.closeRulingsModal();
-        this.openOracleModal();
+        this.openCardModal();
       }
     });
     this.presser.on('rulings', () => {
@@ -83,8 +82,7 @@ export default class CardResult extends Component {
         this.state.rulings &&
         this.state.rulings.length
       ) {
-        this.closeOracleModal();
-        this.openRulingsModal();
+        this.openCardModal();
       }
     });
     this.presser.on('flip', () => {
@@ -104,36 +102,12 @@ export default class CardResult extends Component {
     }));
   };
 
-  openOracleModal = () => {
-    this.setState({ isOracleModalOpen: true });
+  openCardModal = () => {
+    this.setState({ isCardModalOpen: true });
   };
 
-  closeOracleModal = () => {
-    this.setState({ isOracleModalOpen: false });
-  };
-
-  openRulingsModal = () => {
-    this.setState({ isRulingsModalOpen: true });
-  };
-
-  closeRulingsModal = () => {
-    this.setState({ isRulingsModalOpen: false });
-  };
-
-  openPrintingsModal = () => {
-    this.setState({ isPrintingsModalOpen: true });
-  };
-
-  closePrintingsModal = () => {
-    this.setState({ isPrintingsModalOpen: false });
-  };
-
-  openPricesModal = () => {
-    this.setState({ isPricesModalOpen: true });
-  };
-
-  closePricesModal = () => {
-    this.setState({ isPricesModalOpen: false });
+  closeCardModal = () => {
+    this.setState({ isCardModalOpen: false });
   };
 
   render() {
@@ -142,10 +116,7 @@ export default class CardResult extends Component {
       allPrintings,
       rulings,
       faceIndex,
-      isOracleModalOpen,
-      isRulingsModalOpen,
-      isPrintingsModalOpen,
-      isPricesModalOpen,
+      isCardModalOpen,
     } = this.state;
     const { onRequestRemove, onRequestPin, isPinned, isFocused } = this.props;
     const imageSources = getImageSources(card);
@@ -159,7 +130,7 @@ export default class CardResult extends Component {
                 icon
                 primary
                 title="Card Info"
-                onClick={this.openOracleModal}
+                onClick={this.openCardModal}
               >
                 <Icon name="info" />
               </Button>
@@ -184,8 +155,8 @@ export default class CardResult extends Component {
             rulings={rulings}
             allPrintings={allPrintings}
             onSelectPrinting={this.selectCard}
-            isOpen={isOracleModalOpen}
-            onClose={this.closeOracleModal}
+            isOpen={isCardModalOpen}
+            onClose={this.closeCardModal}
           />
         )}
       </Segment>

@@ -17,7 +17,7 @@ const CardModal = ({
   panes.push({
     menuItem: {
       key: 'oracle',
-      icon: 'info',
+      icon: 'eye',
       content: 'Oracle',
     },
     render: () => <OraclePane card={card} />,
@@ -64,7 +64,7 @@ const CardModal = ({
       <Modal.Content>
         <Grid>
           <Grid.Column mobile="16">
-            <Tab panes={panes} />
+            <Tab panes={panes} menu={{ pointing: true }} />
           </Grid.Column>
         </Grid>
       </Modal.Content>

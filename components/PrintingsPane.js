@@ -9,7 +9,7 @@ const PrintingsPane = ({ onSelectPrinting, allPrintings }) => {
   };
 
   return (
-    <Tab.Pane>
+    <Tab.Pane attached={false}>
       <Grid>
         <Grid.Column computer="12" mobile="16">
           {allPrintings.map(card => (

@@ -8,7 +8,7 @@ const PricesPane = ({ card }) => {
   const { tcgplayer } = purchase_uris;
 
   return (
-    <Tab.Pane>
+    <Tab.Pane attached={false}>
       <Grid>
         <Grid.Column computer="16" mobile="16">
           <Statistic.Group widths={[usd, usd_foil].filter(p => p).length || 1}>

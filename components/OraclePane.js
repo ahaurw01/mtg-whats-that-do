@@ -12,7 +12,7 @@ import CardImage from './CardImage';
 import styles from './OracleModal.css';
 
 const OraclePane = ({ card }) => (
-  <Tab.Pane>
+  <Tab.Pane attached={false}>
     <Grid>
       <Grid.Column computer="12" mobile="16">
         {getOracleData(card).map((oracle, index) => (

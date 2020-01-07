@@ -63,20 +63,6 @@ describe('PricesPane', () => {
           .text()
       ).toBe('Foil');
     });
-
-    test('renders 2 widths in the group', () => {
-      const card = {
-        prices: {
-          usd: '0.01',
-          usd_foil: '1.01',
-        },
-      };
-
-      const wrapper = mount(<PricesPane {...makeProps({ card })} />);
-
-      expect(wrapper.find(Statistic.Group)).toHaveLength(1);
-      expect(wrapper.find(Statistic.Group).prop('widths')).toBe(2);
-    });
   });
 
   describe('only usd available', () => {
@@ -106,19 +92,6 @@ describe('PricesPane', () => {
           .text()
       ).toBe('Non-foil');
     });
-
-    test('renders 1 width in the group', () => {
-      const card = {
-        prices: {
-          usd: '0.01',
-        },
-      };
-
-      const wrapper = mount(<PricesPane {...makeProps({ card })} />);
-
-      expect(wrapper.find(Statistic.Group)).toHaveLength(1);
-      expect(wrapper.find(Statistic.Group).prop('widths')).toBe(1);
-    });
   });
 
   describe('only usd_foil available', () => {
@@ -147,19 +120,6 @@ describe('PricesPane', () => {
           .find(Statistic.Label)
           .text()
       ).toBe('Foil');
-    });
-
-    test('renders 1 width in the group', () => {
-      const card = {
-        prices: {
-          usd_foil: '1.01',
-        },
-      };
-
-      const wrapper = mount(<PricesPane {...makeProps({ card })} />);
-
-      expect(wrapper.find(Statistic.Group)).toHaveLength(1);
-      expect(wrapper.find(Statistic.Group).prop('widths')).toBe(1);
     });
   });
 

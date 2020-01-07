@@ -27,7 +27,7 @@ const PricesPane = ({ card }) => {
             />
           )}
 
-          <Statistic.Group widths={[usd, usd_foil].filter(p => p).length || 1}>
+          <Statistic.Group horizontal>
             {usd && (
               <Statistic>
                 <Statistic.Value>

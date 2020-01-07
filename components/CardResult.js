@@ -2,10 +2,6 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Segment, Icon } from 'semantic-ui-react';
 import CardModal from './CardModal';
-import RulingsModal from './RulingsModal';
-import OracleModal from './OracleModal';
-import PrintingsModal from './PrintingsModal';
-import PricesModal from './PricesModal';
 import { getImageSources, isDoubleFaced } from '../utils/card-data';
 import CardImage from './CardImage';
 import cx from 'classnames';
@@ -162,21 +158,10 @@ export default class CardResult extends Component {
               <Button
                 icon
                 primary
-                title="Oracle"
+                title="Card Info"
                 onClick={this.openOracleModal}
               >
                 <Icon name="info" />
-              </Button>
-            )}
-            {card && (
-              <Button
-                icon
-                secondary
-                disabled={!rulings.length}
-                title="Rulings"
-                onClick={this.openRulingsModal}
-              >
-                <Icon name="legal" />
               </Button>
             )}
             <Button icon onClick={onRequestRemove}>
@@ -190,27 +175,8 @@ export default class CardResult extends Component {
                 <Icon name="refresh" />
               </Button>
             )}
-            {allPrintings && (
-              <Button icon onClick={this.openPrintingsModal}>
-                <Icon name="picture" />
-              </Button>
-            )}
-            {card && (
-              <Button icon title="Prices" onClick={this.openPricesModal}>
-                <Icon name="dollar" />
-              </Button>
-            )}
           </Button.Group>
         </div>
-
-        {allPrintings && (
-          <PrintingsModal
-            allPrintings={allPrintings}
-            isOpen={isPrintingsModalOpen}
-            onClose={this.closePrintingsModal}
-            selectCard={this.selectCard}
-          />
-        )}
 
         {card && (
           <CardModal
@@ -220,21 +186,6 @@ export default class CardResult extends Component {
             onSelectPrinting={this.selectCard}
             isOpen={isOracleModalOpen}
             onClose={this.closeOracleModal}
-          />
-        )}
-        {card && (
-          <RulingsModal
-            card={card}
-            rulings={rulings}
-            isOpen={isRulingsModalOpen}
-            onClose={this.closeRulingsModal}
-          />
-        )}
-        {card && (
-          <PricesModal
-            card={card}
-            isOpen={isPricesModalOpen}
-            onClose={this.closePricesModal}
           />
         )}
       </Segment>

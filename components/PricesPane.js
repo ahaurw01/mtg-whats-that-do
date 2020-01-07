@@ -17,7 +17,7 @@ const PricesPane = ({ card }) => {
   const noPricesAvailable = !usd && !usd_foil;
 
   return (
-    <Tab.Pane attached={false}>
+    <Tab.Pane>
       <Grid>
         <Grid.Column mobile="16">
           {noPricesAvailable && (

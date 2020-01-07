@@ -1,9 +1,10 @@
 import PropTypes from 'prop-types';
-import { Modal, Grid, Tab, Icon } from 'semantic-ui-react';
+import { Modal, Menu, Grid, Tab, Icon, Responsive } from 'semantic-ui-react';
 import OraclePane from './OraclePane';
 import RulingsPane from './RulingsPane';
 import PrintingsPane from './PrintingsPane';
 import PricesPane from './PricesPane';
+import styles from './CardModal.css';
 
 const CardModal = ({
   card,
@@ -15,22 +16,36 @@ const CardModal = ({
 }) => {
   const panes = [];
   panes.push({
-    menuItem: {
-      key: 'oracle',
-      icon: 'eye',
-      content: 'Oracle',
-    },
+    menuItem: (
+      <Menu.Item key="oracle">
+        <Icon name="eye" className={styles.menuIcon} />
+        <Responsive
+          as="span"
+          minWidth={Responsive.onlyTablet.minWidth}
+          className={styles.menuText}
+        >
+          Oracle
+        </Responsive>
+      </Menu.Item>
+    ),
     render() {
       return <OraclePane card={card} />;
     },
   });
   if (rulings && rulings.length) {
     panes.push({
-      menuItem: {
-        key: 'rulings',
-        icon: 'legal',
-        content: 'Rulings',
-      },
+      menuItem: (
+        <Menu.Item key="rulings">
+          <Icon name="legal" className={styles.menuIcon} />
+          <Responsive
+            as="span"
+            minWidth={Responsive.onlyTablet.minWidth}
+            className={styles.menuText}
+          >
+            Rulings
+          </Responsive>
+        </Menu.Item>
+      ),
       render() {
         return <RulingsPane card={card} rulings={rulings} />;
       },
@@ -38,11 +53,18 @@ const CardModal = ({
   }
   if (allPrintings && allPrintings.length > 1) {
     panes.push({
-      menuItem: {
-        key: 'printings',
-        icon: 'picture',
-        content: 'Printings',
-      },
+      menuItem: (
+        <Menu.Item key="printings">
+          <Icon name="picture" className={styles.menuIcon} />
+          <Responsive
+            as="span"
+            minWidth={Responsive.onlyTablet.minWidth}
+            className={styles.menuText}
+          >
+            Printings
+          </Responsive>
+        </Menu.Item>
+      ),
       render() {
         return (
           <PrintingsPane
@@ -54,25 +76,32 @@ const CardModal = ({
     });
   }
   panes.push({
-    menuItem: {
-      key: 'prices',
-      icon: 'dollar',
-      content: 'Prices',
-    },
+    menuItem: (
+      <Menu.Item key="prices">
+        <Icon name="dollar" className={styles.menuIcon} />
+        <Responsive
+          as="span"
+          minWidth={Responsive.onlyTablet.minWidth}
+          className={styles.menuText}
+        >
+          Prices
+        </Responsive>
+      </Menu.Item>
+    ),
     render() {
       return <PricesPane card={card} />;
     },
   });
 
   return (
-    <Modal closeIcon onClose={onClose} open={isOpen}>
+    <Modal closeIcon onClose={onClose} open={isOpen} centered={false}>
       <Modal.Header>
         <Icon name="info" /> {card.name}
       </Modal.Header>
       <Modal.Content>
         <Grid>
           <Grid.Column mobile="16">
-            <Tab panes={panes} menu={{ pointing: true }} />
+            <Tab panes={panes} />
           </Grid.Column>
         </Grid>
       </Modal.Content>

@@ -35,7 +35,7 @@ const makeCommentData = ruling => {
 };
 
 const RulingsPane = ({ card, rulings }) => (
-  <Tab.Pane attached={false}>
+  <Tab.Pane>
     <Grid>
       <Grid.Column computer="12" mobile="16">
         <Comment.Group>

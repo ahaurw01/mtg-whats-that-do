@@ -10,7 +10,6 @@ import ShortcutsModal from '../components/ShortcutsModal';
 import CardFinderModal from '../components/CardFinderModal';
 import Presser from '../utils/presser';
 import mixpanel from '../utils/mixpanel';
-import MixpanelInit from '../components/MixpanelInit';
 
 export default class Index extends Component {
   state = {
@@ -77,13 +76,13 @@ export default class Index extends Component {
   };
 
   componentDidMount() {
-    mixpanel.track('Page Load');
-
     this.presser = new Presser();
     this.presser.on('clear', this.clearCards);
     this.presser.on('search', this.openCardFinderModal);
 
     if (screenfull.isEnabled) screenfull.on('change', this.setFullscreenState);
+
+    mixpanel.track('Page Load');
   }
 
   componentWillUnmount() {
@@ -101,7 +100,6 @@ export default class Index extends Component {
     } = this.state;
     return (
       <Page>
-        <MixpanelInit token={process.env.MIXPANEL_TOKEN} />
         <StorageErrorBoundary>
           <MainHeader
             onOpenSidebar={this.openSidebar}

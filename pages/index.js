@@ -9,6 +9,7 @@ import ShareModal from '../components/ShareModal';
 import ShortcutsModal from '../components/ShortcutsModal';
 import CardFinderModal from '../components/CardFinderModal';
 import Presser from '../utils/presser';
+import mixpanel from '../utils/mixpanel';
 
 export default class Index extends Component {
   state = {
@@ -57,6 +58,7 @@ export default class Index extends Component {
   };
 
   cardSelected = name => {
+    mixpanel.track('Add Card', { name });
     this.cardManager.addCard(name);
     this.closeCardFinderModal();
   };
@@ -79,6 +81,8 @@ export default class Index extends Component {
     this.presser.on('search', this.openCardFinderModal);
 
     if (screenfull.isEnabled) screenfull.on('change', this.setFullscreenState);
+
+    mixpanel.track('Page Load');
   }
 
   componentWillUnmount() {

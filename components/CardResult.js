@@ -7,6 +7,7 @@ import CardImage from './CardImage';
 import cx from 'classnames';
 import Presser from '../utils/presser';
 import styles from './CardResult.css';
+import mixpanel from '../utils/mixpanel';
 
 export default class CardResult extends Component {
   static propTypes = {
@@ -92,6 +93,7 @@ export default class CardResult extends Component {
 
   openCardModal = () => {
     this.setState({ isCardModalOpen: true });
+    mixpanel.track('Open Card Modal', { name: this.state.card.name });
   };
 
   closeCardModal = () => {

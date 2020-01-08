@@ -5,9 +5,10 @@ import PropTypes from 'prop-types';
 const MixpanelInit = ({ token }) => {
   useEffect(() => {
     if (
-      window.mixpanel &&
-      window.mixpanel.get_distinct_id &&
-      window.mixpanel.get_distinct_id()
+      !token || // For tests or for easily toggling off tracking.
+      (window.mixpanel &&
+        window.mixpanel.get_distinct_id &&
+        window.mixpanel.get_distinct_id())
     ) {
       return;
     }
@@ -106,7 +107,11 @@ const MixpanelInit = ({ token }) => {
 };
 
 MixpanelInit.propTypes = {
-  token: PropTypes.string.isRequired,
+  token: PropTypes.string,
+};
+
+MixpanelInit.defaultProps = {
+  token: null,
 };
 
 export default MixpanelInit;

@@ -4,6 +4,7 @@ import { Grid } from 'semantic-ui-react';
 import Column from './Column';
 import Presser from '../utils/presser';
 import NoCardsYet from './NoCardsYet';
+import mixpanel from '../utils/mixpanel';
 
 export const LOCAL_STORAGE_STATE_KEY = 'CardManager#state';
 
@@ -31,6 +32,8 @@ export default class CardManager extends Component {
     const code = CardManager.getShareCode();
     if (!code) return Promise.reject(new Error('no code'));
 
+    mixpanel.track('Fetching Share', { code });
+
     return (
       fetch(`https://whatsthatdo.net/share/${code}`)
         .then(result => result.json())
@@ -42,7 +45,11 @@ export default class CardManager extends Component {
           })),
         }))
         // Remove the code from the url so you can refresh the page and not lose any updates.
-        .then(window.history.replaceState({}, '', '/'))
+        .then(result => {
+          window.history.replaceState({}, '', '/');
+          mixpanel.track('Fetched Share', { code });
+          return result;
+        })
     );
   }
 

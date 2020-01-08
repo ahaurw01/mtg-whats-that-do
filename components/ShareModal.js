@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Modal, Icon, Input } from 'semantic-ui-react';
 import { LOCAL_STORAGE_STATE_KEY } from './CardManager';
 import styles from './ShareModal.css';
+import mixpanel from '../utils/mixpanel';
 
 export const constructPayload = () => {
   try {
@@ -20,6 +21,7 @@ export const getShareUrl = () => {
       ? 'http://localhost:1337'
       : 'https://whatsthatdo.net';
   const payload = constructPayload();
+  mixpanel.track('Get Share URL', { isBaseOnly: !payload });
   if (!payload) return Promise.resolve(base);
 
   return fetch(
@@ -74,12 +76,14 @@ export default class ShareModal extends Component {
     }
 
     this.setState({ copied: true });
+    mixpanel.track('Copy Share URL', { shareUrl: this.state.url });
   };
 
   UNSAFE_componentWillUpdate(nextProps) {
     if (nextProps.isOpen && !this.props.isOpen) {
       this.setState({ isLoading: true, isOpen: true });
       getShareUrl().then(url => {
+        mixpanel.track('Received Share URL', { shareUrl: url });
         this.setState({ url, isLoading: false });
 
         // Disabling for now: the delay is enough that the browser might not think you

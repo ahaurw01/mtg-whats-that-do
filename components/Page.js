@@ -6,6 +6,16 @@ const Page = ({ children }) => (
     <Head>
       <meta name="viewport" content="width=device-width, initial-scale=1" />
       <meta charSet="utf-8" />
+      <meta property="og:title" content="What's that do?" />
+      <meta property="twitter:title" content="What's that do?" />
+      <meta
+        property="og:description"
+        content="A tool for looking up multiple Magic: The Gathering cards in one view."
+      />
+      <meta
+        property="twitter:description"
+        content="A tool for looking up multiple Magic: The Gathering cards in one view."
+      />
       <link
         rel="stylesheet"
         href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.3/semantic.min.css"

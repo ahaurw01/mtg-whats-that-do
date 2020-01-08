@@ -2,7 +2,11 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Segment, Icon } from 'semantic-ui-react';
 import CardModal from './CardModal';
-import { getImageSources, isDoubleFaced } from '../utils/card-data';
+import {
+  getImageSources,
+  isDoubleFaced,
+  getFirstPaperCard,
+} from '../utils/card-data';
 import CardImage from './CardImage';
 import cx from 'classnames';
 import Presser from '../utils/presser';
@@ -48,7 +52,7 @@ export default class CardResult extends Component {
       .then(result => result.json())
       .then(result => {
         const cards = result.data;
-        const card = cards[0];
+        const card = getFirstPaperCard(cards);
         this.setState({ card });
         if (cards.length > 1) {
           this.setState({ allPrintings: cards });

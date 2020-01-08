@@ -43,3 +43,17 @@ export const getOracleData = card => {
 
   return card.card_faces ? card.card_faces.map(mapper) : [mapper(card)];
 };
+
+/**
+ * Find the first card object that is for paper magic. If no such card is found,
+ * provide the first one.
+ *
+ * @param {Object[]} cards  Card objects
+ *
+ * @return {Object} Card object from the array.
+ */
+export const getFirstPaperCard = (cards = []) => {
+  return (
+    cards.find(({ games = [] }) => games.indexOf('paper') > -1) || cards[0]
+  );
+};

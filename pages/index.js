@@ -22,6 +22,7 @@ export default class Index extends Component {
 
   openShareModal = () => {
     this.setState({ isShareModalOpen: true, isSidebarOpen: false });
+    mixpanel.track('Open Share Modal');
   };
 
   closeShareModal = () => {

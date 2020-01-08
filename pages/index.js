@@ -9,6 +9,7 @@ import ShareModal from '../components/ShareModal';
 import ShortcutsModal from '../components/ShortcutsModal';
 import CardFinderModal from '../components/CardFinderModal';
 import Presser from '../utils/presser';
+import MixpanelInit from '../components/MixpanelInit';
 
 export default class Index extends Component {
   state = {
@@ -57,6 +58,7 @@ export default class Index extends Component {
   };
 
   cardSelected = name => {
+    window.mixpanel.track('View Card', { name });
     this.cardManager.addCard(name);
     this.closeCardFinderModal();
   };
@@ -96,6 +98,7 @@ export default class Index extends Component {
     } = this.state;
     return (
       <Page>
+        <MixpanelInit token={process.env.MIXPANEL_TOKEN} />
         <StorageErrorBoundary>
           <MainHeader
             onOpenSidebar={this.openSidebar}

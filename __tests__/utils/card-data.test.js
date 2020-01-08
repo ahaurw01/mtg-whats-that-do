@@ -2,6 +2,7 @@ import {
   getImageSources,
   isDoubleFaced,
   getOracleData,
+  getFirstPaperCard,
 } from '../../utils/card-data';
 
 describe('getImageSources', () => {
@@ -165,5 +166,34 @@ describe('getOracleData', () => {
         loyalty: null,
       },
     ]);
+  });
+});
+
+describe('getFirstPaperCard', () => {
+  it('is does not bomb if no cards', () => {
+    expect(getFirstPaperCard([])).not.toBeDefined();
+  });
+
+  it('is first card if no paper cards', () => {
+    const cards = [
+      { name: 'Pikachu', games: ['Pokemon'] },
+      { name: 'Queen of Hearts', games: ['Poker'] },
+    ];
+
+    const result = getFirstPaperCard(cards);
+
+    expect(result).toEqual({ name: 'Pikachu', games: ['Pokemon'] });
+  });
+
+  it('is first paper card', () => {
+    const cards = [
+      { name: 'Pikachu', games: ['Pokemon'] },
+      { name: 'Island', games: ['mtgo', 'paper'] },
+      { name: 'Queen of Hearts', games: ['Poker'] },
+    ];
+
+    const result = getFirstPaperCard(cards);
+
+    expect(result).toEqual({ name: 'Island', games: ['mtgo', 'paper'] });
   });
 });

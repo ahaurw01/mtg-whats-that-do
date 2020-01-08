@@ -17,10 +17,10 @@ const PricesPane = ({ card }) => {
   }, []);
 
   const { prices = {}, purchase_uris = {} } = card;
-  const { usd, usd_foil } = prices;
+  const { usd, usd_foil, tix } = prices;
   const { tcgplayer } = purchase_uris;
 
-  const noPricesAvailable = !usd && !usd_foil;
+  const noPricesAvailable = !usd && !usd_foil && !tix;
 
   return (
     <Tab.Pane>
@@ -50,6 +50,12 @@ const PricesPane = ({ card }) => {
                   {usd_foil}
                 </Statistic.Value>
                 <Statistic.Label>Foil</Statistic.Label>
+              </Statistic>
+            )}
+            {tix && (
+              <Statistic>
+                <Statistic.Value>{tix}</Statistic.Value>
+                <Statistic.Label>Tix</Statistic.Label>
               </Statistic>
             )}
           </Statistic.Group>

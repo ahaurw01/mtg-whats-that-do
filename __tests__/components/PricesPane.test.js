@@ -20,18 +20,19 @@ describe('PricesPane', () => {
     });
   });
 
-  describe('both prices available', () => {
+  describe('all prices available', () => {
     test('renders prices', () => {
       const card = {
         prices: {
           usd: '0.01',
           usd_foil: '1.01',
+          tix: '0.05',
         },
       };
 
       const wrapper = mount(<PricesPane {...makeProps({ card })} />);
 
-      expect(wrapper.find(Statistic)).toHaveLength(2);
+      expect(wrapper.find(Statistic)).toHaveLength(3);
 
       expect(
         wrapper
@@ -62,6 +63,21 @@ describe('PricesPane', () => {
           .find(Statistic.Label)
           .text()
       ).toBe('Foil');
+
+      expect(
+        wrapper
+          .find(Statistic)
+          .at(2)
+          .find(Statistic.Value)
+          .text()
+      ).toBe('0.05');
+      expect(
+        wrapper
+          .find(Statistic)
+          .at(2)
+          .find(Statistic.Label)
+          .text()
+      ).toBe('Tix');
     });
   });
 
@@ -120,6 +136,35 @@ describe('PricesPane', () => {
           .find(Statistic.Label)
           .text()
       ).toBe('Foil');
+    });
+  });
+
+  describe('only tix available', () => {
+    test('renders price', () => {
+      const card = {
+        prices: {
+          tix: '13',
+        },
+      };
+
+      const wrapper = mount(<PricesPane {...makeProps({ card })} />);
+
+      expect(wrapper.find(Statistic)).toHaveLength(1);
+
+      expect(
+        wrapper
+          .find(Statistic)
+          .at(0)
+          .find(Statistic.Value)
+          .text()
+      ).toBe('13');
+      expect(
+        wrapper
+          .find(Statistic)
+          .at(0)
+          .find(Statistic.Label)
+          .text()
+      ).toBe('Tix');
     });
   });
 

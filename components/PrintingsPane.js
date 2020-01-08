@@ -1,7 +1,13 @@
+import { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Tab, Grid } from 'semantic-ui-react';
+import mixpanel from '../utils/mixpanel';
 
 const PrintingsPane = ({ onSelectPrinting, allPrintings }) => {
+  useEffect(() => {
+    mixpanel.track('View Prices', { name: allPrintings[0].name });
+  }, []);
+
   const onPrintingSelect = e => {
     e.preventDefault();
     const cardID = e.target.id;

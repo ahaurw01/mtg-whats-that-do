@@ -59,7 +59,7 @@ export default class Index extends Component {
   };
 
   cardSelected = name => {
-    mixpanel.track('View Card', { name });
+    mixpanel.track('Add Card', { name });
     this.cardManager.addCard(name);
     this.closeCardFinderModal();
   };

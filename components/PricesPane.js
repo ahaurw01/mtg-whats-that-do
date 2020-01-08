@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import {
   Tab,
@@ -8,8 +9,13 @@ import {
   Message,
 } from 'semantic-ui-react';
 import styles from './PricesPane.css';
+import mixpanel from '../utils/mixpanel';
 
 const PricesPane = ({ card }) => {
+  useEffect(() => {
+    mixpanel.track('View Prices', { name: card.name });
+  }, []);
+
   const { prices = {}, purchase_uris = {} } = card;
   const { usd, usd_foil } = prices;
   const { tcgplayer } = purchase_uris;

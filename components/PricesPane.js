@@ -112,7 +112,7 @@ const PricesPane = ({ card, allPrintings }) => {
                 <Statistic>
                   <Statistic.Value>
                     <span className={styles.dollar}>$</span>
-                    {lowestPriceInfoAmongPrintings.lowestPrice}
+                    {lowestPriceInfoAmongPrintings.lowestPrice.toFixed(2)}
                   </Statistic.Value>
                   <Statistic.Label>
                     {lowestPriceInfoAmongPrintings.foil ? 'foil' : 'non-foil'}

@@ -89,7 +89,7 @@ const CardModal = ({
       </Menu.Item>
     ),
     render() {
-      return <PricesPane card={card} />;
+      return <PricesPane card={card} allPrintings={allPrintings} />;
     },
   });
 

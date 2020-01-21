@@ -193,7 +193,7 @@ describe('PricesPane', () => {
   describe('lowest price', () => {
     const card1 = {
       prices: {
-        usd: '0.02',
+        usd: '0.11',
         usd_foil: '1.01',
         tix: '0.05',
       },
@@ -202,7 +202,7 @@ describe('PricesPane', () => {
     };
     const card2 = {
       prices: {
-        usd: '0.01',
+        usd: '0.10',
         usd_foil: '1.01',
         tix: '0.05',
       },
@@ -231,7 +231,7 @@ describe('PricesPane', () => {
         .find(Statistic)
         .find(Statistic.Value)
         .text()
-    ).toBe('$0.01');
+    ).toBe('$0.10');
     expect(
       wrapper
         .find(Statistic.Group)

@@ -120,6 +120,18 @@ describe('presser', () => {
     document.dispatchEvent(event);
   });
 
+  est('escape', done => {
+    presser.on('escape', () => {
+      expect(preventDefault).not.toHaveBeenCalled();
+      done();
+    });
+
+    const event = new KeyboardEvent('keydown', {
+      key: 'Escape',
+    });
+    document.dispatchEvent(event);
+  });
+
   test('off', () => {
     const handler = () => {
       throw new Error('should not be called');

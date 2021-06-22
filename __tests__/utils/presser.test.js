@@ -120,7 +120,7 @@ describe('presser', () => {
     document.dispatchEvent(event);
   });
 
-  est('escape', done => {
+  test('escape', done => {
     presser.on('escape', () => {
       expect(preventDefault).not.toHaveBeenCalled();
       done();

@@ -9,7 +9,7 @@ import styles from './CardImage.css';
 export default class CardImage extends Component {
   static propTypes = {
     sources: PropTypes.arrayOf(PropTypes.string).isRequired,
-    highResSources: PropTypes.arrayOf(PropTypes.string).isRequired,
+    highResSources: PropTypes.arrayOf(PropTypes.string),
     indexShowing: PropTypes.oneOf([0, 1]).isRequired,
   };
 
@@ -77,6 +77,7 @@ export default class CardImage extends Component {
             const className = cx(styles.img, {
               [styles.front]: index === 0,
               [styles.back]: index === 1,
+              [styles.clickable]: highResSources?.length > 0,
             });
 
             return loading[index] ? (
@@ -97,16 +98,18 @@ export default class CardImage extends Component {
           <InlinedCardBackImage className={cx(styles.img, styles.placer)} />
         </div>
 
-        <Dimmer
-          page
-          onClickOutside={() => this.setState({ isImageModalOpen: false })}
-          active={isImageModalOpen}
-        >
-          <img
-            src={highResSources[indexShowing]}
-            className={styles.highResImage}
-          />
-        </Dimmer>
+        {highResSources?.length > 0 && (
+          <Dimmer
+            page
+            onClickOutside={() => this.setState({ isImageModalOpen: false })}
+            active={isImageModalOpen}
+          >
+            <img
+              src={highResSources[indexShowing]}
+              className={styles.highResImage}
+            />
+          </Dimmer>
+        )}
       </div>
     );
   }

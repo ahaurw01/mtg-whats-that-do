@@ -15,7 +15,9 @@ export const getImageSourcesByType = (card, type) => {
 export const getImageSources = card => getImageSourcesByType(card, 'large');
 export const getHighResImageSources = card => {
   const pngSources = getImageSourcesByType(card, 'png');
-  return pngSources.length > 0 ? pngSources : getImageSources();
+  return pngSources.length > 0 && pngSources[0]
+    ? pngSources
+    : getImageSources(card);
 };
 
 export const isDoubleFaced = card =>

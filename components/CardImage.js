@@ -1,17 +1,21 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
+import { Dimmer } from 'semantic-ui-react';
+import Presser from '../utils/presser';
 import InlinedCardBackImage from './InlinedCardBackImage';
 import styles from './CardImage.css';
 
 export default class CardImage extends Component {
   static propTypes = {
     sources: PropTypes.arrayOf(PropTypes.string).isRequired,
+    highResSources: PropTypes.arrayOf(PropTypes.string).isRequired,
     indexShowing: PropTypes.oneOf([0, 1]).isRequired,
   };
 
   state = {
     loading: [true, true],
+    isImageModalOpen: false,
   };
 
   fetchImages = () => {
@@ -43,15 +47,26 @@ export default class CardImage extends Component {
     if (this.props.sources.length) {
       this.fetchImages();
     }
+
+    this.presser = new Presser();
+    this.presser.on('escape', () => {
+      if (this.state.isImageModalOpen) {
+        this.setState({ isImageModalOpen: false });
+      }
+    });
+  }
+
+  componentWillUnmount() {
+    this.presser.off();
   }
 
   render() {
-    let { sources, indexShowing } = this.props;
+    let { sources, highResSources, indexShowing } = this.props;
     if (!sources.length) {
       // sources will be [] before we get the card data back.
       sources = [null];
     }
-    const { loading } = this.state;
+    const { loading, isImageModalOpen } = this.state;
 
     return (
       <div className={styles.outer}>
@@ -70,11 +85,28 @@ export default class CardImage extends Component {
                 key={`spinner-${index}`}
               />
             ) : (
-              <img src={src} key={src} className={className} />
+              <img
+                src={src}
+                key={src}
+                className={className}
+                role="button"
+                onClick={() => this.setState({ isImageModalOpen: true })}
+              />
             );
           })}
           <InlinedCardBackImage className={cx(styles.img, styles.placer)} />
         </div>
+
+        <Dimmer
+          page
+          onClickOutside={() => this.setState({ isImageModalOpen: false })}
+          active={isImageModalOpen}
+        >
+          <img
+            src={highResSources[indexShowing]}
+            className={styles.highResImage}
+          />
+        </Dimmer>
       </div>
     );
   }

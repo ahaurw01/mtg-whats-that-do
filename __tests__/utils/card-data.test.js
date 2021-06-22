@@ -1,5 +1,6 @@
 import {
   getImageSources,
+  getHighResImageSources,
   isDoubleFaced,
   getOracleData,
   getFirstPaperCard,
@@ -37,6 +38,60 @@ describe('getImageSources', () => {
     };
 
     expect(getImageSources(card)).toEqual(['hi', 'bye']);
+  });
+});
+
+describe('getHighResImageSources', () => {
+  test('is empty array if card data is falsy', () => {
+    expect(getHighResImageSources()).toEqual([]);
+  });
+
+  test('is [image_uris.png] if no card faces', () => {
+    const card = {
+      image_uris: {
+        png: 'hi',
+      },
+    };
+
+    expect(getHighResImageSources(card)).toEqual(['hi']);
+  });
+
+  test('is image_uris.png entries if faces exist', () => {
+    const card = {
+      card_faces: [
+        {
+          image_uris: {
+            png: 'hi',
+          },
+        },
+        {
+          image_uris: {
+            png: 'bye',
+          },
+        },
+      ],
+    };
+
+    expect(getHighResImageSources(card)).toEqual(['hi', 'bye']);
+  });
+
+  test('falls back to image_uris.large if png does not exist', () => {
+    const card = {
+      card_faces: [
+        {
+          image_uris: {
+            large: 'hi',
+          },
+        },
+        {
+          image_uris: {
+            large: 'bye',
+          },
+        },
+      ],
+    };
+
+    expect(getHighResImageSources(card)).toEqual(['hi', 'bye']);
   });
 });
 

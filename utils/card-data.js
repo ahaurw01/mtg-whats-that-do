@@ -1,15 +1,21 @@
-export const getImageSources = card => {
+export const getImageSourcesByType = (card, type) => {
   if (!card) return [];
 
-  if (card.image_uris && card.image_uris.large) {
-    return [card.image_uris.large];
+  if (card.image_uris && card.image_uris[type]) {
+    return [card.image_uris[type]];
   }
 
   if (card.card_faces) {
-    return card.card_faces.map(face => face.image_uris.large);
+    return card.card_faces.map(face => face.image_uris[type]);
   }
 
   return [];
+};
+
+export const getImageSources = card => getImageSourcesByType(card, 'large');
+export const getHighResImageSources = card => {
+  const pngSources = getImageSourcesByType(card, 'png');
+  return pngSources.length > 0 ? pngSources : getImageSources();
 };
 
 export const isDoubleFaced = card =>

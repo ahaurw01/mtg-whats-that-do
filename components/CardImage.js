@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-import { Dimmer } from 'semantic-ui-react';
+import { Dimmer, Responsive } from 'semantic-ui-react';
 import Presser from '../utils/presser';
 import InlinedCardBackImage from './InlinedCardBackImage';
 import styles from './CardImage.css';
@@ -99,16 +99,18 @@ export default class CardImage extends Component {
         </div>
 
         {highResSources?.length > 0 && (
-          <Dimmer
-            page
-            onClickOutside={() => this.setState({ isImageModalOpen: false })}
-            active={isImageModalOpen}
-          >
-            <img
-              src={highResSources[indexShowing]}
-              className={styles.highResImage}
-            />
-          </Dimmer>
+          <Responsive minWidth={Responsive.onlyTablet.minWidth}>
+            <Dimmer
+              page
+              onClickOutside={() => this.setState({ isImageModalOpen: false })}
+              active={isImageModalOpen}
+            >
+              <img
+                src={highResSources[indexShowing]}
+                className={styles.highResImage}
+              />
+            </Dimmer>
+          </Responsive>
         )}
       </div>
     );

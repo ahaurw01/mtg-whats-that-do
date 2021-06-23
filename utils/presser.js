@@ -35,6 +35,10 @@ const EVENTS = {
     check: e => e.key === 'k' && !e.metaKey && !e.ctrlKey,
     preventDefault: false,
   },
+  escape: {
+    check: e => e.key === 'Escape',
+    preventDefault: false,
+  },
 };
 
 export default class Presser {

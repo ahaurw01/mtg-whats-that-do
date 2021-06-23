@@ -4,6 +4,7 @@ import { Button, Segment, Icon } from 'semantic-ui-react';
 import CardModal from './CardModal';
 import {
   getImageSources,
+  getHighResImageSources,
   isDoubleFaced,
   getFirstPaperCard,
 } from '../utils/card-data';
@@ -113,10 +114,14 @@ export default class CardResult extends Component {
       isCardModalOpen,
     } = this.state;
     const { onRequestRemove, onRequestPin, isPinned, isFocused } = this.props;
-    const imageSources = getImageSources(card);
+
     return (
       <Segment className={cx({ [styles.cardIsFocused]: isFocused })}>
-        <CardImage sources={imageSources} indexShowing={faceIndex} />
+        <CardImage
+          sources={getImageSources(card)}
+          highResSources={getHighResImageSources(card)}
+          indexShowing={faceIndex}
+        />
         <div className={styles.actions}>
           <Button.Group>
             {card && (
